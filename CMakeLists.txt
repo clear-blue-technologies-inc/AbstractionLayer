@@ -1,0 +1,29 @@
+################################################################################
+#Date: September 26th, 2023                                                    #
+#File: CMakeLists.txt                                                          #
+#Authour: Ben Haubrich                                                         #
+#Synopsis: Top level project CMakeList.txt. Note that the CMakeList.txt inside #
+#          main is the CMakeLists.txt for the main `component` of the project. #
+################################################################################
+cmake_minimum_required(VERSION 3.5)
+
+#Use cmake '--help-policy <POLICY>` to learn more
+cmake_policy(SET CMP0079 NEW)
+cmake_policy(SET CMP0076 NEW)
+
+project(AbstractionLayer)
+
+add_library(abstractionLayer INTERFACE)
+
+add_subdirectory(Cryptography)
+add_subdirectory(Error)
+add_subdirectory(Event)
+add_subdirectory(Hardware)
+add_subdirectory(Ip)
+add_subdirectory(Logging)
+add_subdirectory(Network)
+add_subdirectory(OperatingSystem)
+add_subdirectory(Protocols)
+add_subdirectory(Serialization)
+add_subdirectory(Storage)
+add_subdirectory(Types)
