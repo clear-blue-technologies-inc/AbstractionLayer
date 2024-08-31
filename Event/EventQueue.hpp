@@ -1,16 +1,16 @@
 /**************************************************************************//**
 * @author Ben Haubrich                                        
-* @file   CbtEventQueue.hpp
+* @file   EventQueue.hpp
 * @details \b Synopsis: \n Synchronization for calling function members of the
            base class.
-* @ingroup FoundationCore
+* @ingroup AbstractionLayer
 *******************************************************************************/
-#ifndef __CBT_EVENT_QUEUE_HPP__
-#define __CBT_EVENT_QUEUE_HPP__
+#ifndef __EVENT_QUEUE_HPP__
+#define __EVENT_QUEUE_HPP__
 
 //Foundation
-#include "CbtError.hpp"
-#include "CbtTypes.hpp"
+#include "Error.hpp"
+#include "Types.hpp"
 //C++
 #include <vector>
 #include <tuple>
@@ -176,4 +176,4 @@ class EventQueue {
     std::vector<std::unique_ptr<EventAbstraction>> events;
 };
 
-#endif //__CBT_EVENT_QUEUE_HPP__
+#endif //__EVENT_QUEUE_HPP__
