@@ -1,8 +1,8 @@
 /***************************************************************************//**
 * @author   Ben Haubrich
-* @file     CbtCryptographyAbstraction.hpp
+* @file     CryptographyAbstraction.hpp
 * @details  Abstraction layer for Cryptography
-* @ingroup  FoundationCore
+* @ingroup  AbstractionLayer
 *******************************************************************************/
 #ifndef __CBT_CRYPTOGRAPHY_ABSTRACTION_HPP__
 #define __CBT_CRYPTOGRAPHY_ABSTRACTION_HPP__
