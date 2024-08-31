@@ -5,8 +5,8 @@
 * @ingroup AbstractionLayer
 *******************************************************************************/
 
-#ifndef __CBT_ERROR_HPP__
-#define __CBT_ERROR_HPP__
+#ifndef __ERROR_HPP__
+#define __ERROR_HPP__
 
 #include <stdint.h>
 
@@ -39,4 +39,4 @@ enum class ErrorType : uint8_t {
  */
 ErrorType toCbtError(int32_t error);
 
-#endif // __CBT_ERROR_HPP__
+#endif // __ERROR_HPP__
