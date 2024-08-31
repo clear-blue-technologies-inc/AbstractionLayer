@@ -1,8 +1,8 @@
 /**************************************************************************//**
 * @author Ben Haubrich                                        
-* @file   CbtError.hpp
+* @file   Error.hpp
 * @details \b Synopsis: \n Error types for Foundation core software.
-* @ingroup FoundationCore
+* @ingroup AbstractionLayer
 *******************************************************************************/
 
 #ifndef __CBT_ERROR_HPP__
