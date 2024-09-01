@@ -12,7 +12,7 @@
 
 /**
  * @enum ErrorType
- * @brief Error types for Foundation core software
+ * @brief Error types
 */
 enum class ErrorType : uint8_t {
     Success             = 0,    ///< Nothing to worry about. Move on!
@@ -37,6 +37,6 @@ enum class ErrorType : uint8_t {
  * @param error The error code to convert 
  * @returns The ErrorType corresponding to the error code 
  */
-ErrorType toCbtError(int32_t error);
+ErrorType toPlatformError(int32_t error);
 
 #endif // __ERROR_HPP__
