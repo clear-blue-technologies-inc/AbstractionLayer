@@ -8,8 +8,8 @@
 #define __LOGGING_ABSTRACTION_HPP__
 
 //Foundation
-#include "CbtError.hpp"
-#include "CbtTypes.hpp"
+#include "Error.hpp"
+#include "Types.hpp"
 //C++
 #include <string>
 

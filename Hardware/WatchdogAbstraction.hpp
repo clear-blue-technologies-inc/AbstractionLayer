@@ -4,10 +4,10 @@
 * @details  Abstraction layer for watchdog
 * @ingroup  AbstractionLayer
 *******************************************************************************/
-#ifndef __CBT_WATCHDOG_ABSTRACTION_HPP__
-#define __CBT_WATCHDOG_ABSTRACTION_HPP__
+#ifndef __WATCHDOG_ABSTRACTION_HPP__
+#define __WATCHDOG_ABSTRACTION_HPP__
 
-#include "CbtError.hpp"
+#include "Error.hpp"
 
 /**
  * @class WatchdogAbstraction
@@ -47,4 +47,4 @@ class WatchdogAbstraction {
     virtual ErrorType pet() = 0;
 };
 
-#endif // __CBT_WATCHDOG_ABSTRACTION_HPP__
+#endif // __WATCHDOG_ABSTRACTION_HPP__

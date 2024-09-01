@@ -10,8 +10,8 @@
 //Standard library
 #include <stdint.h>
 //Foundation
-#include "CbtError.hpp"
-#include "CbtTypes.hpp"
+#include "Error.hpp"
+#include "Types.hpp"
 
 /**
  * @enum GpioPinDirection

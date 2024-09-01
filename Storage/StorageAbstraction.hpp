@@ -1,7 +1,7 @@
 /**************************************************************************//**
 * @author Ben Haubrich                                        
 * @file   StorageAbstraction.hpp
-* @details \b Synopsis: \n Foundation core functions for any storage type
+* @details \b Synopsis: \n Interface for any storage type
 * @ingroup AbstractionLayer
 ******************************************************************************/
 #ifndef __STORAGE_ABSTRACTION_HPP__

@@ -8,8 +8,8 @@
 #define __IP_SERVER_ABSTRACTION_HPP__
 
 //Foundation
-#include "CbtTypes.hpp"
-#include "CbtError.hpp"
+#include "Types.hpp"
+#include "Error.hpp"
 //C++
 #include <memory>
 #include <string>
