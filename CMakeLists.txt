@@ -2,8 +2,7 @@
 #Date: September 26th, 2023                                                    #
 #File: CMakeLists.txt                                                          #
 #Authour: Ben Haubrich                                                         #
-#Synopsis: Top level project CMakeList.txt. Note that the CMakeList.txt inside #
-#          main is the CMakeLists.txt for the main `component` of the project. #
+#Synopsis: Top level project CMakeList.txt.                                    #
 ################################################################################
 cmake_minimum_required(VERSION 3.5)
 

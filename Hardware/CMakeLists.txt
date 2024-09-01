@@ -1,6 +1,6 @@
 target_sources(abstractionLayer
 PRIVATE FILE_SET headers TYPE HEADERS BASE_DIRS ${CMAKE_CURRENT_LIST_DIR} FILES
-  CbtUartAbstraction.hpp
-  CbtGpioAbstraction.hpp
-  CbtWatchdogAbstraction.hpp
+  UartAbstraction.hpp
+  GpioAbstraction.hpp
+  WatchdogAbstraction.hpp
 )

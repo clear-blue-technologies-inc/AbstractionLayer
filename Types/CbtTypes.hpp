@@ -1,12 +1,12 @@
 /**************************************************************************//**
 * @author Ben Haubrich                                        
-* @file   CbtTypes.hpp
+* @file   Types.hpp
 * @details \b Synopsis: \n Variable types for enhanced readability.
-* @ingroup FoundationCore
+* @ingroup AbstractionLayer
 *******************************************************************************/
 
-#ifndef __CBT_TYPES_HPP__
-#define __CBT_TYPES_HPP__
+#ifndef __TYPES_HPP__
+#define __TYPES_HPP__
 
 #include <stdint.h>
 
@@ -85,4 +85,4 @@ using Port = uint16_t;
 ///Network socket number
 using Socket = int32_t;
 
-#endif //__CBT_TYPES_HPP__
+#endif //__TYPES_HPP__
