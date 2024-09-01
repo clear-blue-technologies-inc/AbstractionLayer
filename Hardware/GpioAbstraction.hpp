@@ -7,11 +7,11 @@
 #ifndef __GPIO_ABSTRACTION_HPP__
 #define __GPIO_ABSTRACTION_HPP__
 
-//Standard library
-#include <stdint.h>
-//Foundation
+//AbstractionLayer
 #include "Error.hpp"
 #include "Types.hpp"
+//Standard library
+#include <stdint.h>
 
 /**
  * @enum GpioPinDirection

@@ -7,7 +7,7 @@
 #ifndef __UART_ABSTRACTION_HPP__
 #define __UART_ABSTRACTION_HPP__
 
-//Foundation
+//AbstractionLayer
 #include "Error.hpp"
 #include "Types.hpp"
 #include "IcCommunicationProtocol.hpp"

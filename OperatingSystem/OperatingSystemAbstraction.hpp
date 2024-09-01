@@ -8,7 +8,7 @@
 #ifndef __OPERATING_SYSTEM_ABSTRACTION_HPP__
 #define __OPERATING_SYSTEM_ABSTRACTION_HPP__
 
-//Foundation
+//AbstractionLayer
 #include "Types.hpp"
 #include "Error.hpp"
 //C++

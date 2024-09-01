@@ -46,7 +46,6 @@ class EventQueue {
     /**
      * @brief Adds an event to the to the queue.
      * @param[in] event The event to add.
-     * @pre You must call setOs
      * @post The event is added to a FIFO queue and will be executed when it reaches the first position in the queue and this thread
      *       is running.
      * @post Ownership of the event is transferred to the queue if, and only if, ErrorType::Success is returned.
@@ -54,7 +53,7 @@ class EventQueue {
      * @returns ErrorType::LimitReached if the maximum number of events has been reached.
      * @returns ErrorType::PreqrequisiteNotMet if the mutex is already locked.
      * @note In order to reduce dependencies on other software, the "mutex" is simple static boolean. It is reccomended that
-     *       if ErrorType::PrerequisitesNotMet is returned, the caller will use any software at their disposal to avoid a polling loop.
+     *       if ErrorType::PrerequisitesNotMet is returned, the caller will block using the operating system.
     */
     ErrorType addEvent(std::unique_ptr<EventAbstraction> &event) {
         static bool mutex = false;

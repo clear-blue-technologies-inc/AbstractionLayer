@@ -1,7 +1,7 @@
 /**************************************************************************//**
 * @author Ben Haubrich                                        
 * @file   Error.hpp
-* @details \b Synopsis: \n Error types for Foundation core software.
+* @details \b Synopsis: \n Error types.
 * @ingroup AbstractionLayer
 *******************************************************************************/
 

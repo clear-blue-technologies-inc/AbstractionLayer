@@ -7,7 +7,7 @@
 #ifndef __LOGGING_ABSTRACTION_HPP__
 #define __LOGGING_ABSTRACTION_HPP__
 
-//Foundation
+//AbstractionLayer
 #include "Error.hpp"
 #include "Types.hpp"
 //C++

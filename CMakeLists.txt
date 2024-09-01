@@ -2,15 +2,13 @@
 #Date: September 26th, 2023                                                    #
 #File: CMakeLists.txt                                                          #
 #Authour: Ben Haubrich                                                         #
-#Synopsis: Top level project CMakeList.txt.                                    #
+#Synopsis: Top level CMakeList.txt.                                     #
 ################################################################################
 cmake_minimum_required(VERSION 3.5)
 
 #Use cmake '--help-policy <POLICY>` to learn more
 cmake_policy(SET CMP0079 NEW)
 cmake_policy(SET CMP0076 NEW)
-
-project(AbstractionLayer)
 
 add_library(abstractionLayer INTERFACE)
 
