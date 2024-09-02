@@ -14,7 +14,7 @@ Alternatively, you can inlcude only a portion of it, e.g. Uart:
 `target_link_libraries(<target>, <PUBLIC|PRIVATE>, Uart)`
 
 ## Why use an abstraction layer
-An abstraction layer allows you to build you main application code separate from common software components such as hardware peripherals, storage, networks, etc.
+An abstraction layer allows you to build your main application code separate from common software components such as hardware peripherals, storage, networks, etc.
 This allows you to swap out components without having to edit or retest your main application. Consequentially, this allows you to develop and test applications on systems such
 as MacOS or Linux which have faster processing times and a more feature rich debugging environment, and then take that tested code and run it on an embedded target with your ported abstraction layer.
 
