@@ -23,7 +23,7 @@ using Minutes = uint32_t;
 ///@typedef UnixTime
 ///Unix time (s)
 using UnixTime = uint32_t;
-///@typedef Tick
+///@typedef Ticks
 ///CPU tick. Must use a system dependant conversion to get elapsed time in seconds.
 using Ticks = uint32_t;
 

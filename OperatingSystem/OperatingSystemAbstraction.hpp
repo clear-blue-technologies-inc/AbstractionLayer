@@ -180,7 +180,7 @@ class OperatingSystemAbstraction {
     virtual ErrorType getSystemTime(UnixTime &currentSystemUnixTime) = 0;
     /**
      * @brief Get the current system tick value
-     * @param[out] currentSystemTick The current tick value of the system.
+     * @param[out] currentSystemTicks The current tick value of the system.
      * @returns ErrorType::Success if the system tick value was obtained
      * @returns ErrorType::NotImplemented if getting the system tick value is not implemented
      * @returns ErrorType::Failure if the system tick value could not be obtained
@@ -188,13 +188,13 @@ class OperatingSystemAbstraction {
     virtual ErrorType getSystemTick(Ticks &currentSystemTicks) = 0;
     /**
      * @brief Convert a tick value to a time in milliseconds
-     * @param[in] tick The tick value to convert.
-     * @param[out] timeInMilliseconds The time in milliseconds.
+     * @param[in] ticks The tick value to convert.
+     * @param[out] tickEquivalent The converted tick value.
      * @returns ErrorType::Success if the tick was converted to milliseconds
      * @returns ErrorType::NotImplemented if converting the tick to milliseconds is not implemented
      * @returns ErrorType::Failure if the tick could not be converted to milliseconds
      */
-    virtual ErrorType ticksToMilliseconds(Ticks ticks, Milliseconds &timeInMilliseconds) = 0;
+    virtual ErrorType ticksToMilliseconds(Ticks ticks, Milliseconds &tickEquivalent) = 0;
     /**
      * @brief Get software version
      * @param[out] softwareVersion The software version in the format a.b.c.d, where a, b, c, and d
@@ -220,14 +220,14 @@ class OperatingSystemAbstraction {
     virtual ErrorType reset() = 0;
     /**
      * @brief setTimeOfDay
-     * @param[in] unixTime The time of day in unix time.
-     * @param[in] timeZone The time zone.
+     * @param[in] utc The time of day in unix time.
+     * @param[in] timeZoneDifferenceUtc The time zone difference.
      * @returns ErrorType::Success if the time of day was set.
      * @returns ErrorType::NotImplemented if setting the time of day is not implemented.
      * @returns ErrorType::NotAvailable if setting the time of day is not available on the host system.
      * @returns ErrorType::Failure if an error occurred while setting the time of day.
     */
-    virtual ErrorType setTimeOfDay(UnixTime utc, int32_t timeZoneDifferenceUtcSeconds) = 0;
+    virtual ErrorType setTimeOfDay(UnixTime utc, Seconds timeZoneDifferenceUtc) = 0;
 };
 
 #endif //__OPERATING_SYSTEM_ABSTRACTION_HPP__

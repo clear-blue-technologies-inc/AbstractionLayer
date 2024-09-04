@@ -166,6 +166,8 @@ class EventQueue {
         return error;
     }
 
+    /// @brief Get the number of events available in the queue.
+    /// @return The number of events available in the queue.
     Count eventsAvailable() const { return _maxEvents - events.size(); }
 
     private:

@@ -108,6 +108,7 @@ class IpServerAbstraction {
      * @brief Receive data from this client
      * @pre data should be appropriately sized with the correct amount of bytes you want to send, i.e buffer.resize()
      * @param[in] data The data to send
+     * @param[in] timeout The amount of time to wait for a response
      * @param[in] callback The callback to call when the data is received
      * @code
      * //TODO: add an example of a callback and how to give it to this function
@@ -116,12 +117,15 @@ class IpServerAbstraction {
      * @returns Fnd::ErrorType::Failure on failure
      * @returns Fnd::ErrorType::NotImplemented if not implemented
      * @returns Fnd::ErrorType::Timeout if a timeout occurred
+     * @post If the callback is not nullptr, control is returned to the caller immediately and the callback is called when the data is received.
+     *       The value of timeout is ignored. If callback is nullptr, the function will block until the data is received or the timeout occurs.
     */
     virtual ErrorType sendNonBlocking(const std::shared_ptr<std::string> data, const Milliseconds timeout, std::function<void(const ErrorType error, const Bytes bytesWritten)> callback = nullptr) = 0;
     /**
      * @brief Receive data from this client
      * @pre buffer should be appropriately sized with the correct amount of bytes you want to receive, i.e buffer.resize()
      * @param[out] buffer The buffer to receive data into
+     * @param[in] timeout The amount of time to wait for a response
      * @param[in] callback The callback to call when the data is received
      * @code
      * //TODO: add an example of a callback and how to give it to this function
@@ -130,6 +134,8 @@ class IpServerAbstraction {
      * @returns Fnd::ErrorType::Failure on failure
      * @returns Fnd::ErrorType::NotImplemented if not implemented
      * @returns Fnd::ErrorType::Timeout if a timeout occurred
+     * @post If the callback is not nullptr, control is returned to the caller immediately and the callback is called when the data is received.
+     *       The value of timeout is ignored. If callback is nullptr, the function will block until the data is received or the timeout occurs.
     */
     virtual ErrorType receiveNonBlocking(std::shared_ptr<std::string> buffer, const Milliseconds timeout, std::function<void(const ErrorType error, std::shared_ptr<std::string> buffer)> callback = nullptr) = 0;
 
