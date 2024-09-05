@@ -69,9 +69,6 @@ endif()
 add_subdirectory(main/AbstractionLayer)
 target_include_directories(__idf_main PRIVATE $<TARGET_PROPERTY:abstractionLayer,INTERFACE_INCLUDE_DIRECTORIES>)
 
-#Common code that has no code or platform dependencies other than the standard library.
-add_subdirectory(main/Common)
-
 ##Application layer - Cross-platform implementation core code
 #add_subdirectory()
 
