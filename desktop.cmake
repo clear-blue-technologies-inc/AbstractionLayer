@@ -55,7 +55,7 @@ endif()
 add_subdirectory(main/AbstractionLayer)
 
 #Common code that has no code or platform dependencies other than the standard library.
-add_subdirectory(main/Common)
+#add_subdirectory()
 
 ##Application layer. Cross-platform implementation core code
 
