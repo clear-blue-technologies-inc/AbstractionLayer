@@ -54,10 +54,8 @@ endif()
 
 add_subdirectory(main/AbstractionLayer)
 
-#Common code that has no code or platform dependencies other than the standard library.
-#add_subdirectory()
-
 ##Application layer. Cross-platform implementation core code
+#add_subdirectory()
 
 #Module/Porting layer
 #Modules are chunks of code that implement functionality. They are all interchangeable provided that the target platform
