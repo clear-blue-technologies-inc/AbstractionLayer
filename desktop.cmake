@@ -57,13 +57,7 @@ add_subdirectory(main/AbstractionLayer)
 #Common code that has no code or platform dependencies other than the standard library.
 add_subdirectory(main/Common)
 
-##Cross-platform Foundation implementation core code
-add_subdirectory(main/Foundation/Main)
-add_subdirectory(main/Foundation/Cleon)
-add_subdirectory(main/Foundation/Cloud)
-add_subdirectory(main/Foundation/Clients/Cloud)
-add_subdirectory(main/Foundation/Servers/Webapp)
-add_subdirectory(main/Foundation/Factory)
+##Application layer. Cross-platform implementation core code
 
 #Module/Porting layer
 #Modules are chunks of code that implement functionality. They are all interchangeable provided that the target platform
