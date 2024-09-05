@@ -21,8 +21,8 @@ enum class ErrorType : uint8_t {
     NoMemory            = 3,    ///< Not enough memory to complete the operation
     Timeout             = 4,    ///< Operation timed out
     NotSupported        = 5,    ///< The operation is implemented, but doesn't support the provided data types. You couldn't implement the code even if you wanted to.
-    PrerequisitesNotMet = 6,    ///< One or more prerequisites are not met. Read the documentation for more information.
-    InvalidParameter    = 7,    ///< One or more parameters are invalid. Read the documentation for more information.
+    PrerequisitesNotMet = 6,    ///< One or more prerequisites are not met. Read the inline documentation for more information.
+    InvalidParameter    = 7,    ///< One or more parameters are invalid. Read the inline documentation for more information.
     CrcMismatch         = 8,    ///< Cyclic Redundancy Check failed.
     NotAvailable        = 9,    ///< The operation makes sense to be implemented, but the underlying software doesn't support this operation.
     FileNotFound        = 10,   ///< File not found.

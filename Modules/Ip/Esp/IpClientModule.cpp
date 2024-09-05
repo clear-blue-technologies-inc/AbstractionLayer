@@ -125,6 +125,8 @@ ErrorType IpClient::disconnect() {
 
 //TODO: Timeout is not implemented
 ErrorType IpClient::sendBlocking(const std::string &data, const Milliseconds timeout) {
+    assert(0 != _socket);
+
     int err = send(_socket, data.data(), data.size(), 0);
 
     if (err < 0) {
@@ -137,7 +139,10 @@ ErrorType IpClient::sendBlocking(const std::string &data, const Milliseconds tim
 }
 
 ErrorType IpClient::receiveBlocking(std::string &buffer, const Milliseconds timeout) {
+    assert(0 != _socket);
+
     ssize_t len = 0;
+    ErrorType error = ErrorType::Failure;
     struct timeval timeoutval = {
         .tv_sec = timeout / 1000,
         .tv_usec = 0
@@ -154,21 +159,26 @@ ErrorType IpClient::receiveBlocking(std::string &buffer, const Milliseconds time
         len = recv(_socket, buffer.data(), buffer.size(), 0);
     }
     else {
-        return ErrorType::Timeout;
-        _status.connected = false;
+        error = ErrorType::Timeout;
     }
 
     if (len < 0) {
-        buffer.resize(0);
-        return toPlatformError(len);
+        error = toPlatformError(len);
     }
     else {
-        buffer.resize(len);
-        return ErrorType::Success;
+        if (len > buffer.size()) {
+            error =  ErrorType::PrerequisitesNotMet;
+        }
+        else {
+            buffer.resize(len);
+            return ErrorType::Success;
+        }
     }
 
+    buffer.resize(0);
     _status.connected = false;
-    return ErrorType::Failure;
+
+    return error;
 }
 
 ErrorType IpClient::sendNonBlocking(const std::shared_ptr<std::string> data, const Milliseconds timeout, std::function<void(const ErrorType error, const Bytes bytesWritten)> callback) {
