@@ -46,7 +46,7 @@ Your top-level `CMakeLists.txt` from your main application may include the top-l
 if (ESP_PLATFORM)
   #If not set, defaults to all components. Set this to reduce the amount of
   #components that are built at compile time. Required and linked componenents
-  #for foundation are located in the main compnenet CMakeLists.txt file. When a
+  #for foundation are located in the main component CMakeLists.txt file. When a
   #component is required, it's added to the components list automatically.
   set(COMPONENTS
     main
