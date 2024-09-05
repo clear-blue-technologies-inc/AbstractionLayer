@@ -2,7 +2,7 @@
 #Date: September 26th, 2023                                                    #
 #File: CMakeLists.txt                                                          #
 #Authour: Ben Haubrich                                                         #
-#Synopsis: Top level CMakeList.txt.                                     #
+#Synopsis: Top level CMakeList.txt.                                            # 
 ################################################################################
 cmake_minimum_required(VERSION 3.5)
 
@@ -12,15 +12,15 @@ cmake_policy(SET CMP0076 NEW)
 
 add_library(abstractionLayer INTERFACE)
 
-add_subdirectory(Cryptography)
-add_subdirectory(Error)
-add_subdirectory(Event)
-add_subdirectory(Hardware)
-add_subdirectory(Ip)
-add_subdirectory(Logging)
-add_subdirectory(Network)
-add_subdirectory(OperatingSystem)
-add_subdirectory(Protocols)
-add_subdirectory(Serialization)
-add_subdirectory(Storage)
-add_subdirectory(Types)
+add_subdirectory(Abstractions/Cryptography)
+add_subdirectory(Abstractions/Error)
+add_subdirectory(Abstractions/Event)
+add_subdirectory(Abstractions/Hardware)
+add_subdirectory(Abstractions/Ip)
+add_subdirectory(Abstractions/Logging)
+add_subdirectory(Abstractions/Network)
+add_subdirectory(Abstractions/OperatingSystem)
+add_subdirectory(Abstractions/Protocols)
+add_subdirectory(Abstractions/Serialization)
+add_subdirectory(Abstractions/Storage)
+add_subdirectory(Abstractions/Types)
