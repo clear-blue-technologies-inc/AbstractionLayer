@@ -64,7 +64,7 @@ add_subdirectory(main/AbstractionLayer)
 #E.g. to run on Linux, replace or add main/Modules/Drivers/Linux/<module> subdirectory.
 #To remove modules, use the "None" port since at least a function stub must exist for Foundation
 #core code to call.
-add_subdirectory(main/AbstractionLayer/Modules/Drivers/Uart/MacOsCleonSimulator)
+add_subdirectory(main/AbstractionLayer/Modules/Drivers/Uart/None)
 add_subdirectory(main/AbstractionLayer/Modules/Drivers/Watchdog/None)
 add_subdirectory(main/AbstractionLayer/Modules/Drivers/Gpio/None)
 
