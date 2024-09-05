@@ -55,7 +55,13 @@ endif()
 add_subdirectory(main/AbstractionLayer)
 
 ##Application layer. Cross-platform implementation core code
-#add_subdirectory()
+add_subdirectory(main/Foundation/Cleon)
+add_subdirectory(main/Foundation/Clients/Cloud)
+add_subdirectory(main/Foundation/Cloud)
+add_subdirectory(main/Foundation/Factory)
+add_subdirectory(main/Foundation/Main)
+add_subdirectory(main/Foundation/Servers/Webapp)
+add_subdirectory(main/Common)
 
 #Module/Porting layer
 #Modules are chunks of code that implement functionality. They are all interchangeable provided that the target platform
@@ -73,7 +79,7 @@ add_subdirectory(main/AbstractionLayer/Modules/Network/Wifi/MacOs)
 add_subdirectory(main/AbstractionLayer/Modules/Ip/Posix)
 add_subdirectory(main/AbstractionLayer/Modules/Logging/Stdlib)
 add_subdirectory(main/AbstractionLayer/Modules/Storage/Stdlib)
-add_subdirectory(main/AbstractionLayer/Modules/Serialization/None)
+add_subdirectory(main/AbstractionLayer/Modules/Serialization/ClearBlueCloudProtobuf)
 add_subdirectory(main/AbstractionLayer/Modules/Error/Errno)
 add_subdirectory(main/AbstractionLayer/Modules/Tools/Any/Crc)
 add_subdirectory(main/AbstractionLayer/Modules/MemoryManagement/Default)
