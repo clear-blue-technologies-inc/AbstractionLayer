@@ -63,7 +63,7 @@ ErrorType IpClient::disconnect() {
 }
 
 ErrorType IpClient::sendBlocking(const std::string &data, const Milliseconds timeout) {
-    assert(0 != socket);
+    assert(0 != _socket);
 
     if (-1 == send(_socket, data.data(), data.size(), 0)) {
         _status.connected = false;
@@ -76,9 +76,9 @@ ErrorType IpClient::sendBlocking(const std::string &data, const Milliseconds tim
 }
 
 ErrorType IpClient::receiveBlocking(std::string &buffer, const Milliseconds timeout) {
-    assert(0 != socket);
+    assert(0 != _socket);
 
-    ErrorType error = ErrorType::Success;
+    ErrorType error = ErrorType::Failure;
     ssize_t bytesReceived = 0;
 
     struct timeval timeoutval = {
@@ -95,16 +95,22 @@ ErrorType IpClient::receiveBlocking(std::string &buffer, const Milliseconds time
 
     if (FD_ISSET(_socket, &readfds)) {
         if (-1 == (bytesReceived = recv(_socket, buffer.data(), buffer.size(), 0))) {
-            _status.connected = false;
             error = toPlatformError(errno);
+        }
+        else if ((size_t)bytesReceived > buffer.size()) {
+            error = ErrorType::PrerequisitesNotMet;
+        }
+        else {
+            buffer.resize(bytesReceived);
+            return ErrorType::Success;
         }
     }
     else {
-        _status.connected = false;
         error = ErrorType::Timeout;
     }
 
-    buffer.resize(bytesReceived);
+    buffer.resize(0);
+    _status.connected = false;
 
     return error;
 }
