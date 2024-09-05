@@ -37,4 +37,4 @@ LoggingAbstraction *logger = new EmbeddedLogger();
 logger->log("LogTag", "Hello World", LogTpye::Info);
 ```
 
-The main application code hasn't been altered so I know the logic is correct. It will print as long as the ported code works.
+The main application code hasn't been altered so I know the logic is correct. It will print as long as the ported code works. If it doesn't print I can eliminate 50% of the code (the main application code) as a potential source of the bug since it's already been tested and has not changed.
