@@ -40,7 +40,7 @@ logger->log("LogTag", "Hello World", LogTpye::Info);
 The main application code hasn't been altered so I know the logic is correct. It will print as long as the ported code works. If it doesn't print I can eliminate 50% of the code (the main application code) as a potential source of the bug since it's already been tested and has not changed.
 
 ## How to include Abstraction Layer in your project
-Your top-level `CMakeLists.txt` from you main application may include the top-level `CMakeLists.txt` of the abstraction layer as shown below:
+Your top-level `CMakeLists.txt` from your main application may include the top-level `CMakeLists.txt` of the abstraction layer as shown below:
 
 ```
 if (ESP_PLATFORM)
