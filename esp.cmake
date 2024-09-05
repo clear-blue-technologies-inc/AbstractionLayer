@@ -73,7 +73,7 @@ target_include_directories(__idf_main PRIVATE $<TARGET_PROPERTY:abstractionLayer
 add_subdirectory(main/Common)
 
 ##Application layer - Cross-platform implementation core code
-#add_subdirectory(main/Foundation/Main)
+#add_subdirectory()
 
 ##Module/Porting layer
 ##Modules are chunks of code that implement functionality. They are optional and can be removed.
