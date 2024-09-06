@@ -143,7 +143,6 @@ ErrorType OperatingSystem::waitSemaphore(std::string name, Milliseconds timeout)
     }
 
     return ErrorType::Success;
-
 }
 
 ErrorType OperatingSystem::incrementSemaphore(std::string name) {

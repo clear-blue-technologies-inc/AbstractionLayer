@@ -3,9 +3,7 @@ STATIC
   ErrorModule.cpp
 )
 
-target_include_directories(Error INTERFACE ${CMAKE_CURRENT_LIST_DIR})
-
-target_link_libraries(cbtEspError PUBLIC Error)
+target_link_libraries(cbtEspError PUBLIC Utilities)
 target_link_libraries(${PROJECT_NAME}${EXECUTABLE_SUFFIX} PUBLIC cbtEspError)
 
 if (ESP_PLATFORM)

@@ -8,7 +8,7 @@
 #ifndef __EVENT_QUEUE_HPP__
 #define __EVENT_QUEUE_HPP__
 
-//Foundation
+//AbstractionLayer utilities
 #include "Error.hpp"
 #include "Types.hpp"
 //C++
@@ -16,6 +16,7 @@
 #include <tuple>
 #include <functional>
 #include <memory>
+#include <string>
 
 /**
  * @class EventAbstraction
@@ -40,7 +41,7 @@ class EventAbstraction {
 class EventQueue {
     
     public:
-    EventQueue() = default;
+    EventQueue();
     ~EventQueue() = default;
 
     /**
@@ -51,27 +52,11 @@ class EventQueue {
      * @post Ownership of the event is transferred to the queue if, and only if, ErrorType::Success is returned.
      * @returns ErrorType::Success
      * @returns ErrorType::LimitReached if the maximum number of events has been reached.
-     * @returns ErrorType::PreqrequisiteNotMet if the mutex is already locked.
+     * @returns ErrorType::Timeout if the semaphore could not be obtained in time
      * @note In order to reduce dependencies on other software, the "mutex" is simple static boolean. It is reccomended that
      *       if ErrorType::PrerequisitesNotMet is returned, the caller will block using the operating system.
     */
-    ErrorType addEvent(std::unique_ptr<EventAbstraction> &event) {
-        static bool mutex = false;
-
-        if (mutex) {
-            return ErrorType::PrerequisitesNotMet;
-        }
-
-        if (events.size() >= _maxEvents) {
-            return ErrorType::LimitReached;
-        }
-
-        mutex = true;
-        events.push_back(std::move(event));
-        mutex = false;
-
-        return ErrorType::Success;
-    }
+    ErrorType addEvent(std::unique_ptr<EventAbstraction> &event);
 
     /**
      * @class Event
@@ -153,18 +138,10 @@ class EventQueue {
      * @fn runNextEvent
      * @brief Runs the next event in the queue.
      * @returns ErrorType::NoData if the queue is empty.
+     * @returns ErrorType::Timeout if the semaphore could not be obtained in time
      * @returns The error code of the callback function pointed to by the Event.
     */
-    ErrorType runNextEvent() {
-
-        if (0 == events.size()) {
-            return ErrorType::NoData;
-        }
-
-        ErrorType error = events.front()->run();
-        events.erase(events.begin());
-        return error;
-    }
+    ErrorType runNextEvent();
 
     /// @brief Get the number of events available in the queue.
     /// @return The number of events available in the queue.
@@ -173,8 +150,10 @@ class EventQueue {
     private:
     /// @brief The maximum number of events that can be queued.
     static constexpr Count _maxEvents = 10;
+    static constexpr Milliseconds SemaphoreTimeout = 0;
     /// @brief The queue of events to run.
     std::vector<std::unique_ptr<EventAbstraction>> events;
+    std::string binarySemaphore = "binarySemaphore";
 };
 
 #endif //__EVENT_QUEUE_HPP__
