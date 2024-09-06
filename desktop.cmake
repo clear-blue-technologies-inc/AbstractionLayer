@@ -4,73 +4,7 @@
 #Authour: Ben Haubrich                                                         #
 #Synopsis: Top level project CMakeList.txt for AbstractionLayer desktop build  #
 ################################################################################
-
-if (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
-  set(EXECUTABLE_SUFFIX ".Mach-O")
-elseif (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-  set(EXECUTABLE_SUFFIX ".elf")
-elseif (${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
-  set(EXECUTABLE_SUFFIX ".exe")
-endif()
-
-add_executable(${PROJECT_NAME}${EXECUTABLE_SUFFIX} "main/main.cpp")
-
-set_target_properties(${PROJECT_NAME}${EXECUTABLE_SUFFIX}
-  PROPERTIES
-  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-)
-
-if (${RELEASE_BUILD})
-  message(STATUS "Building Release build")
-  target_compile_options(${PROJECT_NAME}${EXECUTABLE_SUFFIX}
-  PRIVATE
-    -ffunction-sections
-    -fno-exceptions
-    -fdata-sections
-    -Os
-    -Wextra
-    -std=gnu++23
-  )
-
-  target_compile_definitions(${PROJECT_NAME}${EXECUTABLE_SUFFIX} PUBLIC CONFIG_LOG_COLORS=0)
-
-elseif (${DEBUG_BUILD})
-  message(STATUS "Building Debug build")
-  target_compile_options(${PROJECT_NAME}${EXECUTABLE_SUFFIX}
-  PRIVATE
-    -ffunction-sections
-    -fdata-sections
-    -fno-exceptions
-    -O0
-    -g3
-    -ggdb
-    -Wextra
-    -std=gnu++23
-  )
-
-  target_compile_definitions(${PROJECT_NAME}${EXECUTABLE_SUFFIX} PUBLIC CONFIG_LOG_COLORS=1)
-
-#default to debug build
-else ()
-  message(STATUS "Building debug build")
-  target_compile_options(${PROJECT_NAME}${EXECUTABLE_SUFFIX}
-  PRIVATE
-    -ffunction-sections
-    -fdata-sections
-    -fno-exceptions
-    -mlongcalls
-    -O0
-    -g3
-    -ggdb
-    -Wextra
-    -std=gnu++23
-  )
-
-  target_compile_definitions(${PROJECT_NAME}${EXECUTABLE_SUFFIX} PUBLIC CONFIG_LOG_COLORS=1)
-
-endif()
-
-add_subdirectory(main/AbstractionLayer)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR})
 
 #Module/Porting layer
 #Modules are chunks of code that implement functionality. They are all interchangeable provided that the target platform
