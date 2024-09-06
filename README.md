@@ -69,6 +69,6 @@ Then you should add your main application files to your top-level main applicati
 add_subdirectory(mainApplicationDir1)
 add_subdirectory(mainApplicationDir2)
 add_subdirectory(mainApplicationDir3)
-...
+```
 
 You can do it before or after the inlcude. It doesn't matter.
