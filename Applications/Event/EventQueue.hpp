@@ -53,8 +53,6 @@ class EventQueue {
      * @returns ErrorType::Success
      * @returns ErrorType::LimitReached if the maximum number of events has been reached.
      * @returns ErrorType::Timeout if the semaphore could not be obtained in time
-     * @note In order to reduce dependencies on other software, the "mutex" is simple static boolean. It is reccomended that
-     *       if ErrorType::PrerequisitesNotMet is returned, the caller will block using the operating system.
     */
     ErrorType addEvent(std::unique_ptr<EventAbstraction> &event);
 
