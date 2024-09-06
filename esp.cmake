@@ -6,12 +6,13 @@
 ################################################################################
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR})
 
-##Module/Porting layer
-##Modules are chunks of code that implement functionality. They are optional and can be removed.
-##They also serve as a method of porting to Foundation on different platforms.
-##E.g. to run on Linux, replace or add main/Modules/Linux/Drivers subdirectory.
-##To remove modules, use the "None" port since at least a function stub must exist for Foundation
-##core code to call.
+#Module/Porting layer
+#Modules are chunks of code that implement functionality. They are all interchangeable provided that the target platform
+#supports the implementation.
+#They serve as a method of porting to Foundation on different platforms.
+#E.g. to run on Linux, replace or add main/Modules/Drivers/Linux/<module> subdirectory.
+#To remove modules, use the "None" port since at least a function stub must exist for Foundation
+#core code to call.
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Drivers/Uart/Esp)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Drivers/Watchdog/Kevin)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Drivers/Gpio/Esp)
