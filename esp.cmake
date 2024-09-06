@@ -4,92 +4,30 @@
 #Authour: Ben Haubrich                                                         #
 #Synopsis: Top level project CMakeList.txt for AbstractionLayer ESP build      #
 ################################################################################
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR})
 
-message(STATUS "CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
-if (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
-  set(EXECUTABLE_SUFFIX ".Mach-O")
-elseif (${CMAKE_SYSTEM_NAME} STREQUAL "Linux" OR ESP_PLATFORM)
-  set(EXECUTABLE_SUFFIX ".elf")
-elseif (${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
-  set(EXECUTABLE_SUFFIX ".exe")
-endif()
+#Module/Porting layer
+#Modules are chunks of code that implement functionality. They are all interchangeable provided that the target platform
+#supports the implementation.
+#They serve as a method of porting to Foundation on different platforms.
+#E.g. to run on Linux, replace or add main/Modules/Drivers/Linux/<module> subdirectory.
+#To remove modules, use the "None" port since at least a function stub must exist for Foundation
+#core code to call.
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Drivers/Uart/Esp)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Drivers/Watchdog/None)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Drivers/Gpio/Esp)
 
-if ($ENV{FND_RELEASE_BUILD})
-  message(STATUS "Building Release build")
-  target_compile_options(${PROJECT_NAME}${EXECUTABLE_SUFFIX}
-  PRIVATE
-    -ffunction-sections
-    -fno-exceptions
-    -fdata-sections
-    -mlongcalls
-    -Os
-    -Wextra
-    -std=gnu++23
-  )
-
-  target_compile_definitions(${PROJECT_NAME}${EXECUTABLE_SUFFIX} PUBLIC CONFIG_LOG_COLORS=0)
-
-elseif ($ENV{FND_DEBUG_BUILD})
-  message(STATUS "Building Debug build")
-  target_compile_options(${PROJECT_NAME}${EXECUTABLE_SUFFIX}
-  PRIVATE
-    -ffunction-sections
-    -fdata-sections
-    -fno-exceptions
-    -mlongcalls
-    -O0
-    -g3
-    -ggdb
-    -Wextra
-    -std=gnu++23
-  )
-
-  target_compile_definitions(${PROJECT_NAME}${EXECUTABLE_SUFFIX} PULBIC CONFIG_LOG_COLORS=1)
-
-#default to debug build
-else ()
-  message(STATUS "Building debug build")
-  target_compile_options(${PROJECT_NAME}${EXECUTABLE_SUFFIX}
-  PRIVATE
-    -ffunction-sections
-    -fdata-sections
-    -fno-exceptions
-    -mlongcalls
-    -O0
-    -g3
-    -ggdb
-    -Wextra
-    -std=gnu++23
-  )
-
-  target_compile_definitions(${PROJECT_NAME}${EXECUTABLE_SUFFIX} PUBLIC CONFIG_LOG_COLORS=1)
-
-endif()
-
-add_subdirectory(main/AbstractionLayer)
-target_include_directories(__idf_main PRIVATE $<TARGET_PROPERTY:abstractionLayer,INTERFACE_INCLUDE_DIRECTORIES>)
-
-##Module/Porting layer
-##Modules are chunks of code that implement functionality. They are optional and can be removed.
-##They also serve as a method of porting to Foundation on different platforms.
-##E.g. to run on Linux, replace or add main/Modules/Linux/Drivers subdirectory.
-##To remove modules, use the "None" port since at least a function stub must exist for Foundation
-##core code to call.
-add_subdirectory(main/AbstractionLayer/Modules/Drivers/Uart/Esp)
-add_subdirectory(main/AbstractionLayer/Modules/Drivers/Watchdog/None)
-add_subdirectory(main/AbstractionLayer/Modules/Drivers/Gpio/Esp)
-
-add_subdirectory(main/AbstractionLayer/Modules/OperatingSystem/Esp)
-add_subdirectory(main/AbstractionLayer/Modules/Network/Wifi/Esp)
-add_subdirectory(main/AbstractionLayer/Modules/Ip/Esp)
-add_subdirectory(main/AbstractionLayer/Modules/Logging/Esp)
-add_subdirectory(main/AbstractionLayer/Modules/Storage/Esp)
-add_subdirectory(main/AbstractionLayer/Modules/Serialization/ClearBlueCloudProtobuf)
-add_subdirectory(main/AbstractionLayer/Modules/Error/Esp)
-add_subdirectory(main/AbstractionLayer/Modules/Tools/Any/Crc)
-add_subdirectory(main/AbstractionLayer/Modules/MemoryManagement/Esp)
-add_subdirectory(main/AbstractionLayer/Modules/Cryptography/Esp)
-add_subdirectory(main/AbstractionLayer/Utilities)
-add_subdirectory(main/AbstractionLayer/Applications/Logging)
-add_subdirectory(main/AbstractionLayer/Applications/ChainOfResponsibility)
-add_subdirectory(main/AbstractionLayer/Applications/Event)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/OperatingSystem/Esp)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Network/Wifi/Esp)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Ip/Esp)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Logging/Esp)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Storage/Esp)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Serialization/ClearBlueCloudProtobuf)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Error/Esp)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Tools/Any/Crc)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/MemoryManagement/Esp)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Cryptography/Esp)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Utilities)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Applications/Logging)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Applications/ChainOfResponsibility)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Applications/Event)

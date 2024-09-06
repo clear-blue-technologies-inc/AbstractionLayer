@@ -41,6 +41,7 @@ ErrorType EventQueue::runNextEvent() {
     }
 
     auto event = std::move(events.front());
+    assert(nullptr != event)
     events.erase(events.begin());
 
     error = OperatingSystem::Instance().incrementSemaphore(binarySemaphore);
