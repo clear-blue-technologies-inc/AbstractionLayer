@@ -34,13 +34,15 @@ if (${RELEASE_BUILD})
 
   target_compile_definitions(${PROJECT_NAME}${EXECUTABLE_SUFFIX} PUBLIC CONFIG_LOG_COLORS=0)
 
-elseif (${DEBUG_BUILD})
-  message(STATUS "Building Debug build")
+#default to debug build
+else ()
+  message(STATUS "Building debug build")
   target_compile_options(${PROJECT_NAME}${EXECUTABLE_SUFFIX}
   PRIVATE
     -ffunction-sections
     -fdata-sections
     -fno-exceptions
+    -mlongcalls
     -O0
     -g3
     -ggdb
@@ -53,9 +55,6 @@ elseif (${DEBUG_BUILD})
 endif()
 
 add_subdirectory(main/AbstractionLayer)
-
-##Application layer. Cross-platform implementation core code
-#add_subdirectory()
 
 #Module/Porting layer
 #Modules are chunks of code that implement functionality. They are all interchangeable provided that the target platform
@@ -81,3 +80,4 @@ add_subdirectory(main/AbstractionLayer/Modules/Cryptography/MacOs)
 add_subdirectory(main/AbstractionLayer/Utilities)
 add_subdirectory(main/AbstractionLayer/Applications/Logging)
 add_subdirectory(main/AbstractionLayer/Applications/ChainOfResponsibility)
+add_subdirectory(main/AbstractionLayer/Applications/Event)

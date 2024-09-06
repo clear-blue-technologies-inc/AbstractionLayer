@@ -63,21 +63,12 @@ endif()
 
 Additional platforms can be added in this pattern.
 
-Then you should add your main application files to the `.cmake` files where it prompts for them:
+Then you should add your main application files to  you top-level main application `CMakeLists.txt`
 
 ```
-##Application layer - Cross-platform implementation core code
-#add_subdirectory()
-```
-
-Replace it with something like:
-
-```
-##Application layer - Cross-platform implementation core code
 add_subdirectory(mainApplicationDir1)
 add_subdirectory(mainApplicationDir2)
 add_subdirectory(mainApplicationDir3)
 ...
-```
 
-Alternatively, if you don't want to dirty this repo, add those lines to your main application top-level `CMakeLists.txt` with a further advantage of only having to add them once.
+You can do it before or after the inlcude. It doesn't matter.

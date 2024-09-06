@@ -3,7 +3,7 @@ STATIC
   ErrorModule.cpp
 )
 
-target_link_libraries(cbtErrnoError PUBLIC Error)
+target_link_libraries(cbtErrnoError PUBLIC Utilities)
 target_link_libraries(${PROJECT_NAME}${EXECUTABLE_SUFFIX} PUBLIC cbtErrnoError)
 
 if (ESP_PLATFORM)

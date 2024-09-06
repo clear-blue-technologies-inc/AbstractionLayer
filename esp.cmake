@@ -69,9 +69,6 @@ endif()
 add_subdirectory(main/AbstractionLayer)
 target_include_directories(__idf_main PRIVATE $<TARGET_PROPERTY:abstractionLayer,INTERFACE_INCLUDE_DIRECTORIES>)
 
-##Application layer - Cross-platform implementation core code
-#add_subdirectory()
-
 ##Module/Porting layer
 ##Modules are chunks of code that implement functionality. They are optional and can be removed.
 ##They also serve as a method of porting to Foundation on different platforms.
@@ -79,7 +76,7 @@ target_include_directories(__idf_main PRIVATE $<TARGET_PROPERTY:abstractionLayer
 ##To remove modules, use the "None" port since at least a function stub must exist for Foundation
 ##core code to call.
 add_subdirectory(main/AbstractionLayer/Modules/Drivers/Uart/Esp)
-add_subdirectory(main/AbstractionLayer/Modules/Drivers/Watchdog/Kevin)
+add_subdirectory(main/AbstractionLayer/Modules/Drivers/Watchdog/None)
 add_subdirectory(main/AbstractionLayer/Modules/Drivers/Gpio/Esp)
 
 add_subdirectory(main/AbstractionLayer/Modules/OperatingSystem/Esp)
@@ -95,3 +92,4 @@ add_subdirectory(main/AbstractionLayer/Modules/Cryptography/Esp)
 add_subdirectory(main/AbstractionLayer/Utilities)
 add_subdirectory(main/AbstractionLayer/Applications/Logging)
 add_subdirectory(main/AbstractionLayer/Applications/ChainOfResponsibility)
+add_subdirectory(main/AbstractionLayer/Applications/Event)

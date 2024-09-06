@@ -9,9 +9,10 @@ STATIC
 )
 target_include_directories(Cryptography INTERFACE ${CMAKE_CURRENT_LIST_DIR})
 
-target_include_directories(cbtMacOsCryptography PRIVATE $<TARGET_PROPERTY:abstractionLayer,INTERFACE_INCLUDE_DIRECTORIES>)
 target_include_directories(cbtMacOsCryptography PRIVATE ${CMAKE_CURRENT_LIST_DIR}/libsodium-stable/src/libsodium/include)
 
+target_link_libraries(cbtMacOsCryptography PUBLIC Utilities)
+target_link_libraries(cbtMacOsCryptography PUBLIC abstractionLayer)
 target_link_libraries(${PROJECT_NAME}${EXECUTABLE_SUFFIX} PUBLIC cbtMacOsCryptography)
 
 add_custom_command(

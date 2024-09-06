@@ -10,8 +10,7 @@ STATIC
   crc.c
 )
 
-target_link_libraries(cbtAnyCyclicRedundancyCheck PUBLIC Error)
-target_link_libraries(cbtAnyCyclicRedundancyCheck PUBLIC Types)
+target_link_libraries(cbtAnyCyclicRedundancyCheck PUBLIC Utilities)
 target_link_libraries(${PROJECT_NAME}${EXECUTABLE_SUFFIX} PUBLIC cbtAnyCyclicRedundancyCheck)
 
 if (ESP_PLATFORM)

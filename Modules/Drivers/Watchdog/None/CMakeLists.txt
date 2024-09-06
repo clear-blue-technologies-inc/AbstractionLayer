@@ -12,8 +12,8 @@ target_include_directories(Watchdog INTERFACE ${CMAKE_CURRENT_LIST_DIR})
 
 target_link_libraries(cbtNoneWatchdog PUBLIC abstractionLayer)
 target_link_libraries(cbtNoneWatchdog PUBLIC Watchdog)
-target_link_libraries(cbtNoneWatchdog PUBLIC Common)
-target_link_libraries(cbtNoneWatchdog PUBLIC Logging)
+target_link_libraries(cbtNoneWatchdog PUBLIC Gpio)
+target_link_libraries(cbtNoneWatchdog PUBLIC Utilities)
 target_link_libraries(${PROJECT_NAME}${EXECUTABLE_SUFFIX} PUBLIC cbtNoneWatchdog)
 
 if (ESP_PLATFORM)

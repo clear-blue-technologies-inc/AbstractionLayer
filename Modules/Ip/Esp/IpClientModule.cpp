@@ -126,7 +126,7 @@ ErrorType IpClient::disconnect() {
 //TODO: Timeout is not implemented
 ErrorType IpClient::sendBlocking(const std::string &data, const Milliseconds timeout) {
     assert(0 != _socket);
-    
+
     int err = send(_socket, data.data(), data.size(), 0);
 
     if (err < 0) {
@@ -140,7 +140,7 @@ ErrorType IpClient::sendBlocking(const std::string &data, const Milliseconds tim
 
 ErrorType IpClient::receiveBlocking(std::string &buffer, const Milliseconds timeout) {
     assert(0 != _socket);
-    
+
     ssize_t len = 0;
     ErrorType error = ErrorType::Failure;
     struct timeval timeoutval = {
@@ -167,7 +167,7 @@ ErrorType IpClient::receiveBlocking(std::string &buffer, const Milliseconds time
     }
     else {
         if (len > buffer.size()) {
-            error = ErrorType::PrerequisitesNotMet;
+            error =  ErrorType::PrerequisitesNotMet;
         }
         else {
             buffer.resize(len);
@@ -177,7 +177,7 @@ ErrorType IpClient::receiveBlocking(std::string &buffer, const Milliseconds time
 
     buffer.resize(0);
     _status.connected = false;
-    
+
     return error;
 }
 
@@ -186,6 +186,11 @@ ErrorType IpClient::sendNonBlocking(const std::shared_ptr<std::string> data, con
 
     auto tx = [this, callback, &sent](const std::shared_ptr<std::string> frame, const Milliseconds timeout) -> ErrorType {
         ErrorType error = ErrorType::Failure;
+
+        if (nullptr == frame.get()) {
+            assert(false);
+            return ErrorType::NoData;
+        }
 
         error = sendBlocking(*frame.get(), timeout);
 
@@ -229,6 +234,11 @@ ErrorType IpClient::receiveNonBlocking(std::shared_ptr<std::string> buffer, cons
 
     auto rx = [this, callback, &received](const std::shared_ptr<std::string> buffer, const Milliseconds timeout) -> ErrorType {
         ErrorType error = ErrorType::Failure;
+
+        if (nullptr == buffer.get()) {
+            assert(false);
+            return ErrorType::NoData;
+        }
 
         error = receiveBlocking(*buffer.get(), timeout);
 
