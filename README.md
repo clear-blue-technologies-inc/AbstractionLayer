@@ -63,7 +63,7 @@ endif()
 
 Additional platforms can be added in this pattern.
 
-Then you should add your main application files to  you top-level main application `CMakeLists.txt`
+Then you should add your main application files to your top-level main application `CMakeLists.txt`
 
 ```
 add_subdirectory(mainApplicationDir1)
