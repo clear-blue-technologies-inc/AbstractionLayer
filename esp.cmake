@@ -15,7 +15,6 @@ add_subdirectory(${CMAKE_CURRENT_LIST_DIR})
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Drivers/Uart/Esp)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Drivers/Watchdog/Kevin)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Drivers/Gpio/Esp)
-
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/OperatingSystem/Esp)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Network/Wifi/Esp)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Ip/Esp)
