@@ -3,13 +3,14 @@
 
 //Modules
 #include "Global.hpp"
+#include "EventQueue.hpp"
 //AbstractionLayer
 #include "StorageAbstraction.hpp"
 
 /**
  * @class Storage
 */
-class Storage : public StorageAbstraction, public Global<Storage, std::string> {
+class Storage : public StorageAbstraction, public Global<Storage, std::string>, public EventQueue {
 
     public:
     Storage(std::string name) : StorageAbstraction(name) {

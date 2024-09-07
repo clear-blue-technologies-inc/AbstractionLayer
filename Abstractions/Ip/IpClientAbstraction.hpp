@@ -56,6 +56,7 @@ class NetworkAbstraction;
 /**
  * @class IpClientAbstraction
  * @brief Abstraction for creating a client on any network
+ * @note You should use the network to handle communication by placing events on it's queue.
 */
 class IpClientAbstraction {
 

@@ -1,10 +1,11 @@
 #ifndef __STORAGE_MODULE_HPP__
 #define __STORAGE_MODULE_HPP__
 
-//Common
+//Utilities
 #include "Global.hpp"
-//AbstractionLayer
 #include "Error.hpp"
+#include "EventQueue.hpp"
+//AbstractionLayer
 #include "StorageAbstraction.hpp"
 #include "OperatingSystemAbstraction.hpp"
 //ESP
@@ -13,7 +14,7 @@
 /**
  * @class Storage
 */
-class Storage : public StorageAbstraction, public Global<Storage, std::string> {
+class Storage : public StorageAbstraction, public Global<Storage, std::string>, public EventQueue{
 
     public:
     /**

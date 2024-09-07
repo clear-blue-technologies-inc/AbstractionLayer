@@ -52,6 +52,7 @@ class NetworkAbstraction;
 /**
  * @class IpServerAbstraction
  * @brief Creates a server on any network
+ * @note You should use the network to handle communication by placing events on it's queue.
  */
 class IpServerAbstraction {
 

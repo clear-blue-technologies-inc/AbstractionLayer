@@ -36,6 +36,7 @@ class EventAbstraction {
 
 /**
  * @class EventQueue
+ * @details Queue is FIFO
  * @brief Provides an interface for synchronizing calls to base classes.
 */
 class EventQueue {
