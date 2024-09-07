@@ -3,8 +3,9 @@
 
 #include "LoggingAbstraction.hpp"
 #include "Global.hpp"
+#include "EventQueue.hpp"
 
-class Logger : public LoggingAbstraction, public Global<Logger> {
+class Logger : public LoggingAbstraction, public Global<Logger>, public EventQueue {
     public:
     Logger() : LoggingAbstraction() {}
     virtual ~Logger() = default;

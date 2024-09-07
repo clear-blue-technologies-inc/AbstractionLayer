@@ -24,8 +24,6 @@ namespace Fnd {
         Unknown = 0,       ///< The signature is unknown.
         NetworkData = 1,   ///< The data is network data and origingate from the newtwork.
         StorageData = 2,   ///< The data is storage data and originates from storage.
-        CleonData = 3,     ///< The data is Cleon data and originates from cleon.
-        FoundationData = 4 ///< The data is Foundation data and originates from Foundation.
     };
 
     /**

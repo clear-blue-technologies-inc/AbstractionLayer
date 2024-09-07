@@ -1,10 +1,13 @@
 #ifndef __LOGGER_MODULE_HPP__
 #define __LOGGER_MODULE_HPP__
 
+//Abstractions
 #include "LoggingAbstraction.hpp"
+//Utilities
 #include "Global.hpp"
+#include "EventQueue.hpp"
 
-class Logger : public LoggingAbstraction, public Global<Logger> {
+class Logger : public LoggingAbstraction, public Global<Logger>, public EventQueue {
     public:
     Logger() : LoggingAbstraction() {}
     virtual ~Logger() = default;

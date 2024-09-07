@@ -1,14 +1,28 @@
 #include "esp_heap_caps.h"
 
-//TODO: I think this needs a bit more thought. I feel like I don't know enough about the memory
-//layout to be confident that these calls are the best choice. Maybe could do something like choose
-//where to allocate based on the size.
+//Going off the strategies listed here: https://docs.espressif.com/projects/esp-idf/en/v5.1.1/esp32/api-reference/kconfig.html#config-spiram-malloc-alwaysinternal
+//https://docs.espressif.com/projects/esp-idf/en/v5.1.1/esp32/api-reference/system/mem_alloc.html
+static void *allocate(size_t size) {
+    constexpr size_t spiramThreshold = 8196;
+
+    if (size <= spiramThreshold) {
+        if (nullptr == heap_caps_malloc(size, MALLOC_CAP_8BIT)) {
+            return heap_caps_malloc(size, MALLOC_CAP_SPIRAM);
+        }
+    }
+    else {
+        if (nullptr == heap_caps_malloc(size, MALLOC_CAP_SPIRAM)) {
+            return heap_caps_malloc(size, MALLOC_CAP_8BIT);
+        }
+    }
+}
+
 void *operator new(size_t size) {
-    return heap_caps_malloc(size, MALLOC_CAP_SPIRAM);
+    return allocate(size);
 }
 
 void *operator new[](size_t size) {
-    return heap_caps_malloc(size, MALLOC_CAP_SPIRAM);
+    return allocate(size);
 }
 
 void operator delete(void *ptr) {

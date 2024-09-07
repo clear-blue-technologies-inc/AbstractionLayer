@@ -41,7 +41,7 @@ ErrorType EventQueue::runNextEvent() {
     }
 
     auto event = std::move(events.front());
-    assert(nullptr != event)
+    assert(nullptr != event.get());
     events.erase(events.begin());
 
     error = OperatingSystem::Instance().incrementSemaphore(binarySemaphore);
@@ -49,7 +49,6 @@ ErrorType EventQueue::runNextEvent() {
 
     //This needs to be run last, in case the event needs to add more events to the queue or run an event.
     error = event->run();
-
 
     return ErrorType::Success;
 }

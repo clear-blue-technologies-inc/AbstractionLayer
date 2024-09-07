@@ -56,6 +56,7 @@ class NetworkAbstraction;
 /**
  * @class IpClientAbstraction
  * @brief Abstraction for creating a client on any network
+ * @note You should use the network to handle communication by placing events on it's queue.
 */
 class IpClientAbstraction {
 
@@ -79,16 +80,16 @@ class IpClientAbstraction {
      * @param[out] socket The socket that was created
      * @param[in] timeout The amount of time to wait to connect to the host
      * @post The caller is blocked until the connection is made or the timeout is reached. The connection can still be made after the timeout is reached.
-     * @returns ErrorType::Success on success
-     * @returns ErrorType::Failure on failure
-     * @returns ErrorType::NotImplemented if not implemented
+     * @returns Fnd::ErrorType::Success on success
+     * @returns Fnd::ErrorType::Failure on failure
+     * @returns Fnd::ErrorType::NotImplemented if not implemented
     */
     virtual ErrorType connectTo(std::string hostname, Port port, IpClientSettings::Protocol protocol, IpClientSettings::Version version, Socket &socket, Milliseconds timeout) = 0;
     /**
      * @brief Disconnect this client
-     * @returns ErrorType::Success on success
-     * @returns ErrorType::Failure on failure
-     * @returns ErrorType::NotImplemented if not implemented
+     * @returns Fnd::ErrorType::Success on success
+     * @returns Fnd::ErrorType::Failure on failure
+     * @returns Fnd::ErrorType::NotImplemented if not implemented
     */
     virtual ErrorType disconnect() = 0;
     /**
@@ -96,10 +97,10 @@ class IpClientAbstraction {
      * @param[in] data The data to send
      * @param[in] timeout The amount of time to wait to send the message
      * @pre data should be appropriately sized with the correct amount of bytes you want to send, i.e data.resize()
-     * @returns ErrorType::Success on success
-     * @returns ErrorType::Failure on failure
-     * @returns ErrorType::NotImplemented if not implemented
-     * @returns ErrorType::Timeout if a timeout occurred
+     * @returns Fnd::ErrorType::Success on success
+     * @returns Fnd::ErrorType::Failure on failure
+     * @returns Fnd::ErrorType::NotImplemented if not implemented
+     * @returns Fnd::ErrorType::Timeout if a timeout occurred
     */
     virtual ErrorType sendBlocking(const std::string &data, const Milliseconds timeout) = 0;
     /**
@@ -129,7 +130,7 @@ class IpClientAbstraction {
      * @returns ErrorType::Failure on failure
      * @returns ErrorType::NotImplemented if not implemented
      * @returns ErrorType::Timeout if a timeout occurred
-     * @returns ErrorType::PrerequisitesNotMet if the buffer is not appropriately sized.
+     * @returns ErrorType::PrerequisitesNotMet if the buffer is not appropriately sized
     */
     virtual ErrorType sendNonBlocking(const std::shared_ptr<std::string> data, const Milliseconds timeout, std::function<void(const ErrorType error, const Bytes bytesWritten)> callback = nullptr) = 0;
     /**
@@ -142,10 +143,10 @@ class IpClientAbstraction {
      * @code
      * //TODO: add an example of a callback and how to give it to this function
      * @endcode
-     * @returns ErrorType::Success on success
-     * @returns ErrorType::Failure on failure
-     * @returns ErrorType::NotImplemented if not implemented
-     * @returns ErrorType::Timeout if a timeout occurred
+     * @returns Fnd::ErrorType::Success on success
+     * @returns Fnd::ErrorType::Failure on failure
+     * @returns Fnd::ErrorType::NotImplemented if not implemented
+     * @returns Fnd::ErrorType::Timeout if a timeout occurred
     */
     virtual ErrorType receiveNonBlocking(std::shared_ptr<std::string> buffer, const Milliseconds timeout, std::function<void(const ErrorType error, std::shared_ptr<std::string> buffer)> callback = nullptr) = 0;
 

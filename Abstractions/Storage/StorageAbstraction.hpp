@@ -7,10 +7,8 @@
 #ifndef __STORAGE_ABSTRACTION_HPP__
 #define __STORAGE_ABSTRACTION_HPP__
 
-//Foundation
+//Utilities
 #include "Types.hpp"
-#include "EventQueue.hpp"
-//Modules
 #include "Error.hpp"
 //C++
 #include <string>
@@ -28,7 +26,7 @@ struct StorageStatus {
  * @class StorageAbstraction
  * @brief Foundation core functions for any storage type
 */
-class StorageAbstraction : public EventQueue {
+class StorageAbstraction {
 
     public:
     /**

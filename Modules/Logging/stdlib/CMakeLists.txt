@@ -13,6 +13,7 @@ target_include_directories(Logging INTERFACE ${CMAKE_CURRENT_LIST_DIR})
 target_link_libraries(cbtStdlibLogger PUBLIC abstractionLayer)
 target_link_libraries(cbtStdlibLogger PUBLIC Logging)
 target_link_libraries(cbtStdlibLogger PUBLIC Utilities)
+target_link_libraries(cbtStdlibLogger PUBLIC Event)
 target_link_libraries(${PROJECT_NAME}${EXECUTABLE_SUFFIX} PUBLIC cbtStdlibLogger)
 
 if (ESP_PLATFORM)

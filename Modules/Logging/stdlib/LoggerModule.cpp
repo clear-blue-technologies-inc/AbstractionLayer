@@ -1,7 +1,8 @@
 //Moudles
 #include "LoggerModule.hpp"
-//C
-#include <stdio.h>
+//C++
+#include <cstdarg>
+#include <cstdio>
 
 ErrorType Logger::log(const LogType type, const char *tag, const char *format, ...) {
     va_list args;

@@ -3,12 +3,12 @@
 
 //AbstractionLayer
 #include "StorageAbstraction.hpp"
-//Common
+//Utilities
 #include "Error.hpp"
-//Modules
 #include "Global.hpp"
+#include "EventQueue.hpp"
 
-class Storage : public StorageAbstraction, public Global<Storage, std::string>{
+class Storage : public StorageAbstraction, public Global<Storage, std::string>, public EventQueue {
     public:
     Storage(std::string name) : StorageAbstraction(name) {
         _status.isInitialized = false;
