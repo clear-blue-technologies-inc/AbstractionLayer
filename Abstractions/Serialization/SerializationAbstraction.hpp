@@ -1,98 +1,188 @@
-/**************************************************************************//**
-* @author Ben Haubrich                                        
-* @file   SerializationAbstraction.hpp
-* @details \b Synopsis: \n Provides an abstraction serialization.
-* @ingroup AbstractionLayer
-*******************************************************************************/
-#ifndef __SERIALIZATION_ABSTRACTION_HPP__
-#define __SERIALIZATION_ABSTRACTION_HPP__
-
 //C++
+#include <iostream>
 #include <string>
-//AbstractionLayer
-#include "Error.hpp"
-#include "Types.hpp"
+#include <cstring>
+#include <cassert>
+//Modules
+#include "SerializationModule.hpp"
+//Nanopb
+#include "pb_common.h"
+#include "pb_decode.h"
+#include "pb_encode.h"
+//Api Protobufs
+#include "api_fc.pb.h"
+#include "api_cf.pb.h"
+#include "v2-cloud-api/generated/apiF0rx.pb.h"
+#include "v2-cloud-api/generated/apiF0tx.pb.h"
+#include "v2-cloud-api/generated/apiBA.pb.h"
+#include "v2-cloud-api/generated/apiF1.pb.h"
 
-/**
- * @enum SerializationType
- * @brief The type of serialization.
-*/
-enum class SerializationType {
-    Unknown = 0x00,                              ///< Unknown serialization type.
-    FoundationToCleonDataRequest         = 0xFC, ///< Foundation to cleon data request.
-    CleonToFoundationDataReply           = 0xCF, ///< Cleon to foundation data reply.
-    FoundationToCloudSyncRequest         = 0xF0, ///< Synchronization request to cloud
-    CloudToFoundationSyncRequest         = 0x0F, ///< Synchronization data from cloud
-    FoundationToCleonSyncRequest         = 0x0F, ///< Synchronization request from cloud.
-    FoundationToCloudSyncAcknowledge     = 0xF1, ///< Synchronization acknowledge to cloud.
-    TelemetryUpdate                      = 0xBA  ///< Telemetry update
-};
-
-/**
- * @class SerializationAbstraction
- * @brief Provides an abstraction for serialization. The data will be serialized as long the underlying serializer supports it.
-*/
-class SerializationAbstraction {
+//Helper template function for serialization
+template <typename MessageType, const pb_msgdesc_t* Fields>
+ErrorType serializeMessage(const std::string& data, std::string& serializedData) {
+    ErrorType error = ErrorType::Failure;
     
-    public:
-    SerializationAbstraction() = default;
-    virtual ~SerializationAbstraction() = default;
+    //No overlapping memory
+    assert(data.data() != serializedData.data());
 
-    /**
-     * @brief Serializes the given data.
-     * @param[in] data The data to serialize.
-     * @param[out] serializedData The serialized data.
-     * @param[in] type The type of the serialized data.
-     * @returns ErrorType::Success if the data was serialized.
-     * @returns ErrorType::InvalidParameter if the data to serialize has not been resized to the amount of data it contains.
-     * @returns ErrorType::InvalidParameter if the data to serialize has not been properly initialized.
-     * @returns ErrorType::NotImplemented if not implemented.
-     * @returns ErrorType::NotSupported if the type is not supported by the underlying deserializer.
-     * @returns ErrorType::Failure for any other failure.
-     * @note You may cast serializedData to the type that corresponds to the type given
-     * @code
-     * if (SerializedType::FoundationToCleonDataRequest == type) {
-     *   protobufCleonRequestMessage request;
-     *   memcpy(request, data.data(), data.size());
-     * }
-     * @endcode
-     * @post The size of the encoded data is given by serializedData.size()
-     */ 
-    virtual ErrorType serialize(const std::string &data, std::string &serializedData, SerializationType type) = 0;
-    /**
-     * @brief Deserializes the given data.
-     * @param[in] serializedData The data to deserialize.
-     * @param[out] data The deserialized data.
-     * @param[in] type The type of the serialized data.
-     * @returns ErrorType::Success if the data was deserialized.
-     * @returns ErrorType::InvalidParameter if the serialized data is invalid.
-     * @returns ErrorType::NotImplemented if not implemented.
-     * @returns ErrorType::NotSupported if the type is not supported by the underlying deserializer.
-     * @returns ErrorType::Failure for any other failure.
-     * @code
-     * if (SerializedType::FoundationToCleonDataRequest == type) {
-     *   protobufCleonRequestMessage request;
-     *   memcpy(request, serializedData.data(), serializedData.size());
-     * }
-     * @endcode
-    */
-    virtual ErrorType deserialize(const std::string &serializedData, std::string &data, SerializationType type) = 0;
-    /**
-     * @brief Get the maximum size of the serialized data.
-     * @param[out] maxSize The maximum size of the serialized data
-     * @param[in] type The type to get the max size for
-     * @returns ErrorType::Success if the max size could be determined
-     * @returns ErrorType::NotSupported if the type is not supported by the underlying deserializer.
-    */
-    virtual ErrorType maxSerializedSize(Bytes &maxSize, SerializationType type) = 0;
-    /**
-     * @brief Get the maximum size of the deserialized data.
-     * @param[out] maxSize The maximum size of the deserialized data
-     * @param[in] type The type to get the max size for
-     * @returns ErrorType::Success if the max size could be determined
-     * @returns ErrorType::NotSupported if the type is not supported by the underlying deserializer.
-    */
-    virtual ErrorType maxDeserializedSize(Bytes &maxSize, SerializationType type) = 0;
-};
+    pb_ostream_t oStream = pb_ostream_from_buffer(reinterpret_cast<pb_byte_t*>(serializedData.data()), serializedData.size());
 
-#endif // __SERIALIZATION_ABSTRACTION_HPP__
+    // Encode message. This will populate the serialized data parameter
+    if (!pb_encode(&oStream, Fields, reinterpret_cast<const void*>(data.data()))) {
+        error =  ErrorType::Failure;
+    }
+    else {
+        error = ErrorType::Success;
+    }
+
+    serializedData.resize(oStream.bytes_written);
+    return error;
+}
+
+ErrorType Serializer::serialize(const std::string &data, std::string &serializedData, SerializationType type) {
+
+    // Return failure if input is empty
+    if (data.empty()) {
+        return ErrorType::Failure;
+    }
+
+    pb_ostream_t oStream;
+    oStream = pb_ostream_from_buffer(reinterpret_cast<pb_byte_t*>(serializedData.data()), serializedData.size());
+
+    if (type == SerializationType::FoundationToCleonDataRequest) {
+        return serializeMessage<FC, FC_fields>(data, serializedData);
+    }
+    else if (type == SerializationType::CleonToFoundationDataReply) {
+        return serializeMessage<CF, CF_fields>(data, serializedData);
+    }
+    else if (type == SerializationType::FoundationToCloudSyncRequest) {
+        return serializeMessage<F0RX, F0RX_fields>(data, serializedData);
+    }
+    else if (type == SerializationType::CloudToFoundationSyncRequest || type == SerializationType::FoundationToCleonSyncRequest) {
+        return serializeMessage<F0TX, F0TX_fields>(data, serializedData);
+    }
+    else if (type == SerializationType::FoundationToCloudSyncAcknowledge) {
+        return serializeMessage<F1, F1_fields>(data, serializedData);
+    }
+    else if (type == SerializationType::TelemetryUpdate) {
+        return serializeMessage<BA, BA_fields>(data, serializedData);
+    }
+    else {
+        return ErrorType::NotSupported;
+    }
+}
+
+// Helper template function for deserialization
+template <typename MessageType, const pb_msgdesc_t* Fields>
+ErrorType deserializeMessage(const std::string& serializedData, std::string& data) {
+    ErrorType error = ErrorType::Failure;
+
+    //No overlapping memory
+    assert(data.data() != serializedData.data());
+
+    pb_istream_t iStream = pb_istream_from_buffer(reinterpret_cast<const pb_byte_t*>(serializedData.data()), serializedData.size());
+
+    if (!pb_decode(&iStream, Fields, reinterpret_cast<void*>(data.data()))) {
+        error = ErrorType::Failure;
+    }
+    else {
+        error = ErrorType::Success;
+    }
+
+    data.resize(sizeof(MessageType));
+    return error;
+}
+
+ErrorType Serializer::deserialize(const std::string &serializedData, std::string &data, SerializationType type) {
+
+    // Return failure if input is empty
+    if (serializedData.empty()) {
+        return ErrorType::Failure;
+    }
+
+    pb_istream_t iStream;
+    iStream = pb_istream_from_buffer(reinterpret_cast<const pb_byte_t*>(serializedData.data()), serializedData.size());
+
+    if (type == SerializationType::FoundationToCleonDataRequest) {
+        return deserializeMessage<FC, FC_fields>(serializedData, data);
+    }
+    else if (type == SerializationType::CleonToFoundationDataReply) {
+        return deserializeMessage<CF, CF_fields>(serializedData, data);
+    }
+    else if (type == SerializationType::FoundationToCloudSyncRequest) {
+        return deserializeMessage<F0RX, F0RX_fields>(serializedData, data);
+    }
+    else if (type == SerializationType::CloudToFoundationSyncRequest || type == SerializationType::FoundationToCleonSyncRequest) {
+        return deserializeMessage<F0TX, F0TX_fields>(serializedData, data);
+    }
+    else if (type == SerializationType::FoundationToCloudSyncAcknowledge) {
+        return deserializeMessage<F1, F1_fields>(serializedData, data);
+    }
+    else if (type == SerializationType::TelemetryUpdate) {
+        return deserializeMessage<BA, BA_fields>(serializedData, data);
+    }
+    else {
+        return ErrorType::NotSupported;
+    }
+}
+
+ErrorType Serializer::maxSerializedSize(Bytes &maxSize, SerializationType type) {
+    if (type == SerializationType::FoundationToCleonDataRequest) {
+        maxSize = FC_size;
+        return ErrorType::Success;
+    }
+    else if (type == SerializationType::CleonToFoundationDataReply) {
+        maxSize = CF_size;
+        return ErrorType::Success;
+    }
+    else if (type == SerializationType::FoundationToCloudSyncRequest) {
+        //Just gonna guess here. I don't know why the proto doesn't have F0RX_size
+        maxSize = sizeof(F0RX) + 512;
+        return ErrorType::Success;
+    }
+    else if (type == SerializationType::CloudToFoundationSyncRequest || type == SerializationType::FoundationToCleonSyncRequest) {
+        maxSize = F0TX_size + 512;
+        return ErrorType::Success;
+    }
+    else if (type == SerializationType::FoundationToCloudSyncAcknowledge) {
+        maxSize = sizeof(F1) + 512;
+        return ErrorType::Success;
+    }
+    else if (type == SerializationType::TelemetryUpdate) {
+        maxSize = BA_size;
+        return ErrorType::Success;
+    }
+    else {
+        return ErrorType::NotSupported;
+    }
+}
+
+ErrorType Serializer::maxDeserializedSize(Bytes &maxSize, SerializationType type) {
+    if (type == SerializationType::FoundationToCleonDataRequest) {
+        maxSize = sizeof(FC);
+        return ErrorType::Success;
+    }
+    else if (type == SerializationType::CleonToFoundationDataReply) {
+        maxSize = sizeof(CF);
+        return ErrorType::Success;
+    }
+    else if (type == SerializationType::FoundationToCloudSyncRequest) {
+        maxSize = sizeof(F0RX);
+        return ErrorType::Success;
+    }
+    else if (type == SerializationType::CloudToFoundationSyncRequest || type == SerializationType::FoundationToCleonSyncRequest) {
+        maxSize = sizeof(F0TX);
+        return ErrorType::Success;
+    }
+    else if (type == SerializationType::FoundationToCloudSyncAcknowledge) {
+        maxSize = sizeof(F1);
+        return ErrorType::Success;
+    }
+    else if (type == SerializationType::TelemetryUpdate) {
+        maxSize = sizeof(BA);
+        return ErrorType::Success;
+    }
+    else {
+        return ErrorType::NotSupported;
+    }
+}
