@@ -43,6 +43,7 @@ class SerializationAbstraction {
      * @param[in] data The data to serialize.
      * @param[out] serializedData The serialized data.
      * @param[in] type The type of the serialized data.
+     * @pre serializedData needs to be sized big enough or the function will return an error.
      * @returns ErrorType::Success if the data was serialized.
      * @returns ErrorType::InvalidParameter if the data to serialize has not been resized to the amount of data it contains.
      * @returns ErrorType::InvalidParameter if the data to serialize has not been properly initialized.
@@ -50,12 +51,6 @@ class SerializationAbstraction {
      * @returns ErrorType::NotSupported if the type is not supported by the underlying deserializer.
      * @returns ErrorType::Failure for any other failure.
      * @note You may cast serializedData to the type that corresponds to the type given
-     * @code
-     * if (SerializedType::FoundationToCleonDataRequest == type) {
-     *   protobufCleonRequestMessage request;
-     *   memcpy(request, data.data(), data.size());
-     * }
-     * @endcode
      * @post The size of the encoded data is given by serializedData.size()
      */ 
     virtual ErrorType serialize(const std::string &data, std::string &serializedData, SerializationType type) = 0;
@@ -64,17 +59,12 @@ class SerializationAbstraction {
      * @param[in] serializedData The data to deserialize.
      * @param[out] data The deserialized data.
      * @param[in] type The type of the serialized data.
+     * @pre data needs to be sized big enough or the function will return an error.
      * @returns ErrorType::Success if the data was deserialized.
      * @returns ErrorType::InvalidParameter if the serialized data is invalid.
      * @returns ErrorType::NotImplemented if not implemented.
      * @returns ErrorType::NotSupported if the type is not supported by the underlying deserializer.
      * @returns ErrorType::Failure for any other failure.
-     * @code
-     * if (SerializedType::FoundationToCleonDataRequest == type) {
-     *   protobufCleonRequestMessage request;
-     *   memcpy(request, serializedData.data(), serializedData.size());
-     * }
-     * @endcode
     */
     virtual ErrorType deserialize(const std::string &serializedData, std::string &data, SerializationType type) = 0;
     /**

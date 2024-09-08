@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <cstring>
+#include <cassert>
 //Modules
 #include "SerializationModule.hpp"
 //Nanopb
@@ -16,38 +17,26 @@
 #include "v2-cloud-api/generated/apiBA.pb.h"
 #include "v2-cloud-api/generated/apiF1.pb.h"
 
-// Helper template function for serialization
+//Helper template function for serialization
 template <typename MessageType, const pb_msgdesc_t* Fields>
 ErrorType serializeMessage(const std::string& data, std::string& serializedData) {
-    // Copy input data to message struct
-    MessageType message = MessageType();
-    std::memcpy(&message, data.data(), sizeof(MessageType));
+    ErrorType error = ErrorType::Failure;
+    
+    //No overlapping memory
+    assert(data.data() != serializedData.data());
 
-    // Initialize output stream for serialization
     pb_ostream_t oStream = pb_ostream_from_buffer(reinterpret_cast<pb_byte_t*>(serializedData.data()), serializedData.size());
 
     // Encode message. This will populate the serialized data parameter
-    if (!pb_encode(&oStream, Fields, &message)) {
-        return ErrorType::Failure;
+    if (!pb_encode(&oStream, Fields, reinterpret_cast<const void*>(data.data()))) {
+        error =  ErrorType::Failure;
+    }
+    else {
+        error = ErrorType::Success;
     }
 
-    // Resize serializedData to actual size used
     serializedData.resize(oStream.bytes_written);
-
-    // Initialize input stream for deserialization
-    pb_istream_t iStream = pb_istream_from_buffer(reinterpret_cast<pb_byte_t*>(serializedData.data()), serializedData.size());
-
-    // Decode message
-    if (!pb_decode(&iStream, Fields, &message)) {
-        return ErrorType::Failure;
-    }
-
-    // Compare original data and deserialized data
-    if (std::memcmp(&message, data.data(), data.size()) != 0) {
-        return ErrorType::InvalidParameter;
-    }
-
-    return ErrorType::Success;
+    return error;
 }
 
 ErrorType Serializer::serialize(const std::string &data, std::string &serializedData, SerializationType type) {
@@ -86,36 +75,22 @@ ErrorType Serializer::serialize(const std::string &data, std::string &serialized
 // Helper template function for deserialization
 template <typename MessageType, const pb_msgdesc_t* Fields>
 ErrorType deserializeMessage(const std::string& serializedData, std::string& data) {
+    ErrorType error = ErrorType::Failure;
 
-    // Initialize input stream for deserialization
+    //No overlapping memory
+    assert(data.data() != serializedData.data());
+
     pb_istream_t iStream = pb_istream_from_buffer(reinterpret_cast<const pb_byte_t*>(serializedData.data()), serializedData.size());
 
-    // Decode message
-    MessageType message = MessageType();
-    if (!pb_decode(&iStream, Fields, &message)) {
-        return ErrorType::Failure;
+    if (!pb_decode(&iStream, Fields, reinterpret_cast<void*>(data.data()))) {
+        error = ErrorType::Failure;
+    }
+    else {
+        error = ErrorType::Success;
     }
 
-    // Resize data to actual size used
-    data.resize(sizeof(message));
-
-    // Initialize output stream for serialization
-    pb_ostream_t oStream = pb_ostream_from_buffer(reinterpret_cast<pb_byte_t*>(data.data()), data.size());
-
-    // Encode message
-    if (!pb_encode(&oStream, Fields, &message)) {
-        return ErrorType::Failure;
-    }
-
-    // Compare original serialized data and re-serialized data
-    if (std::memcmp(serializedData.data(), data.data(), serializedData.size()) != 0) {
-        return ErrorType::InvalidParameter;
-    }
-
-    // Copy message to output data parameter
-    data.assign(reinterpret_cast<char*>(&message), sizeof(MessageType));
-
-    return ErrorType::Success;
+    data.resize(sizeof(MessageType));
+    return error;
 }
 
 ErrorType Serializer::deserialize(const std::string &serializedData, std::string &data, SerializationType type) {
