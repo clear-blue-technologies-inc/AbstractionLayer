@@ -18,7 +18,8 @@ target_link_libraries(${PROJECT_NAME}${EXECUTABLE_SUFFIX} PUBLIC cbtMacOsCryptog
 add_custom_command(
   OUTPUT ${CMAKE_CURRENT_LIST_DIR}/libsodium-stable/src/libsodium/.libs/libsodium.a
   WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/libsodium-stable
-  COMMAND ./configure && make && make check
+  COMMENT "Building libsodium..."
+  COMMAND autoreconf -i && ./configure && make && make check
   VERBATIM
 )
 add_custom_target(libsodium-stable DEPENDS ${CMAKE_CURRENT_LIST_DIR}/libsodium-stable/src/libsodium/.libs/libsodium.a)
