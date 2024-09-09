@@ -74,7 +74,7 @@ The main application code hasn't changed so I know the logic is correct. It will
 This abstraction layer allows easy changes away from drivers and build tools offered by your chip vendor. If you mix in vendor specific tools and drivers directly alongside your application, the application will develop a strong dependancy on it as it's size and complexity increases. Some of these dependancies are:
 - return types
 - parameters
-- function name
+- function names
   
 It will be difficult to port software like this to other platforms. Never say never. Anything can happen in a project with a long or even indefinite lifetime including having/wanting to support another processor or switch vendors. If you don't pay 
 attention to how your application manages dependancies even a smaller hardware change like a bluetooth chip, RTC, ADC, network switch can surprise you with how embedded it's become in your applications correctness.
