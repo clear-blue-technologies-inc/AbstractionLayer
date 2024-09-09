@@ -82,4 +82,5 @@ If you depend on an abstraction:
 - the return type almost never changes.
 - the parameters almost never change.
 - the function name almost never changes.
-  I say almost because it can be challenging to develop an abstraction layer that can support every driver on the market, but _almost never change_ is better than _certainly will change_.
+  
+I say almost because it can be challenging to develop an abstraction layer that can support every driver on the market, but _almost never change_ is better than _certainly will change_.
