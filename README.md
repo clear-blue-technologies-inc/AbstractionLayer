@@ -43,7 +43,7 @@ Alternatively, you can inlcude only a portion of it, e.g. Uart:
 
 `target_link_libraries(<target>, <PUBLIC|PRIVATE>, Uart)`
 
-## 1. Why use an abstraction layer
+## Why use an abstraction layer
 An abstraction layer allows you to build your main application code separate from common software components such as hardware peripherals, storage, networks, etc.
 This allows you to swap out components without having to edit or retest your main application. Consequentially, this allows you to develop and test applications on systems such
 as MacOS or Linux which have faster processing times and a more feature rich debugging environment, and then take that tested code and run it on an embedded target with your ported abstraction layer.
@@ -70,7 +70,7 @@ logger->log("LogTag", "Hello World", LogTpye::Info);
 
 The main application code hasn't changed so I know the logic is correct. It will print as long as the ported code works. If it doesn't print I can eliminate the main application code as a potential source of the bug since it's already been tested and has not changed.
 
-## 2. Reduce dependancies on chip vendor build tools
+## Reduce dependancies on chip vendor build tools
 This abstraction layer allows easy changes away from drivers and build tools offered by your chip vendor. If you mix in vendor specific tools and drivers directly alongside your application, the application will develop a strong dependancy on it as it's size and complexity increases. Some of these dependancies are:
 - return types
 - parameters
