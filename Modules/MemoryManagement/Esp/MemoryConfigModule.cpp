@@ -1,5 +1,5 @@
 #include "esp_heap_caps.h"
-
+#include <cassert>
 //Going off the strategies listed here: https://docs.espressif.com/projects/esp-idf/en/v5.1.1/esp32/api-reference/kconfig.html#config-spiram-malloc-alwaysinternal
 //https://docs.espressif.com/projects/esp-idf/en/v5.1.1/esp32/api-reference/system/mem_alloc.html
 static void *allocate(size_t size) {
