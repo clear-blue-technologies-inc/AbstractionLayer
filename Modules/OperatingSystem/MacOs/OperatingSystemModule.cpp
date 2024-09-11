@@ -114,6 +114,10 @@ ErrorType OperatingSystem::createSemaphore(Count max, Count initial, std::string
 }
 
 ErrorType OperatingSystem::deleteSemaphore(std::string name) {
+    if (!semaphores.contains(name)) {
+        return ErrorType::NoData;
+    }
+
     std::string internalName = std::string("/").append(name);
 
     if (0 != sem_unlink(internalName.c_str())) {
