@@ -139,7 +139,6 @@ ErrorType Uart::flushRxBuffer() {
     else {
         return toPlatformError(err);
     }
-    
 }
 
 ErrorType Uart::setHardwareConfig(int32_t txNumber, int32_t rxNumber, int32_t rtsNumber, int32_t ctsNumber, UartConfig::PeripheralNumber peripheralNumber) {
