@@ -123,6 +123,8 @@ class OperatingSystemAbstraction {
     /**
      * @brief deletes a semaphore.
      * @param[in] name The name of the semaphore.
+     * @returns ErrorType::Success if the semaphore was deleted.
+     * @returns ErrorType::NoData if the semaphore does not exist.
     */
     virtual ErrorType deleteSemaphore(std::string name) = 0;
     /**
@@ -131,18 +133,21 @@ class OperatingSystemAbstraction {
      * @param[in] timeout The amount of time to wait for the semaphore.
      * @returns ErrorType::Timeout if the semaphore couldn't be decremented within the timeout likely because the value is already zero.
      * @returns ErrorType::Success if the was decremented.
+     * @returns ErrorType::NoData if the semaphore does not exist.
     */
     virtual ErrorType waitSemaphore(std::string name, Milliseconds timeout) = 0;
     /**
      * @brief increments a semaphore.
      * @param[in] name The name of the semaphore.
      * @returns ErrorType::Success if the semaphore was incremented
+     * @returns ErrorType::NoData if the semaphore does not exist.
     */
     virtual ErrorType incrementSemaphore(std::string name) = 0;
     /**
      * @brief decrements a semaphore.
      * @param[in] name The name of the semaphore.
      * @returns ErrorType::Success if the semaphore was incremented
+     * @returns ErrorType::NoData if the semaphore does not exist.
     */
     virtual ErrorType decrementSemaphore(std::string name) = 0;
     /**

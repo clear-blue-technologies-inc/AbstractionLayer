@@ -107,21 +107,29 @@ ErrorType OperatingSystem::isDeleted(std::string name) {
 }
 
 ErrorType OperatingSystem::createSemaphore(Count max, Count initial, std::string name) {
-    SemaphoreHandle_t freertos_semaphore;
-    freertos_semaphore = xSemaphoreCreateCounting(max, initial);
+    SemaphoreHandle_t freertosSemaphore;
+    freertosSemaphore = xSemaphoreCreateCounting(max, initial);
 
-    semaphores[name] = freertos_semaphore;
+    semaphores[name] = freertosSemaphore;
 
     return ErrorType::Success;
 }
 
 ErrorType OperatingSystem::deleteSemaphore(std::string name) {
+    if (!semaphores.contains(name)) {
+        return ErrorType::NoData;
+    }
+
     vSemaphoreDelete(semaphores[name]);
 
     return ErrorType::Success;
 }
 
 ErrorType OperatingSystem::waitSemaphore(std::string name, Milliseconds timeout) {
+    if (!semaphores.contains(name)) {
+        return ErrorType::NoData;
+    }
+
     if (pdTRUE == xSemaphoreTake(semaphores[name], timeout)) {
         return ErrorType::Success;
     }
@@ -130,6 +138,10 @@ ErrorType OperatingSystem::waitSemaphore(std::string name, Milliseconds timeout)
 }
 
 ErrorType OperatingSystem::incrementSemaphore(std::string name) {
+    if (!semaphores.contains(name)) {
+        return ErrorType::NoData;
+    }
+
     if (pdTRUE == xSemaphoreGive(semaphores[name])) {
         return ErrorType::Success;
     }
@@ -138,6 +150,10 @@ ErrorType OperatingSystem::incrementSemaphore(std::string name) {
 }
 
 ErrorType OperatingSystem::decrementSemaphore(std::string name) {
+    if (!semaphores.contains(name)) {
+        return ErrorType::NoData;
+    }
+
     if (pdTRUE == xSemaphoreTake(semaphores[name], 0)) {
         return ErrorType::Success;
     }
