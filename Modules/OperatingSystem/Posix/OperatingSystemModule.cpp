@@ -5,6 +5,7 @@
 //Posix
 #include <sys/times.h>
 #include <sys/time.h>
+#include <sys/syslimits.h>
 
 ErrorType OperatingSystem::delay(Milliseconds delay) {
     usleep(delay*1000);
@@ -93,10 +94,13 @@ ErrorType OperatingSystem::isDeleted(std::string name) {
 ErrorType OperatingSystem::createSemaphore(Count max, Count initial, std::string name) {
     std::string internalName = std::string("/").append(name);
 
+    if (internalName.size() > NAME_MAX-4) {
+        return ErrorType::InvalidParameter;
+    }
+
     //On POSIX systems, a created semaphore has peristence within the kernel until it is removed.
     //So delete old semaphores first and then create the new one since we specify O_EXCL as a flag.
-    ErrorType error = deleteSemaphore(name); //Using name and not internalName is NOT a bug.
-    assert(ErrorType::Success == error || ErrorType::FileNotFound == error);
+    deleteSemaphore(name); //Using name and not internalName is NOT a bug.
     sem_t *semaphore = sem_open(internalName.c_str(), O_CREAT | O_EXCL, S_IRWXU, initial);
     if (SEM_FAILED == semaphore) {
         return toPlatformError(errno);
@@ -108,10 +112,6 @@ ErrorType OperatingSystem::createSemaphore(Count max, Count initial, std::string
 }
 
 ErrorType OperatingSystem::deleteSemaphore(std::string name) {
-    if (!semaphores.contains(name)) {
-        return ErrorType::NoData;
-    }
-
     std::string internalName = std::string("/").append(name);
 
     if (0 != sem_unlink(internalName.c_str())) {
