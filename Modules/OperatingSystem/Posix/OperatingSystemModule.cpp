@@ -108,6 +108,10 @@ ErrorType OperatingSystem::createSemaphore(Count max, Count initial, std::string
 }
 
 ErrorType OperatingSystem::deleteSemaphore(std::string name) {
+    if (!semaphores.contains(name)) {
+        return ErrorType::NoData;
+    }
+
     std::string internalName = std::string("/").append(name);
 
     if (0 != sem_unlink(internalName.c_str())) {
@@ -123,6 +127,11 @@ ErrorType OperatingSystem::waitSemaphore(std::string name, Milliseconds timeout)
     Milliseconds timeRemaining = timeout;
     constexpr Milliseconds delayTime = 1;
     int result;
+
+    if (!semaphores.contains(name)) {
+        return ErrorType::NoData;
+    }
+
     std::string internalName = std::string("/").append(name);
 
     do {
@@ -146,6 +155,10 @@ ErrorType OperatingSystem::waitSemaphore(std::string name, Milliseconds timeout)
 }
 
 ErrorType OperatingSystem::incrementSemaphore(std::string name) {
+    if (!semaphores.contains(name)) {
+        return ErrorType::NoData;
+    }
+
     std::string internalName = std::string("/").append(name);
 
     if (0 != sem_post(semaphores[internalName])) {
@@ -156,6 +169,10 @@ ErrorType OperatingSystem::incrementSemaphore(std::string name) {
 }
 
 ErrorType OperatingSystem::decrementSemaphore(std::string name) {
+    if (!semaphores.contains(name)) {
+        return ErrorType::NoData;
+    }
+
     std::string internalName = std::string("/").append(name);
 
     if (0 != sem_trywait(semaphores[internalName])) {
