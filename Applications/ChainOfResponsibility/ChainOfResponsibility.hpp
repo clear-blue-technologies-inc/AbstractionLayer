@@ -59,4 +59,4 @@ class ChainOfResponsibility : public Global<ChainOfResponsibility> {
 
 };
 
-#endif // __CBT_CHAIN_OF_RESPONSIBILITY_HPP__
+#endif // __CHAIN_OF_RESPONSIBILITY_HPP__
