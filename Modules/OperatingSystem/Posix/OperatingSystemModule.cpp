@@ -92,6 +92,8 @@ ErrorType OperatingSystem::isDeleted(std::string name) {
 }
 
 ErrorType OperatingSystem::createSemaphore(Count max, Count initial, std::string name) {
+    //The internal name is the name with a leading / to make it a valid semaphore name on POSIX systems.
+    //For all other purposes inside this operating system abstraction, the name should be used directly.
     std::string internalName = std::string("/").append(name);
 
     if (internalName.size() > NAME_MAX-4) {
@@ -106,7 +108,7 @@ ErrorType OperatingSystem::createSemaphore(Count max, Count initial, std::string
         return toPlatformError(errno);
     }
     else {
-        semaphores[internalName] = semaphore;
+        semaphores[name] = semaphore;
         return ErrorType::Success;
     }
 }
@@ -118,7 +120,7 @@ ErrorType OperatingSystem::deleteSemaphore(std::string name) {
         return toPlatformError(errno);
     }
 
-    semaphores.erase(internalName);
+    semaphores.erase(name);
 
     return ErrorType::Success;
 }
@@ -135,7 +137,7 @@ ErrorType OperatingSystem::waitSemaphore(std::string name, Milliseconds timeout)
     std::string internalName = std::string("/").append(name);
 
     do {
-        if (0 != (result = sem_wait(semaphores[internalName]))) {
+        if (0 != (result = sem_wait(semaphores[name]))) {
             if (timeRemaining > 0) {
                 delay(delayTime);
             }
@@ -161,7 +163,7 @@ ErrorType OperatingSystem::incrementSemaphore(std::string name) {
 
     std::string internalName = std::string("/").append(name);
 
-    if (0 != sem_post(semaphores[internalName])) {
+    if (0 != sem_post(semaphores[name])) {
         return toPlatformError(errno);
     }
 
@@ -175,7 +177,7 @@ ErrorType OperatingSystem::decrementSemaphore(std::string name) {
 
     std::string internalName = std::string("/").append(name);
 
-    if (0 != sem_trywait(semaphores[internalName])) {
+    if (0 != sem_trywait(semaphores[name])) {
         return toPlatformError(errno);
     }
 

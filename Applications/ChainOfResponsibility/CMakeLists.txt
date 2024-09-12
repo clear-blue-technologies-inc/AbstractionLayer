@@ -1,11 +1,11 @@
 target_sources(${PROJECT_NAME}${EXECUTABLE_SUFFIX}
 PRIVATE FILE_SET headers TYPE HEADERS BASE_DIRS ${CMAKE_CURRENT_LIST_DIR} FILES
-  CbtCommandObject.hpp
-  CbtChainOfResponsibility.hpp
+  CommandObject.hpp
+  ChainOfResponsibility.hpp
 )
 
 add_library(ChainOfResponsibility STATIC
-  CbtChainOfResponsibility.cpp
+  ChainOfResponsibility.cpp
 )
 
 target_include_directories(ChainOfResponsibility INTERFACE ChainOfResponsibility)

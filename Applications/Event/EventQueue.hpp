@@ -150,9 +150,10 @@ class EventQueue {
     /// @brief The maximum number of events that can be queued.
     static constexpr Count _maxEvents = 10;
     static constexpr Milliseconds SemaphoreTimeout = 0;
+    static int semaphoreCount;
     /// @brief The queue of events to run.
     std::vector<std::unique_ptr<EventAbstraction>> events;
-    std::string binarySemaphore = "binarySemaphore";
+    std::string binarySemaphore;
 };
 
 #endif //__EVENT_QUEUE_HPP__

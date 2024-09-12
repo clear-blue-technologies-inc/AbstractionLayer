@@ -1,7 +1,10 @@
 #include "EventQueue.hpp"
 #include "OperatingSystemModule.hpp"
 
+int EventQueue::semaphoreCount = 0;
 EventQueue::EventQueue() {
+    semaphoreCount++;
+    binarySemaphore = std::string("eventQueueBinarySemaphore").append(std::to_string(semaphoreCount));
     ErrorType error = OperatingSystem::Instance().createSemaphore(1, 1, binarySemaphore);
     assert(ErrorType::Success == error);
 }
