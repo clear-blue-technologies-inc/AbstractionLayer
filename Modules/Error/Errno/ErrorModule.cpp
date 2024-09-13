@@ -40,7 +40,7 @@ ErrorType toPlatformError(int32_t err) {
         case EOVERFLOW:
             return ErrorType::LimitReached;
         default:
-            CBT_LOGW("CbtErrnoError", "Got unhandled error code %d", err);
+            CBT_LOGW("ErrnoError", "Got unhandled error code %d", err);
             return ErrorType::Failure;
     }
 }

@@ -149,10 +149,13 @@ class EventQueue {
     private:
     /// @brief The maximum number of events that can be queued.
     static constexpr Count _maxEvents = 10;
+    /// @brief The timeout for semaphore operations.
     static constexpr Milliseconds SemaphoreTimeout = 0;
+    /// @brief the number of semaphores that have been created.
     static int semaphoreCount;
     /// @brief The queue of events to run.
     std::vector<std::unique_ptr<EventAbstraction>> events;
+    /// @brief The binary semaphore name for the next created semaphore.
     std::string binarySemaphore;
 };
 
