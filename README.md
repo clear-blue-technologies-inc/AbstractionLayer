@@ -1,5 +1,5 @@
 # AbstractionLayer
-An abstraction layer for building cross-platform, component-based C++/CMake projects.
+An abstraction layer for building cross-platform, [component-based](https://en.wikipedia.org/wiki/Component-based_software_engineering) C++/CMake projects.
 
 ## How to include Abstraction Layer in your project
 Your top-level `CMakeLists.txt` from your main application may include the top-level `CMakeLists.txt` of the abstraction layer as shown below:
