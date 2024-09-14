@@ -156,6 +156,8 @@ ErrorType Serializer::deserialize(const std::string &serializedData, std::string
     }
 }
 
+//The serialized size for some protobuf messages is given by *_size. For the messages that don't have this,
+//just use the size of the structure. The serialized size will always be smaller than this.
 ErrorType Serializer::maxSerializedSize(Bytes &maxSize, SerializationType type) {
     if (type == SerializationType::FoundationToCleonDataRequest) {
         maxSize = FC_size;
@@ -166,16 +168,15 @@ ErrorType Serializer::maxSerializedSize(Bytes &maxSize, SerializationType type) 
         return ErrorType::Success;
     }
     else if (type == SerializationType::FoundationToCloudSyncRequest) {
-        //Just gonna guess here. I don't know why the proto doesn't have F0RX_size
-        maxSize = sizeof(F0RX) + 128;
+        maxSize = sizeof(F0RX);
         return ErrorType::Success;
     }
     else if (type == SerializationType::CloudToFoundationSyncRequest || type == SerializationType::FoundationToCleonSyncRequest) {
-        maxSize = F0TX_size + 128;
+        maxSize = F0TX_size;
         return ErrorType::Success;
     }
     else if (type == SerializationType::FoundationToCloudSyncAcknowledge) {
-        maxSize = sizeof(F1) + 128;
+        maxSize = sizeof(F1);
         return ErrorType::Success;
     }
     else if (type == SerializationType::TelemetryUpdate) {
