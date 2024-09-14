@@ -78,7 +78,7 @@ class OperatingSystemAbstraction {
      * @returns ErrorType::Success if the thread is successfully created.
      * @returns ErrorType::NotImplemented if createThread is not implemented.
      * @returns ErrorType::LimitReached if the maximum number of threads is reached.
-     * @returns toCbtError for all other errors produced by the underlying implementation
+     * @returns toPlatformError for all other errors produced by the underlying implementation
     */
     virtual ErrorType createThread(OperatingSystemConfig::Priority priority, std::string name, void * arguments, Bytes stackSize, void *(*startFunction)(void *), Id &number) = 0;
     /**
@@ -92,7 +92,7 @@ class OperatingSystemAbstraction {
      * @returns ErrorType::Success if the thread is successfully created.
      * @returns ErrorType::NotImplemented if joinThread is not implemented.
      * @returns ErrorType::NoData if no thread with the name given has been created.
-     * @returns toCbtError() for all other errors produced by the underlying implementation
+     * @returns toPlatformError() for all other errors produced by the underlying implementation
     */
     virtual ErrorType joinThread(std::string name) = 0;
     /**
@@ -102,11 +102,14 @@ class OperatingSystemAbstraction {
      * @returns ErrorType::Success if the thread Id was found.
      * @returns ErrorType::NotImplemented if threadId is not implemented
      * @returns ErrorType::NoData if no thread with the name given has been created.
-     * @returns toCbtError() for all other errors produced by the underlying implementation
+     * @returns toPlatformError() for all other errors produced by the underlying implementation
     */
     virtual ErrorType threadId(std::string name, Id &id) = 0;
     /**
      * @brief Check if the thread has been deleted by the operating system.
+     * @details The operating system keeps a record of the threads it has created. Since the OperatingSystemAbstraction is decoupled from the main application,
+     *          it is not able to delete threads directly since it's not possible to tell when it is safe to delete a thread. Instead, it marks the thread as deleted
+     *          so that the main application can check if it's been deleted and then delete the thread when it's safe to do so.
      * @param[in] name The name of the thread.
      * @returns ErrorType::Success if the thread has been not deleted.
      * @returns ErrorType::NotImplemented if isDeleted is not implemented.
