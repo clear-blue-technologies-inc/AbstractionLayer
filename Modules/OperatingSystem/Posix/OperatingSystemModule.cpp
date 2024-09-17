@@ -83,7 +83,7 @@ ErrorType OperatingSystem::threadId(std::string name, Id &thread) {
     return ErrorType::NoData;
 }
 
-ErrorType OperatingSystem::isDeleted(std::string name) {
+ErrorType OperatingSystem::isDeleted(std::string &name) {
     if (threads.contains(name)) {
         return ErrorType::Success;
     }
@@ -125,7 +125,7 @@ ErrorType OperatingSystem::deleteSemaphore(std::string name) {
     return ErrorType::Success;
 }
 
-ErrorType OperatingSystem::waitSemaphore(std::string name, Milliseconds timeout) {
+ErrorType OperatingSystem::waitSemaphore(std::string &name, Milliseconds timeout) {
     Milliseconds timeRemaining = timeout;
     constexpr Milliseconds delayTime = 1;
     int result;
@@ -156,7 +156,7 @@ ErrorType OperatingSystem::waitSemaphore(std::string name, Milliseconds timeout)
     return ErrorType::Success;
 }
 
-ErrorType OperatingSystem::incrementSemaphore(std::string name) {
+ErrorType OperatingSystem::incrementSemaphore(std::string &name) {
     if (!semaphores.contains(name)) {
         return ErrorType::NoData;
     }
