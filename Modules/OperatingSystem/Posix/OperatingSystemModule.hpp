@@ -22,11 +22,11 @@ class OperatingSystem : public Global<OperatingSystem>, public OperatingSystemAb
     ErrorType deleteThread(std::string name) override;
     ErrorType joinThread(std::string name) override;
     ErrorType threadId(std::string name, Id &thread) override;
-    ErrorType isDeleted(std::string name) override;
+    ErrorType isDeleted(std::string &name) override;
     ErrorType createSemaphore(Count max, Count initial, std::string name) override;
     ErrorType deleteSemaphore(std::string name) override;
-    ErrorType waitSemaphore(std::string name, Milliseconds timeout) override;
-    ErrorType incrementSemaphore(std::string name) override;
+    ErrorType waitSemaphore(std::string &name, Milliseconds timeout) override;
+    ErrorType incrementSemaphore(std::string &name) override;
     ErrorType decrementSemaphore(std::string name) override;
     ErrorType createTimer(Id &timer, Milliseconds period, bool autoReload, std::function<void(void)> callback) override;
     ErrorType startTimer(Id timer, Milliseconds timeout) override;
