@@ -28,7 +28,7 @@ class OperatingSystem : public Global<OperatingSystem>, public OperatingSystemAb
     ErrorType deleteThread(std::string name) override;
     ErrorType joinThread(std::string name) override;
     ErrorType threadId(std::string name, Id &id) override;
-    ErrorType isDeleted(std::string name) override;
+    ErrorType isDeleted(std::string &name) override;
     ErrorType createSemaphore(Count max, Count initial, std::string name) override;
     ErrorType deleteSemaphore(std::string name) override;
     ErrorType waitSemaphore(std::string name, Milliseconds timeout) override;

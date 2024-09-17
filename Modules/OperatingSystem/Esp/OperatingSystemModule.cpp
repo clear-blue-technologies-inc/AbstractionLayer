@@ -98,7 +98,7 @@ ErrorType OperatingSystem::threadId(std::string name, Id &thread) {
     return ErrorType::NoData;
 }
 
-ErrorType OperatingSystem::isDeleted(std::string name) {
+ErrorType OperatingSystem::isDeleted(std::string &name) {
     if (threads.contains(name)) {
         return ErrorType::Success;
     }

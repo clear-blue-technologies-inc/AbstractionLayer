@@ -115,7 +115,7 @@ class OperatingSystemAbstraction {
      * @returns ErrorType::NotImplemented if isDeleted is not implemented.
      * @returns ErrorType::NoData if no thread with the name given is deleted.
     */
-    virtual ErrorType isDeleted(std::string name) = 0;
+    virtual ErrorType isDeleted(std::string &name) = 0;
     /**
      * @brief creates a semaphore.
      * @param[in] max The maximum value of the semaphore.
