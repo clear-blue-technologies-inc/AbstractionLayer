@@ -40,10 +40,11 @@ ErrorType serializeMessage(const std::string& data, std::string& serializedData)
 }
 
 ErrorType Serializer::serialize(const std::string &data, std::string &serializedData, SerializationType type) {
+    ErrorType error = ErrorType::Failure;
 
     // Return failure if input is empty
     if (data.empty()) {
-        return ErrorType::Failure;
+        return ErrorType::InvalidParameter;
     }
 
     Bytes maxSize = 0;
@@ -53,38 +54,29 @@ ErrorType Serializer::serialize(const std::string &data, std::string &serialized
     oStream = pb_ostream_from_buffer(reinterpret_cast<pb_byte_t*>(serializedData.data()), serializedData.size());
 
     if (type == SerializationType::FoundationToCleonDataRequest) {
-        ErrorType error = serializeMessage<FC, FC_fields>(data, serializedData);
-        assert(serializedData.size() <= maxSize);
-        return error;
+        error = serializeMessage<FC, FC_fields>(data, serializedData);
     }
     else if (type == SerializationType::CleonToFoundationDataReply) {
-        ErrorType error = serializeMessage<CF, CF_fields>(data, serializedData);
-        assert(serializedData.size() <= maxSize);
-        return error;
+        error = serializeMessage<CF, CF_fields>(data, serializedData);
     }
     else if (type == SerializationType::FoundationToCloudSyncRequest) {
-        ErrorType error = serializeMessage<F0RX, F0RX_fields>(data, serializedData);
-        assert(serializedData.size() <= maxSize);
-        return error;
+        error = serializeMessage<F0RX, F0RX_fields>(data, serializedData);
     }
     else if (type == SerializationType::CloudToFoundationSyncRequest || type == SerializationType::FoundationToCleonSyncRequest) {
-        ErrorType error = serializeMessage<F0TX, F0TX_fields>(data, serializedData);
-        assert(serializedData.size() <= maxSize);
-        return error;
+        error = serializeMessage<F0TX, F0TX_fields>(data, serializedData);
     }
     else if (type == SerializationType::FoundationToCloudSyncAcknowledge) {
-        ErrorType error = serializeMessage<F1, F1_fields>(data, serializedData);
-        assert(serializedData.size() <= maxSize);
-        return error;
+        error = serializeMessage<F1, F1_fields>(data, serializedData);
     }
     else if (type == SerializationType::TelemetryUpdate) {
-        ErrorType error = serializeMessage<BA, BA_fields>(data, serializedData);
-        assert(serializedData.size() <= maxSize);
-        return error;
+        error = serializeMessage<BA, BA_fields>(data, serializedData);
     }
     else {
-        return ErrorType::NotSupported;
+        error = ErrorType::NotSupported;
     }
+
+    assert(serializedData.size() <= maxSize);
+    return error;
 }
 
 // Helper template function for deserialization
@@ -109,10 +101,11 @@ ErrorType deserializeMessage(const std::string& serializedData, std::string& dat
 }
 
 ErrorType Serializer::deserialize(const std::string &serializedData, std::string &data, SerializationType type) {
+    ErrorType error = ErrorType::Failure;
 
     // Return failure if input is empty
     if (serializedData.empty()) {
-        return ErrorType::Failure;
+        return ErrorType::InvalidParameter;
     }
 
     Bytes maxSize;
@@ -122,38 +115,29 @@ ErrorType Serializer::deserialize(const std::string &serializedData, std::string
     iStream = pb_istream_from_buffer(reinterpret_cast<const pb_byte_t*>(serializedData.data()), serializedData.size());
 
     if (type == SerializationType::FoundationToCleonDataRequest) {
-        ErrorType error = deserializeMessage<FC, FC_fields>(serializedData, data);
-        assert(data.size() <= maxSize);
-        return error;
+        error = deserializeMessage<FC, FC_fields>(serializedData, data);
     }
     else if (type == SerializationType::CleonToFoundationDataReply) {
-        ErrorType error = deserializeMessage<CF, CF_fields>(serializedData, data);
-        assert(data.size() <= maxSize);
-        return error;
+        error = deserializeMessage<CF, CF_fields>(serializedData, data);
     }
     else if (type == SerializationType::FoundationToCloudSyncRequest) {
-        ErrorType error = deserializeMessage<F0RX, F0RX_fields>(serializedData, data);
-        assert(data.size() <= maxSize);
-        return error;
+        error = deserializeMessage<F0RX, F0RX_fields>(serializedData, data);
     }
     else if (type == SerializationType::CloudToFoundationSyncRequest || type == SerializationType::FoundationToCleonSyncRequest) {
-        ErrorType error = deserializeMessage<F0TX, F0TX_fields>(serializedData, data);
-        assert(data.size() <= maxSize);
-        return error;
+        error = deserializeMessage<F0TX, F0TX_fields>(serializedData, data);
     }
     else if (type == SerializationType::FoundationToCloudSyncAcknowledge) {
-        ErrorType error = deserializeMessage<F1, F1_fields>(serializedData, data);
-        assert(data.size() <= maxSize);
-        return error;
+        error = deserializeMessage<F1, F1_fields>(serializedData, data);
     }
     else if (type == SerializationType::TelemetryUpdate) {
-        ErrorType error = deserializeMessage<BA, BA_fields>(serializedData, data);
-        assert(data.size() <= maxSize);
-        return error;
+        error = deserializeMessage<BA, BA_fields>(serializedData, data);
     }
     else {
         return ErrorType::NotSupported;
     }
+
+    assert(data.size() <= maxSize);
+    return error;
 }
 
 //The serialized size for some protobuf messages is given by *_size. For the messages that don't have this,

@@ -131,7 +131,7 @@ ErrorType IpClient::sendNonBlocking(const std::shared_ptr<std::string> data, con
             return ErrorType::NoData;
         }
 
-        error = sendBlocking(*frame.get(), timeout);
+        error = sendBlocking(*frame, timeout);
 
         if (nullptr != callback) {
             callback(error, frame->size());
@@ -179,7 +179,7 @@ ErrorType IpClient::receiveNonBlocking(std::shared_ptr<std::string> buffer, cons
             return ErrorType::NoData;
         }
 
-        error = receiveBlocking(*buffer.get(), timeout);
+        error = receiveBlocking(*buffer, timeout);
 
         if (nullptr != callback) {
             callback(error, buffer);
