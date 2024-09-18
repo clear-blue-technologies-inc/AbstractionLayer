@@ -8,7 +8,7 @@ cmake_minimum_required(VERSION 3.5)
 
 project(foundationTesting)
 
-include(Ctest)
+include(CTest)
 
 #The name of the build folder for desktop builds changes based on the operating system used.
 file(GLOB buildDir ${CMAKE_SOURCE_DIR}/../*_build)
