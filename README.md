@@ -70,8 +70,8 @@ logger->log("LogTag", "Hello World", LogTpye::Info);
 
 The main application code hasn't changed so I know the logic is correct. It will print as long as the ported code works. If it doesn't print I can eliminate the main application code as a potential source of the bug since it's already been tested and has not changed.
 
-## Reduce dependancies on chip vendor build tools
-This abstraction layer allows easy changes away from drivers and build tools offered by your chip vendor. If you mix in vendor specific tools and drivers directly alongside your application, the application will develop a strong dependancy on it as it's size and complexity increases. Some of these dependancies are:
+## Reduce dependancies on chip vendors
+This abstraction layer allows easy(ier) changes away from drivers and build tools offered by your chip vendor. If you mix in vendor specific tools and drivers directly alongside your application, the application will develop a strong dependancy on it as it's size and complexity increases. Some of these dependancies are:
 - return types
 - parameters
 - function names
