@@ -1,0 +1,19 @@
+Start testing: Sep 18 15:28 EDT
+----------------------------------------------------------
+Unable to find executable: /Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/Example/ExampleTest
+1/1 Testing: Example
+1/1 Test: Example
+Command: ""
+Directory: /Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/Example
+"Example" start time: 
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Example" end time: Sep 18 15:28 EDT
+"Example" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Sep 18 15:28 EDT
