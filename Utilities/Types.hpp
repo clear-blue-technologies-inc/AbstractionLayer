@@ -8,7 +8,7 @@
 #ifndef __TYPES_HPP__
 #define __TYPES_HPP__
 
-#include <stdint.h>
+#include <cstdint>
 
 //-------------------------------Time
 ///@typedef Milliseconds
