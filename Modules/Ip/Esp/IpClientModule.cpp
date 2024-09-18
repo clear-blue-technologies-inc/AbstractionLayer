@@ -127,12 +127,9 @@ ErrorType IpClient::disconnect() {
 ErrorType IpClient::sendBlocking(const std::string &data, const Milliseconds timeout) {
     assert(0 != _socket);
 
-    int err = send(_socket, data.data(), data.size(), 0);
-
-    if (err < 0) {
-        CBT_LOGE(TAG, "Error occurred during sending: errno: %d", errno);
+    if (-1 == send(_socket, data.data(), data.size(), 0)) {
         _status.connected = false;
-        return ErrorType::Failure;
+        return toPlatformError(errno);
     }
 
     return ErrorType::Success;
@@ -141,8 +138,9 @@ ErrorType IpClient::sendBlocking(const std::string &data, const Milliseconds tim
 ErrorType IpClient::receiveBlocking(std::string &buffer, const Milliseconds timeout) {
     assert(0 != _socket);
 
-    ssize_t len = 0;
     ErrorType error = ErrorType::Failure;
+    ssize_t bytesReceived = 0;
+
     struct timeval timeoutval = {
         .tv_sec = timeout / 1000,
         .tv_usec = 0
@@ -153,26 +151,28 @@ ErrorType IpClient::receiveBlocking(std::string &buffer, const Milliseconds time
     FD_SET(_socket, &readfds);
 
     //Wait for input from the socket until the timeout
-    select(_socket + 1, &readfds, NULL, NULL, &timeoutval);
+    {
+    int ret;
+    ret = select(_socket + 1, &readfds, NULL, NULL, &timeoutval);
+    if (ret < 0) {
+        return toPlatformError(errno);
+    }
+    }
 
     if (FD_ISSET(_socket, &readfds)) {
-        len = recv(_socket, buffer.data(), buffer.size(), 0);
+        if (-1 == (bytesReceived = recv(_socket, buffer.data(), buffer.size(), 0))) {
+            error = toPlatformError(errno);
+        }
+        else if ((size_t)bytesReceived > buffer.size()) {
+            error = ErrorType::PrerequisitesNotMet;
+        }
+        else {
+            buffer.resize(bytesReceived);
+            return ErrorType::Success;
+        }
     }
     else {
         error = ErrorType::Timeout;
-    }
-
-    if (len < 0) {
-        error = toPlatformError(len);
-    }
-    else {
-        if (len > buffer.size()) {
-            error =  ErrorType::PrerequisitesNotMet;
-        }
-        else {
-            buffer.resize(len);
-            return ErrorType::Success;
-        }
     }
 
     buffer.resize(0);
@@ -188,11 +188,10 @@ ErrorType IpClient::sendNonBlocking(const std::shared_ptr<std::string> data, con
         ErrorType error = ErrorType::Failure;
 
         if (nullptr == frame.get()) {
-            assert(false);
             return ErrorType::NoData;
         }
 
-        error = sendBlocking(*frame.get(), timeout);
+        error = sendBlocking(*frame, timeout);
 
         if (nullptr != callback) {
             callback(error, frame->size());
@@ -236,11 +235,10 @@ ErrorType IpClient::receiveNonBlocking(std::shared_ptr<std::string> buffer, cons
         ErrorType error = ErrorType::Failure;
 
         if (nullptr == buffer.get()) {
-            assert(false);
             return ErrorType::NoData;
         }
 
-        error = receiveBlocking(*buffer.get(), timeout);
+        error = receiveBlocking(*buffer, timeout);
 
         if (nullptr != callback) {
             callback(error, buffer);

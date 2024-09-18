@@ -62,6 +62,7 @@ ErrorType IpClient::disconnect() {
     return ErrorType::NotImplemented;
 }
 
+//TODO: Timeout is not implemented
 ErrorType IpClient::sendBlocking(const std::string &data, const Milliseconds timeout) {
     assert(0 != _socket);
 
@@ -69,8 +70,6 @@ ErrorType IpClient::sendBlocking(const std::string &data, const Milliseconds tim
         _status.connected = false;
         return toPlatformError(errno);
     }
-
-
 
     return ErrorType::Success;
 }
@@ -91,7 +90,13 @@ ErrorType IpClient::receiveBlocking(std::string &buffer, const Milliseconds time
     FD_SET(_socket, &readfds);
 
     //Wait for input from the socket until the timeout
-    select(_socket + 1, &readfds, NULL, NULL, &timeoutval);
+    {
+    int ret;
+    ret = select(_socket + 1, &readfds, NULL, NULL, &timeoutval);
+    if (ret < 0) {
+        return toPlatformError(errno);
+    }
+    }
 
     if (FD_ISSET(_socket, &readfds)) {
         if (-1 == (bytesReceived = recv(_socket, buffer.data(), buffer.size(), 0))) {
@@ -126,7 +131,7 @@ ErrorType IpClient::sendNonBlocking(const std::shared_ptr<std::string> data, con
             return ErrorType::NoData;
         }
 
-        error = sendBlocking(*frame.get(), timeout);
+        error = sendBlocking(*frame, timeout);
 
         if (nullptr != callback) {
             callback(error, frame->size());
@@ -174,7 +179,7 @@ ErrorType IpClient::receiveNonBlocking(std::shared_ptr<std::string> buffer, cons
             return ErrorType::NoData;
         }
 
-        error = receiveBlocking(*buffer.get(), timeout);
+        error = receiveBlocking(*buffer, timeout);
 
         if (nullptr != callback) {
             callback(error, buffer);
