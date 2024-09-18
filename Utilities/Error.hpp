@@ -8,7 +8,7 @@
 #ifndef __ERROR_HPP__
 #define __ERROR_HPP__
 
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * @enum ErrorType
