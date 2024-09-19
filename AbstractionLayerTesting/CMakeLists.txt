@@ -2,7 +2,7 @@
 #Date: May 9th, 2024                                                           #
 #File: CMakeLists.txt                                                          #
 #Authour: Ben Haubrich                                                         #
-#Synopsis: Top level project CMakeList.txt for testing foundation              #
+#Synopsis: Top level project CMakeList.txt for testing the abstraction layer   #
 ################################################################################
 cmake_minimum_required(VERSION 3.5)
 
@@ -11,7 +11,7 @@ project(foundationTesting)
 include(CTest)
 
 #The name of the build folder for desktop builds changes based on the operating system used.
-file(GLOB buildDir ${CMAKE_SOURCE_DIR}/../*_build)
+file(GLOB buildDir ${CMAKE_SOURCE_DIR}/../../*_build)
 
 add_library(foundationTesting INTERFACE)
 

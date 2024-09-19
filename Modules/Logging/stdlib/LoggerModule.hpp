@@ -9,7 +9,7 @@
 
 class Logger : public LoggingAbstraction, public Global<Logger>, public EventQueue {
     public:
-    Logger() : LoggingAbstraction() {}
+    Logger() : LoggingAbstraction(), EventQueue() {}
     virtual ~Logger() = default;
 
     virtual ErrorType log(const LogType type, const char *tag, const char *format, ...) override;
