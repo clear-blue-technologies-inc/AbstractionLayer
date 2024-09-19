@@ -2,46 +2,7 @@
 An abstraction layer for building cross-platform, [component-based](https://en.wikipedia.org/wiki/Component-based_software_engineering) C++/CMake projects.
 
 ## How to include Abstraction Layer in your project
-Your top-level `CMakeLists.txt` from your main application may include the top-level `CMakeLists.txt` of the abstraction layer as shown below:
-
-```
-if (ESP_PLATFORM)
-  #If not set, defaults to all components. Set this to reduce the amount of
-  #components that are built at compile time. Required and linked components
-  #for the ESP main component are located in the main component CMakeLists.txt file. When a
-  #component is required, it's added to the components list automatically.
-  set(COMPONENTS
-    main
-  )
-  #include directive must come after the set(COMPONENTS*) directive
-  include($ENV{IDF_PATH}/tools/cmake/project.cmake)
-  project(projectName)
-  include(main/AbstractionLayer/esp.cmake)
-else()
-  project(projectName)
-  include(main/AbstractionLayer/desktop.cmake)
-endif()
-```
-
-Additional platforms can be added in this pattern.
-
-Then you should add your main application files to your top-level main application `CMakeLists.txt`
-
-```
-add_subdirectory(mainApplicationDir1)
-add_subdirectory(mainApplicationDir2)
-add_subdirectory(mainApplicationDir3)
-```
-
-You can do it before or after the inlcude. It doesn't matter.
-
-Pass the headers along to other libraries:
-
-`target_link_libraries(<target>, <PUBLIC|PRIVATE>, abstractionLayer)`
-
-Alternatively, you can inlcude only a portion of it, e.g. Uart:
-
-`target_link_libraries(<target>, <PUBLIC|PRIVATE>, Uart)`
+https://github.com/benhaub/AbstractionLayerExample
 
 ## Why use an abstraction layer
 An abstraction layer allows you to build your main application code separate from common software components such as hardware peripherals, storage, networks, etc.
