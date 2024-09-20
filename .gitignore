@@ -2,6 +2,9 @@
 *.Mach-O
 *.elf
 **/CMakeFiles
+**/CTestTestFile*
+**/cmake_install.cmake
+**/*Test
 AbstractionLayerTesting/.ninja_deps
 AbstractionLayerTesting/.ninja_log
 AbstractionLayerTesting/CMakeCache.txt
