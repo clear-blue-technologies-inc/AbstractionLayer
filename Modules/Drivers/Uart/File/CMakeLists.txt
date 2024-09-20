@@ -3,19 +3,19 @@ PRIVATE FILE_SET headers TYPE HEADERS BASE_DIRS ${CMAKE_CURRENT_LIST_DIR} FILES
   UartModule.hpp
 )
 
-add_library(cbtFileUart
+add_library(FileUart
 STATIC
   UartModule.cpp
 )
 
 target_include_directories(Uart INTERFACE ${CMAKE_CURRENT_LIST_DIR})
 
-target_link_libraries(cbtFileUart PUBLIC abstractionLayer)
-target_link_libraries(cbtFileUart PUBLIC Storage)
-target_link_libraries(cbtFileUart PUBLIC Uart)
-target_link_libraries(cbtFileUart PUBLIC Common)
-target_link_libraries(cbtFileUart PUBLIC Logging)
-target_link_libraries(${PROJECT_NAME}${EXECUTABLE_SUFFIX} PUBLIC cbtFileUart)
+target_link_libraries(FileUart PUBLIC abstractionLayer)
+target_link_libraries(FileUart PUBLIC Storage)
+target_link_libraries(FileUart PUBLIC Uart)
+target_link_libraries(FileUart PUBLIC Common)
+target_link_libraries(FileUart PUBLIC Logging)
+target_link_libraries(${PROJECT_NAME}${EXECUTABLE_SUFFIX} PUBLIC FileUart)
 
 if (ESP_PLATFORM)
   target_include_directories(__idf_main PUBLIC ${CMAKE_CURRENT_LIST_DIR})
@@ -23,4 +23,4 @@ else()
   target_include_directories(${PROJECT_NAME}${EXECUTABLE_SUFFIX} PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 endif()
 
-target_compile_options(cbtFileUart PRIVATE $<TARGET_PROPERTY:${PROJECT_NAME}${EXECUTABLE_SUFFIX},COMPILE_OPTIONS>)
+target_compile_options(FileUart PRIVATE $<TARGET_PROPERTY:${PROJECT_NAME}${EXECUTABLE_SUFFIX},COMPILE_OPTIONS>)

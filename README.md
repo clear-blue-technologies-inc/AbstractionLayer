@@ -1,17 +1,8 @@
 # AbstractionLayer
-An abstraction layer for building cross-platform, component-based C++/CMake projects.
+An abstraction layer for building cross-platform, [component-based](https://en.wikipedia.org/wiki/Component-based_software_engineering) C++/CMake projects.
 
-Include it in your CMake project using:
-
-`add_subdirectory(AbstractionLayer)`
-
-Pass the headers along to other libraries:
-
-`target_link_libraries(<target>, <PUBLIC|PRIVATE>, abstractionLayer)`
-
-Alternatively, you can inlcude only a portion of it, e.g. Uart:
-
-`target_link_libraries(<target>, <PUBLIC|PRIVATE>, Uart)`
+## How to include Abstraction Layer in your project
+https://github.com/benhaub/AbstractionLayerExample
 
 ## Why use an abstraction layer
 An abstraction layer allows you to build your main application code separate from common software components such as hardware peripherals, storage, networks, etc.
@@ -29,6 +20,7 @@ logger->log("LogTag", "Hello World", LogTpye::Info);
 ```
 
 After testing on MacOS, my application works. So I bring it over to my embedded target:
+
 ```
 //Ported code
 LoggingAbstraction *logger = new EmbeddedLogger();
@@ -37,4 +29,19 @@ LoggingAbstraction *logger = new EmbeddedLogger();
 logger->log("LogTag", "Hello World", LogTpye::Info);
 ```
 
-The main application code hasn't been altered so I know the logic is correct. It will print as long as the ported code works. If it doesn't print I can eliminate 50% of the code (the main application code) as a potential source of the bug since it's already been tested and has not changed.
+The main application code hasn't changed so I know the logic is correct. It will print as long as the ported code works. If it doesn't print I can eliminate the main application code as a potential source of the bug since it's already been tested and has not changed.
+
+## Reduce dependancies on chip vendors
+This abstraction layer allows easy(ier) changes away from drivers and build tools offered by your chip vendor. If you mix in vendor specific tools and drivers directly alongside your application, the application will develop a strong dependancy on it as it's size and complexity increases. Some of these dependancies are:
+- return types
+- parameters
+- function names
+  
+It will be difficult to port software like this to other platforms. Never say never. Anything can happen in a project with a long or even indefinite lifetime including having/wanting to support another processor or switch vendors. If you don't pay 
+attention to how your application manages dependancies even a smaller hardware change like a bluetooth chip, RTC, ADC, network switch can surprise you with how embedded it's become in your applications correctness.
+If you depend on an abstraction:
+- the return type almost never changes.
+- the parameters almost never change.
+- the function name almost never changes.
+  
+I say almost because it can be challenging to develop an abstraction layer that can support every driver on the market, but _almost never change_ is better than _certainly will change_.

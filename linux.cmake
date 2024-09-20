@@ -1,8 +1,8 @@
 ################################################################################
-#Date: April 17th, 2023                                                        #
+#Date: September 26th, 2023                                                    #
 #File: CMakeLists.txt                                                          #
 #Authour: Ben Haubrich                                                         #
-#Synopsis: Top level project CMakeList.txt for AbstractionLayer ESP build      #
+#Synopsis: Top level project CMakeList.txt for AbstractionLayer desktop build  #
 ################################################################################
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR})
 
@@ -12,19 +12,20 @@ add_subdirectory(${CMAKE_CURRENT_LIST_DIR})
 #E.g. to run on Linux, replace or add main/Modules/Drivers/Linux/<module> subdirectory.
 #To remove modules, use the "None" port since at least a function stub must exist for the main application
 #to call.
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Drivers/Uart/Esp)
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Drivers/Watchdog/Kevin)
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Drivers/Gpio/Esp)
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/OperatingSystem/Esp)
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Network/Wifi/Esp)
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Ip/Esp)
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Logging/Esp)
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Storage/Esp)
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Serialization/ClearBlueCloudProtobuf)
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Error/Esp)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Drivers/Uart/None)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Drivers/Watchdog/None)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Drivers/Gpio/None)
+
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/OperatingSystem/Linux)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Network/Wifi/None)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Ip/Posix)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Logging/stdlib)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Storage/stdlib)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Serialization/None)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Error/Errno)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Tools/Any/Crc)
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/MemoryManagement/Esp)
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Cryptography/Esp)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/MemoryManagement/Default)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Cryptography/None)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Utilities)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Applications/Logging)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Applications/ChainOfResponsibility)

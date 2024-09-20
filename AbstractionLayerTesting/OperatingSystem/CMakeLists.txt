@@ -1,31 +1,30 @@
-add_executable(cbtOperatingSystemTest.Mach-O
-  CbtOperatingSystemTest.cpp
+add_executable(OperatingSystemTest
+  OperatingSystemTest.cpp
 )
 
-target_include_directories(cbtOperatingSystemTest.Mach-O
+target_include_directories(OperatingSystemTest
 PRIVATE
-  ${CMAKE_SOURCE_DIR}/../main/AbstractionLayer/Storage
-  ${CMAKE_SOURCE_DIR}/../main/AbstractionLayer/OperatingSystem
-  ${CMAKE_SOURCE_DIR}/../main/AbstractionLayer/Logging
-  ${CMAKE_SOURCE_DIR}/../main/Foundation/Common
+  ${CMAKE_SOURCE_DIR}/../Abstractions/Storage
+  ${CMAKE_SOURCE_DIR}/../Abstractions/OperatingSystem
+  ${CMAKE_SOURCE_DIR}/../Abstractions/Logging
 
-  ${CMAKE_SOURCE_DIR}/../main/Modules/Storage/Stdlib
-  ${CMAKE_SOURCE_DIR}/../main/Modules/Logging/Stdlib
-  ${CMAKE_SOURCE_DIR}/../main/Modules/OperatingSystem/Posix
+  ${CMAKE_SOURCE_DIR}/../Modules/Storage/stdlib
+  ${CMAKE_SOURCE_DIR}/../Modules/Logging/stdlib
+  ${CMAKE_SOURCE_DIR}/../Modules/OperatingSystem/MacOs
 )
 
 find_library(operatingSystemLib
 NAMES
-  cbtPosixOperatingSystem
+  MacOsOperatingSystem
 HINTS
-  ${buildDir}/main/Modules/OperatingSystem/Posix
+  ${buildDir}/AbstractionLayer/Modules/OperatingSystem/MacOs
 )
 
-target_compile_options(cbtOperatingSystemTest.Mach-O PRIVATE $<TARGET_PROPERTY:foundationTesting,INTERFACE_COMPILE_OPTIONS>)
+target_compile_options(OperatingSystemTest PRIVATE $<TARGET_PROPERTY:abstractionLayerTesting,INTERFACE_COMPILE_OPTIONS>)
 
-target_link_libraries(cbtOperatingSystemTest.Mach-O PRIVATE ${operatingSystemLib})
+target_link_libraries(OperatingSystemTest PRIVATE ${operatingSystemLib})
 
 add_test(
   NAME OperatingSystem
-  COMMAND cbtOperatingSystemTest.Mach-O
+  COMMAND OperatingSystemTest
 )

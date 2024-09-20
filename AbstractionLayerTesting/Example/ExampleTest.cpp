@@ -2,7 +2,8 @@
 #include <vector>
 #include <functional>
 //Modules
-#include "LoggerModule.hpp"
+#include "Log.hpp"
+#include "OperatingSystemModule.hpp"
 
 static const char TAG[] = "exampleTest";
 
@@ -35,9 +36,11 @@ static int runAllTests() {
 
 int main() {
 
+    OperatingSystem::Init();
     Logger::Init();
 
     int result = runAllTests();
+    toPlatformError(result);
 
     return result;
 }

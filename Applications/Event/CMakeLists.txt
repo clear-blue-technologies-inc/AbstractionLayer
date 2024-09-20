@@ -8,6 +8,7 @@ add_library(Event STATIC
 )
 
 target_include_directories(Event PUBLIC ${CMAKE_CURRENT_LIST_DIR})
+target_include_directories(abstractionLayer INTERFACE ${CMAKE_CURRENT_LIST_DIR})
 
 target_link_libraries(Event PUBLIC OperatingSystem)
 target_link_libraries(Event PUBLIC Utilities)

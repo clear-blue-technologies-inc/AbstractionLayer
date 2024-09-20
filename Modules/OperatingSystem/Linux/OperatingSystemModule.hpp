@@ -75,4 +75,4 @@ class OperatingSystem : public Global<OperatingSystem>, public OperatingSystemAb
     std::map<std::string, sem_t *> semaphores;
 };
 
-#endif // __CBT_OPERATING_SYSTEM_HPP__
+#endif // __OPERATING_SYSTEM_HPP__

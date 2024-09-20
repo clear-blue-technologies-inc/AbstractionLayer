@@ -8,6 +8,7 @@ PRIVATE FILE_SET headers TYPE HEADERS BASE_DIRS ${CMAKE_CURRENT_LIST_DIR} FILES
 add_library(Utilities INTERFACE)
 
 target_include_directories(Utilities INTERFACE ${CMAKE_CURRENT_LIST_DIR})
+target_include_directories(abstractionLayer INTERFACE ${CMAKE_CURRENT_LIST_DIR})
 target_link_libraries(${PROJECT_NAME}${EXECUTABLE_SUFFIX} INTERFACE Utilities)
 
 if (ESP_PLATFORM)
