@@ -31,9 +31,9 @@ HINTS
 
 find_library(operatingSystemLib
 NAMES
-  LinuxOperatingSystem
+  MacOsOperatingSystem
 HINTS
-  ${buildDir}/AbstractionLayer/Modules/OperatingSystem/Linux
+  ${buildDir}/AbstractionLayer/Modules/OperatingSystem/MacOs
 )
 
 find_library(eventLib
