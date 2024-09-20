@@ -17,7 +17,7 @@ add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Drivers/Watchdog/None)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Drivers/Gpio/None)
 
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/OperatingSystem/MacOs)
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Network/Wifi/None)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Network/Wifi/MacOs)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Ip/Posix)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Logging/stdlib)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Storage/stdlib)

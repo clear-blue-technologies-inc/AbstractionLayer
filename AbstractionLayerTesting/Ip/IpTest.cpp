@@ -1,15 +1,13 @@
 //Modules
-#include "CbtOperatingSystem.hpp"
-#include "CbtWifi.hpp"
-#include "CbtIpClient.hpp"
-#include "CbtIpServer.hpp"
-//Foundation
-#include "CbtLog.hpp"
+#include "OperatingSystemModule.hpp"
+#include "WifiModule.hpp"
+#include "IpClientModule.hpp"
+#include "IpServerModule.hpp"
+//Applications
+#include "Log.hpp"
 
 static const char TAG[] = "IpTest";
 static const std::string globalDataToSend("Hello World!");
-
-using namespace Fnd;
 
 static constexpr Port ServerPort = 44000;
 
@@ -49,8 +47,9 @@ static void *startServerThread(void *arg) {
 static void *startClientThread(void *arg) {
     Socket socket = -1;
     ErrorType error;
+    constexpr Milliseconds timeout = 1000;
 
-    error = wifiNetworkClient.client->connectTo("localhost", ServerPort, IpClientSettings::Protocol::Tcp, IpClientSettings::Version::IPv4, socket);
+    error = wifiNetworkClient.client->connectTo("localhost", ServerPort, IpClientSettings::Protocol::Tcp, IpClientSettings::Version::IPv4, socket, timeout);
     if (ErrorType::Success != error) {
         CBT_LOGE(TAG, "Failed to connect to server");
         assert(false);
@@ -68,17 +67,17 @@ static void *startClientThread(void *arg) {
 static int blockingReceiveTest() {
     ErrorType error;
     Bytes received = 0;
-    constexpr Milliseconds timeout = 1000;
-    std::string buffer(64, 0);
+    constexpr Milliseconds timeout = 5000;
+    auto buffer = std::make_shared<std::string>(64, 0);
 
-    error = wifiNetworkServer.server->receiveBlocking(buffer, timeout);
+    error = wifiNetworkServer.server->receiveNonBlocking(buffer, timeout);
     if (ErrorType::Success != error) {
-        return EXIT_FAILURE;
+        assert(false);
     }
     
-    if (0 != buffer.compare(0, globalDataToSend.length(), globalDataToSend)) {
-        CBT_LOGE(TAG, "Data did not match. Bytes received: %u, Received/Expected %s/%s", buffer.size(), buffer.c_str(), globalDataToSend.c_str());
-        return EXIT_FAILURE;
+    if (0 != buffer->compare(0, globalDataToSend.length(), globalDataToSend)) {
+        CBT_LOGE(TAG, "Data did not match. Bytes received: %u, Received/Expected %s/%s", buffer->size(), buffer->c_str(), globalDataToSend.c_str());
+        assert(false);
     }
 
     return EXIT_SUCCESS;
@@ -102,7 +101,7 @@ static int blockingSendTest() {
         OperatingSystem::Instance().delay(1);
     }
 
-    error = wifiNetworkClient.client->sendBlocking(globalDataToSend, timeout);
+    error = wifiNetworkClient.client->sendNonBlocking(std::make_shared<std::string>(globalDataToSend), timeout);
     if (ErrorType::Success != error) {
         assert(false);
     }
@@ -156,11 +155,11 @@ int main() {
     constexpr uint16_t kilobyte = 1024;
     Id networkId, clientId, serverId;
 
-    Fnd::OperatingSystem::Instance().createThread(Fnd::OperatingSystemConfig::Priority::High, "networkThread", &testWifi, 4*kilobyte, startNetworkThread, networkId);
+    OperatingSystem::Instance().createThread(OperatingSystemConfig::Priority::High, "networkThread", &testWifi, 4*kilobyte, startNetworkThread, networkId);
     //Creating a seperate thread for the client and server is not required. You just want the server running independently of the client
     //so that it can loop and accept connections.
-    Fnd::OperatingSystem::Instance().createThread(Fnd::OperatingSystemConfig::Priority::Normal, "serverThread", nullptr, 4*kilobyte, startServerThread, networkId);
-    Fnd::OperatingSystem::Instance().createThread(Fnd::OperatingSystemConfig::Priority::Low, "clientThread", nullptr, 4*kilobyte, startClientThread, networkId);
+    OperatingSystem::Instance().createThread(OperatingSystemConfig::Priority::Normal, "serverThread", nullptr, 4*kilobyte, startServerThread, networkId);
+    OperatingSystem::Instance().createThread(OperatingSystemConfig::Priority::Low, "clientThread", nullptr, 4*kilobyte, startClientThread, networkId);
 
     int result = runAllTests();
 

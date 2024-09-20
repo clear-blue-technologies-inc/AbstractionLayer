@@ -1,78 +1,88 @@
-add_executable(cbtIpTest.Mach-O
-  CbtIpTest.cpp
+add_executable(IpTest
+  IpTest.cpp
 )
 
-target_include_directories(cbtIpTest.Mach-O
+target_include_directories(IpTest
 PRIVATE
-  ${CMAKE_SOURCE_DIR}/../main/Foundation/AbstractionLayer/Ip
-  ${CMAKE_SOURCE_DIR}/../main/Foundation/AbstractionLayer/OperatingSystem
-  ${CMAKE_SOURCE_DIR}/../main/Foundation/AbstractionLayer/Logging
-  ${CMAKE_SOURCE_DIR}/../main/Foundation/AbstractionLayer/Network
+  ${CMAKE_SOURCE_DIR}/../Abstractions/Ip
+  ${CMAKE_SOURCE_DIR}/../Abstractions/OperatingSystem
+  ${CMAKE_SOURCE_DIR}/../Abstractions/Logging
+  ${CMAKE_SOURCE_DIR}/../Abstractions/Network
+  ${CMAKE_SOURCE_DIR}/../Abstractions/Protocols
 
-  ${CMAKE_SOURCE_DIR}/../main/Foundation/Common
-  ${CMAKE_SOURCE_DIR}/../main/Foundation/Protocols
+  ${CMAKE_SOURCE_DIR}/../Modules/Ip/Posix
+  ${CMAKE_SOURCE_DIR}/../Modules/Logging/stdlib
+  ${CMAKE_SOURCE_DIR}/../Modules/OperatingSystem/MacOs
+  ${CMAKE_SOURCE_DIR}/../Modules/Network/Wifi/MacOs
 
-  ${CMAKE_SOURCE_DIR}/../main/Modules/Ip/Posix
-  ${CMAKE_SOURCE_DIR}/../main/Modules/Logging/Stdlib
-  ${CMAKE_SOURCE_DIR}/../main/Modules/OperatingSystem/Posix
-  ${CMAKE_SOURCE_DIR}/../main/Modules/Network/Wifi/MacOs
+  ${CMAKE_SOURCE_DIR}/../Utilities
+
+  ${CMAKE_SOURCE_DIR}/../Applications/Event
+  ${CMAKE_SOURCE_DIR}/../Applications/Logging
 )
 
 find_library(operatingSystemLib
 NAMES
-  cbtPosixOperatingSystem
+  MacOsOperatingSystem
 HINTS
-  ${buildDir}/main/Modules/OperatingSystem/Posix
+  ${buildDir}/AbstractionLayer/Modules/OperatingSystem/MacOs
 )
 
 find_library(errorLib
 NAMES
-  cbtErrnoError
+  ErrnoError
 HINTS
-  ${buildDir}/main/Modules/Error/Errno
+  ${buildDir}/AbstractionLayer/Modules/Error/Errno
 )
 
 find_library(loggerLib
 NAMES
-  cbtStdlibLogger
+  StdlibLogger
 HINTS
-  ${buildDir}/main/Modules/Logging/StdLib
+  ${buildDir}/AbstractionLayer/Modules/Logging/stdLib
 )
 
 find_library(wifiLib
 NAMES
-  cbtMacOsWifi
+  MacOsWifi
 HINTS
-  ${buildDir}/main/Modules/Network/Wifi/MacOs
+  ${buildDir}/AbstractionLayer/Modules/Network/Wifi/MacOs
 )
 
 find_library(ipClientLib
 NAMES
-  cbtPosixIpClient
+  PosixIpClient
 HINTS
-  ${buildDir}/main/Modules/Ip/Posix
+  ${buildDir}/AbstractionLayer/Modules/Ip/Posix
 )
 
 find_library(ipServerLib
 NAMES
-  cbtPosixIpServer
+  PosixIpServer
 HINTS
-  ${buildDir}/main/Modules/Ip/Posix
+  ${buildDir}/AbstractionLayer/Modules/Ip/Posix
 )
 
-target_compile_options(cbtIpTest.Mach-O PRIVATE $<TARGET_PROPERTY:foundationTesting,INTERFACE_COMPILE_OPTIONS>)
+find_library(eventLib
+NAMES
+  Event
+HINTS
+  ${buildDir}/AbstractionLayer/Applications/Event
+)
 
-target_link_libraries(cbtIpTest.Mach-O PRIVATE ${storageLib})
-target_link_libraries(cbtIpTest.Mach-O PRIVATE ${operatingSystemLib})
-target_link_libraries(cbtIpTest.Mach-O PRIVATE ${errorLib})
-target_link_libraries(cbtIpTest.Mach-O PRIVATE ${loggerLib})
-target_link_libraries(cbtIpTest.Mach-O PRIVATE ${wifiLib})
-target_link_libraries(cbtIpTest.Mach-O PRIVATE ${ipClientLib})
-target_link_libraries(cbtIpTest.Mach-O PRIVATE ${ipServerLib})
+target_compile_options(IpTest PRIVATE $<TARGET_PROPERTY:abstractionLayerTesting,INTERFACE_COMPILE_OPTIONS>)
+
+target_link_libraries(IpTest PRIVATE ${operatingSystemLib})
+target_link_libraries(IpTest PRIVATE ${errorLib})
+target_link_libraries(IpTest PRIVATE ${loggerLib})
+target_link_libraries(IpTest PRIVATE ${wifiLib})
+target_link_libraries(IpTest PRIVATE ${ipClientLib})
+target_link_libraries(IpTest PRIVATE ${ipServerLib})
+target_link_libraries(IpTest PRIVATE ${eventLib})
 
 add_test(
   NAME Ip
-  COMMAND cbtIpTest.Mach-O
+  COMMAND IpTest
 )
 
 set_property(TEST Ip
