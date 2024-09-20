@@ -24,7 +24,7 @@ add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Serialization/ClearBlueCloudP
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Error/Errno)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Tools/Any/Crc)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/MemoryManagement/Default)
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Cryptography/None)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Cryptography/MacOs)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Utilities)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Applications/Logging)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Applications/ChainOfResponsibility)
