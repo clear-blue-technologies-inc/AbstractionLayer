@@ -1,0 +1,6 @@
+[submodule "Modules/Serialization/ClearBlueCloudProtobuf/v2-cloud-api"]
+	path = Modules/Serialization/ClearBlueCloudProtobuf/v2-cloud-api
+	url = ssh://git@astral.cbtx9.com:10022/api-files/v2-cloud-api.git
+[submodule "Modules/Serialization/ClearBlueCloudProtobuf/cleon-foundation-api"]
+	path = Modules/Serialization/ClearBlueCloudProtobuf/cleon-foundation-api
+	url = ssh://git@astral.cbtx9.com:10022/api-files/cleon-foundation-api.git
