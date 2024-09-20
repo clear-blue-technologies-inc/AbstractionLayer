@@ -1,6 +1,7 @@
 .DS_Store
 *.Mach-O
 *.elf
+**/CMakeFiles
 AbstractionLayerTesting/.ninja_deps
 AbstractionLayerTesting/.ninja_log
 AbstractionLayerTesting/CMakeCache.txt
