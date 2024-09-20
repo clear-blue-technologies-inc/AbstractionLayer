@@ -31,17 +31,21 @@ logger->log("LogTag", "Hello World", LogTpye::Info);
 
 The main application code hasn't changed so I know the logic is correct. It will print as long as the ported code works. If it doesn't print I can eliminate the main application code as a potential source of the bug since it's already been tested and has not changed.
 
-## Reduce dependancies on chip vendors
-This abstraction layer allows easy(ier) changes away from drivers and build tools offered by your chip vendor. If you mix in vendor specific tools and drivers directly alongside your application, the application will develop a strong dependancy on it as it's size and complexity increases. Some of these dependancies are:
+### Reduce dependancies on chip vendors
+An abstraction layer allows easy(ier) changes away from drivers and build tools offered by your chip vendor. If you mix in vendor specific tools and drivers directly alongside your application, the application will develop a strong dependancy on the vendor as it's size and complexity increases. Some of these dependancies are:
 - return types
 - parameters
 - function names
   
-It will be difficult to port software like this to other platforms. Never say never. Anything can happen in a project with a long or even indefinite lifetime including having/wanting to support another processor or switch vendors. If you don't pay 
-attention to how your application manages dependancies even a smaller hardware change like a bluetooth chip, RTC, ADC, network switch can surprise you with how embedded it's become in your applications correctness.
-If you depend on an abstraction:
+It will be difficult to port software like this to other platforms.
+
+Never say never.
+
+Anything can happen in a project with a long or even indefinite lifetime including having/wanting to support another processor or switch vendors which neccesitates the need for a software port. If you don't pay attention to how your application manages dependancies then even a smaller hardware change like a bluetooth chip, RTC, ADC, or network switch can surprise you with how embedded it's become in your applications correctness.
+
+Alternatively, if you depend on an abstraction:
 - the return type almost never changes.
 - the parameters almost never change.
 - the function name almost never changes.
   
-I say almost because it can be challenging to develop an abstraction layer that can support every driver on the market, but _almost never change_ is better than _certainly will change_.
+We say almost because it can be challenging to develop an abstraction layer that can support every driver on the market, but _almost never change_ is better than _certainly will change_.
