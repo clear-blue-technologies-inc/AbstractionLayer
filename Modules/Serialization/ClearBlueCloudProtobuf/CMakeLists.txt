@@ -9,6 +9,7 @@ STATIC
 )
 
 target_include_directories(Serialization INTERFACE ${CMAKE_CURRENT_LIST_DIR})
+target_link_libraries(cbtProtobufSerialization PUBLIC Utilities)
 target_link_libraries(cbtProtobufSerialization PUBLIC abstractionLayer)
 target_link_libraries(cbtProtobufSerialization PUBLIC Serialization)
 
