@@ -43,7 +43,7 @@ HINTS
   ${buildDir}/AbstractionLayer/Applications/Event
 )
 
-target_compile_options(ExampleTest PRIVATE $<TARGET_PROPERTY:foundationTesting,INTERFACE_COMPILE_OPTIONS>)
+target_compile_options(ExampleTest PRIVATE $<TARGET_PROPERTY:abstractionLayerTesting,INTERFACE_COMPILE_OPTIONS>)
 
 target_link_libraries(ExampleTest PRIVATE ${errorLib})
 target_link_libraries(ExampleTest PRIVATE ${loggerLib})

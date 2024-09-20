@@ -1,13 +1,12 @@
 //Modules
-#include "CbtStorage.hpp"
-#include "CbtFile.hpp"
-#include "CbtOperatingSystem.hpp"
-//Foundation
-#include "CbtLog.hpp"
+#include "StorageModule.hpp"
+#include "FileModule.hpp"
+#include "OperatingSystemModule.hpp"
+//Applications
+#include "Log.hpp"
 
 
 static const char TAG[] = "storageTest";
-using namespace Fnd;
 
 static void *startStorageThread(void *arg) {
     while (true) {
@@ -144,7 +143,7 @@ static int useWithoutOpening() {
 
     //Try reading the non-existent file.
     error = file.readBlocking(0, filename);
-    if (ErrorType::PrerequistesNotMet != error) {
+    if (ErrorType::PrerequisitesNotMet != error) {
         CBT_LOGE(TAG, "File should not be readable %u", (uint8_t)error);
         assert(false);
     }
