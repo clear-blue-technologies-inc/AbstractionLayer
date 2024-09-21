@@ -18,21 +18,21 @@ target_link_libraries(${PROJECT_NAME}${EXECUTABLE_SUFFIX} PUBLIC LinuxCryptograp
 #For some reason, they way that we build libsodium using custom commands has to be slightly different
 #when on MacOs.
 add_custom_command(
-  TARGET LinuxCryptography
-  PRE_BUILD
-  BYPRODUCTS ${CMAKE_CURRENT_LIST_DIR}/libsodium-stable/src/libsodium/.libs/libsodium.a
+  OUTPUT ${CMAKE_CURRENT_LIST_DIR}/libsodium-stable/src/libsodium/.libs/libsodium.a
   WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/libsodium-stable
   COMMENT "Building libsodium..."
   COMMAND autoreconf -i && ./configure && make && make check
   VERBATIM
 )
-target_link_libraries(LinuxCryptography PUBLIC ${libsodium})
+add_custom_target(libsodium-stable DEPENDS ${CMAKE_CURRENT_LIST_DIR}/libsodium-stable/src/libsodium/.libs/libsodium.a)
+add_dependencies(LinuxCryptography libsodium-stable)
 find_library(libsodium
 NAMES
   sodium
 HINTS
   libsodium-stable/src/libsodium/.libs/
 )
+target_link_libraries(LinuxCryptography PUBLIC ${libsodium})
 
 if (ESP_PLATFORM)
   target_include_directories(LinuxCryptography PRIVATE $<TARGET_PROPERTY:__idf_main,INTERFACE_INCLUDE_DIRECTORIES>)

@@ -2,6 +2,7 @@
 #include "CryptographyModule.hpp"
 //C++
 #include <cstring>
+#include <cstdarg>
 //Sodium
 #include "sodium.h"
 
