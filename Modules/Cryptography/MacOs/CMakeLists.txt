@@ -19,7 +19,7 @@ add_custom_command(
   OUTPUT ${CMAKE_CURRENT_LIST_DIR}/libsodium-stable/src/libsodium/.libs/libsodium.a
   WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/libsodium-stable
   COMMENT "Building libsodium..."
-  COMMAND tar -xf LATEST.tar.gz && autoreconf -i && ./configure && make && make check
+  COMMAND autoreconf -i && ./configure && make && make check
   VERBATIM
 )
 add_custom_target(libsodium-stable DEPENDS ${CMAKE_CURRENT_LIST_DIR}/libsodium-stable/src/libsodium/.libs/libsodium.a)
