@@ -19,7 +19,7 @@ target_link_libraries(${PROJECT_NAME}${EXECUTABLE_SUFFIX} PUBLIC LinuxCryptograp
 #when on MacOs.
 add_custom_command(
   TARGET LinuxCryptography
-  PRE_LINK
+  PRE_BUILD
   BYPRODUCTS ${CMAKE_CURRENT_LIST_DIR}/libsodium-stable/src/libsodium/.libs/libsodium.a
   WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/libsodium-stable
   COMMENT "Building libsodium..."
