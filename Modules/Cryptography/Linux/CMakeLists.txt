@@ -15,8 +15,6 @@ target_link_libraries(LinuxCryptography PUBLIC Utilities)
 target_link_libraries(LinuxCryptography PUBLIC abstractionLayer)
 target_link_libraries(${PROJECT_NAME}${EXECUTABLE_SUFFIX} PUBLIC LinuxCryptography)
 
-#For some reason, they way that we build libsodium using custom commands has to be slightly different
-#when on MacOs.
 add_custom_command(
   OUTPUT ${CMAKE_CURRENT_LIST_DIR}/libsodium-stable/src/libsodium/.libs/libsodium.a
   WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/libsodium-stable
