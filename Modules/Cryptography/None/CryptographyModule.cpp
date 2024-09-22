@@ -29,10 +29,6 @@ ErrorType Cryptography::decrypt(CryptographyAlgorithm algorithm, const std::stri
     return ErrorType::NotImplemented;
 }
 
-ErrorType Cryptography::generateKeysX25519() {
-    return ErrorType::NotImplemented;
-}
-
-ErrorType Cryptography::generateKeysEllipticCurveDiffieHellman() {
+ErrorType Cryptography::hash(HashFunction hashFunction, const std::string &key, const std::string &data, std::string hashedData, const HashPart hashPart) {
     return ErrorType::NotImplemented;
 }
