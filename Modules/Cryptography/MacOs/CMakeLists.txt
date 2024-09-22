@@ -43,9 +43,9 @@ add_custom_command(
 add_custom_target(libsodium-stable_download DEPENDS ${libsodium}.tar.gz)
 add_custom_target(libsodium-stable DEPENDS ${CMAKE_CURRENT_LIST_DIR}/libsodium-stable/src/libsodium/.libs/libsodium.a)
 add_dependencies(libsodium-stable libsodium-stable_download)
-add_dependencies(LinuxCryptography libsodium-stable)
+add_dependencies(MacOsCryptography libsodium-stable)
 
-target_link_libraries(LinuxCryptography PUBLIC ${CMAKE_CURRENT_LIST_DIR}/libsodium-stable/src/libsodium/.libs/libsodium.a)
+target_link_libraries(MacOsCryptography PUBLIC ${CMAKE_CURRENT_LIST_DIR}/libsodium-stable/src/libsodium/.libs/libsodium.a)
 
 if (ESP_PLATFORM)
   target_include_directories(MacOsCryptography PRIVATE $<TARGET_PROPERTY:__idf_main,INTERFACE_INCLUDE_DIRECTORIES>)
