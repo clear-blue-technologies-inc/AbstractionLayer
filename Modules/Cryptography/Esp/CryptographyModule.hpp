@@ -23,6 +23,8 @@ class Cryptography : public CryptographyAbstraction {
     ErrorType generatePrivateKeyEllipticCurveDiffieHellman(const std::string &myPrivateKey, const std::string &theirPublicKey, std::string &newPrivateKey);
     ErrorType encryptAeadChaCha20Poly1305Ietf(const std::string &dataToEncrypt, std::string &encryptedData, const std::string &ad, uint64_t n, const std::string &k);
     ErrorType decrpytAeadChaCha20Poly1305Ietf(const std::string &encryptedData, std::string &decryptedData, const std::string &ad, uint64_t n, const std::string &k);
+
+    ErrorType hashBlake2b(const std::string &data, const std::string &key, std::string hashedData, const HashPart hashPart);
 };
 
 #endif // __CRYPTOGRAPHY_MODULE_HPP__
