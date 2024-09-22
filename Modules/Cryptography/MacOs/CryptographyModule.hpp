@@ -3,8 +3,6 @@
 
 //AbstractionLayer
 #include "CryptographyAbstraction.hpp"
-//Sodium
-#include "sodium.h"
 
 class Cryptography : public CryptographyAbstraction {
     
@@ -20,8 +18,6 @@ class Cryptography : public CryptographyAbstraction {
     ErrorType hash(HashFunction hashFunction, const std::string &key, const std::string &data, std::string hashedData, const HashPart hashPart) override;
 
     private:
-    crypto_generichash_state genericHashState;
-    
     ErrorType generateKeysX25519();
     ErrorType generateKeysEllipticCurveDiffieHellman();
     ErrorType generatePrivateKeyEllipticCurveDiffieHellman(const std::string &myPrivateKey, const std::string &theirPublicKey, std::string &newPrivateKey);
