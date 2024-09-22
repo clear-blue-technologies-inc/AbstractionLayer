@@ -162,13 +162,13 @@ ErrorType Cryptography::hashBlake2b(const std::string &data, const std::string &
         case HashPart::Single:
             return toPlatformError(crypto_generichash(reinterpret_cast<unsigned char *>(hashedData.data()),
                                                       hashedData.size(),
-                                                      reinterpret_cast<const unsigned char *>(data.data()),
+                                                      data.empty() ? NULL : reinterpret_cast<const unsigned char *>(data.data()),
                                                       data.size(),
-                                                      reinterpret_cast<const unsigned char *>(key.data()),
+                                                      key.empty() ? NULL : reinterpret_cast<const unsigned char *>(key.data()),
                                                       key.size()));
         case HashPart::Init:
             return toPlatformError(crypto_generichash_init(&genericHashState,
-                                                           reinterpret_cast<const unsigned char *>(key.data()),
+                                                           key.empty() ? NULL : reinterpret_cast<const unsigned char *>(key.data()),
                                                            key.size(),
                                                            hashedData.size()));
         case HashPart::Update:
