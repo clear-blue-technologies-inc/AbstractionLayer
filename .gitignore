@@ -5,6 +5,7 @@
 **/CTestTestFile*
 **/cmake_install.cmake
 **/*Test
+Modules/Cryptography/**/*.tar.gz
 AbstractionLayerTesting/.ninja_deps
 AbstractionLayerTesting/.ninja_log
 AbstractionLayerTesting/CMakeCache.txt
