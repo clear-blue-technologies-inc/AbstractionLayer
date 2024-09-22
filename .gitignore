@@ -6,6 +6,7 @@
 **/cmake_install.cmake
 **/*Test
 Modules/Cryptography/**/*.tar.gz
+Modules/Cryptography/**/libsodium-stable
 AbstractionLayerTesting/.ninja_deps
 AbstractionLayerTesting/.ninja_log
 AbstractionLayerTesting/CMakeCache.txt

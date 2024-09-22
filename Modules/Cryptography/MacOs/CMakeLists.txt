@@ -19,6 +19,8 @@ set(libsodium "libsodium-1.0.20-stable")
 add_custom_command(
   OUTPUT
     ${CMAKE_CURRENT_LIST_DIR}/${libsodium}.tar.gz
+    COMMAND
+    rm -f ${libsodium}.tar.gz
   COMMAND
     wget https://download.libsodium.org/libsodium/releases/${libsodium}.tar.gz
   COMMAND
