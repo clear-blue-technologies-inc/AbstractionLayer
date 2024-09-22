@@ -140,3 +140,44 @@ ErrorType Cryptography::decrpytAeadChaCha20Poly1305Ietf(const std::string &encry
 
     return ErrorType::Failure;
 }
+
+//https://doc.libsodium.org/hashing/generic_hashing
+ErrorType Cryptography::hash(HashFunction hashFunction, const std::string &key, const std::string &data, std::string hashedData, const HashPart hashPart) {
+    switch (hashFunction) {
+        case HashFunction::Blake2B:
+            return hashBlake2b(data, key, hashedData, hashPart);
+        case HashFunction::Argon2:
+            return ErrorType::NotImplemented;
+        case HashFunction::SipHash_2_4:
+            return ErrorType::NotImplemented;
+        default:
+            return ErrorType::InvalidParameter;
+    }
+}
+
+ErrorType Cryptography::hashBlake2b(const std::string &data, const std::string &key, std::string hashedData, const HashPart hashPart) {
+    switch (hashPart) {
+        case HashPart::Single:
+            return toPlatformError(crypto_generichash(reinterpret_cast<unsigned char *>(hashedData.data()),
+                                                      hashedData.size(),
+                                                      reinterpret_cast<const unsigned char *>(data.data()),
+                                                      data.size(),
+                                                      reinterpret_cast<const unsigned char *>(key.data()),
+                                                      key.size()));
+        case HashPart::Init:
+            return toPlatformError(crypto_generichash_init(&genericHashState,
+                                                           reinterpret_cast<const unsigned char *>(key.data()),
+                                                           key.size(),
+                                                           hashedData.size()));
+        case HashPart::Update:
+            return toPlatformError(crypto_generichash_update(&genericHashState,
+                                                             reinterpret_cast<const unsigned char *>(data.data()),
+                                                             data.size()));
+        case HashPart::Final:
+            return toPlatformError(crypto_generichash_final(&genericHashState,
+                                                            reinterpret_cast<unsigned char *>(hashedData.data()),
+                                                            hashedData.size()));
+        default:
+            return ErrorType::InvalidParameter;
+    }
+}

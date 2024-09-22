@@ -3,6 +3,8 @@
 
 //AbstractionLayer
 #include "CryptographyAbstraction.hpp"
+//Sodium
+#include "sodium.h"
 
 class Cryptography : public CryptographyAbstraction {
     
@@ -15,13 +17,18 @@ class Cryptography : public CryptographyAbstraction {
 
     ErrorType encrypt(CryptographyAlgorithm algorithm, const std::string &dataToEncrypt, std::string &encryptedData, ...) override;
     ErrorType decrypt(CryptographyAlgorithm algorithm, const std::string &encrpytedData, std::string &decryptedData, ...) override;
+    ErrorType hash(HashFunction hashFunction, const std::string &key, const std::string &data, std::string hashedData, const HashPart hashPart) override;
 
     private:
+    crypto_generichash_state genericHashState;
+
     ErrorType generateKeysX25519();
     ErrorType generateKeysEllipticCurveDiffieHellman();
     ErrorType generatePrivateKeyEllipticCurveDiffieHellman(const std::string &myPrivateKey, const std::string &theirPublicKey, std::string &newPrivateKey);
     ErrorType encryptAeadChaCha20Poly1305Ietf(const std::string &dataToEncrypt, std::string &encryptedData, const std::string &ad, uint64_t n, const std::string &k);
     ErrorType decrpytAeadChaCha20Poly1305Ietf(const std::string &encryptedData, std::string &decryptedData, const std::string &ad, uint64_t n, const std::string &k);
+
+    ErrorType hashBlake2b(const std::string &data, const std::string &key, std::string hashedData, const HashPart hashPart);
 };
 
 #endif // __CRYPTOGRAPHY_MODULE_HPP__
