@@ -2,8 +2,6 @@
 #include "CryptographyModule.hpp"
 //C++
 #include <cstring>
-//Sodium
-#include "sodium.h"
 
 Cryptography::Cryptography(const std::string &privateStaticKey, Bytes keySize) : CryptographyAbstraction(privateStaticKey, keySize) {
     const bool noExistingKeyIsStored = privateStaticKey.empty();
