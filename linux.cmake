@@ -1,6 +1,6 @@
 ################################################################################
 #Date: September 26th, 2023                                                    #
-#File: linux.cmake                                                             #
+#File: CMakeLists.txt                                                          #
 #Authour: Ben Haubrich                                                         #
 #Synopsis: Top level project CMakeList.txt for AbstractionLayer desktop build  #
 ################################################################################
@@ -16,7 +16,6 @@ add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Drivers/Uart/None)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Drivers/Watchdog/None)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Drivers/Gpio/None)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/OperatingSystem/Linux)
-#TODO: Implement Linux wifi.
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Network/Wifi/None)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Ip/Posix)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Logging/stdlib)

@@ -11,7 +11,7 @@ PRIVATE
   ${CMAKE_SOURCE_DIR}/../Modules/Error/Errno
   ${CMAKE_SOURCE_DIR}/../Modules/Storage/stdlib
   ${CMAKE_SOURCE_DIR}/../Modules/Logging/stdlib
-  ${CMAKE_SOURCE_DIR}/../Modules/OperatingSystem/${CMAKE_HOST_SYSTEM_NAME}
+  ${CMAKE_SOURCE_DIR}/../Modules/OperatingSystem/MacOs
 
   ${CMAKE_SOURCE_DIR}/../Utilities
 
@@ -20,19 +20,18 @@ PRIVATE
   ${CMAKE_SOURCE_DIR}/../Applications/Logging
 )
 
-message(STATUS "${buildDir}/AbstractionLayer/Modules/Storage/stdlib")
 find_library(storageLib
 NAMES
-  StdlibStorage
+  StdLibStorage
 HINTS
-  ${buildDir}/AbstractionLayer/Modules/Storage/stdlib
+  ${buildDir}/AbstractionLayer/Modules/Storage/StdLib
 )
 
 find_library(operatingSystemLib
 NAMES
-  ${CMAKE_HOST_SYSTEM_NAME}OperatingSystem
+  PosixOperatingSystem
 HINTS
-  ${buildDir}/AbstractionLayer/Modules/OperatingSystem/${CMAKE_HOST_SYSTEM_NAME}
+  ${buildDir}/AbstractionLayer/Modules/OperatingSystem/Posix
 )
 
 find_library(errorLib

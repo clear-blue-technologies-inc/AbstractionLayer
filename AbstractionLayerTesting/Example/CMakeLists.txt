@@ -9,7 +9,7 @@ PRIVATE
   ${CMAKE_SOURCE_DIR}/../Utilities
   ${CMAKE_SOURCE_DIR}/../Modules/Error/Errno
   ${CMAKE_SOURCE_DIR}/../Modules/Logging/stdlib
-  ${CMAKE_SOURCE_DIR}/../Modules/OperatingSystem/${CMAKE_HOST_SYSTEM_NAME}
+  ${CMAKE_SOURCE_DIR}/../Modules/OperatingSystem/Linux
   ${CMAKE_SOURCE_DIR}/../Applications/Logging
   ${CMAKE_SOURCE_DIR}/../Applications/Event
 )
@@ -31,9 +31,9 @@ HINTS
 
 find_library(operatingSystemLib
 NAMES
-  ${CMAKE_HOST_SYSTEM_NAME}OperatingSystem
+  MacOsOperatingSystem
 HINTS
-  ${buildDir}/AbstractionLayer/Modules/OperatingSystem/${CMAKE_HOST_SYSTEM_NAME}
+  ${buildDir}/AbstractionLayer/Modules/OperatingSystem/MacOs
 )
 
 find_library(eventLib

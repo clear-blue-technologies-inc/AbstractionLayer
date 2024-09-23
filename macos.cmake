@@ -1,6 +1,6 @@
 ################################################################################
 #Date: September 26th, 2023                                                    #
-#File: darwin.cmake                                                            #
+#File: CMakeLists.txt                                                          #
 #Authour: Ben Haubrich                                                         #
 #Synopsis: Top level project CMakeList.txt for AbstractionLayer desktop build  #
 ################################################################################
@@ -16,8 +16,8 @@ add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Drivers/Uart/None)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Drivers/Watchdog/None)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Drivers/Gpio/None)
 
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/OperatingSystem/Darwin)
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Network/Wifi/Darwin
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/OperatingSystem/MacOs)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Network/Wifi/MacOs)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Ip/Posix)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Logging/stdlib)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Storage/stdlib)
@@ -25,7 +25,7 @@ add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Serialization/None)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Error/Errno)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Tools/Any/Crc)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/MemoryManagement/Default)
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Cryptography/Darwin)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Modules/Cryptography/None)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Utilities)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Applications/Logging)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Applications/ChainOfResponsibility)
