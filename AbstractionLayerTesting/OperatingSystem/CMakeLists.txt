@@ -10,14 +10,14 @@ PRIVATE
 
   ${CMAKE_SOURCE_DIR}/../Modules/Storage/stdlib
   ${CMAKE_SOURCE_DIR}/../Modules/Logging/stdlib
-  ${CMAKE_SOURCE_DIR}/../Modules/OperatingSystem/MacOs
+  ${CMAKE_SOURCE_DIR}/../Modules/OperatingSystem/${CMAKE_HOST_SYSTEM_NAME}
 )
 
 find_library(operatingSystemLib
 NAMES
-  MacOsOperatingSystem
+  ${CMAKE_HOST_SYSTEM_NAME}OperatingSystem
 HINTS
-  ${buildDir}/AbstractionLayer/Modules/OperatingSystem/MacOs
+  ${buildDir}/AbstractionLayer/Modules/OperatingSystem/${CMAKE_HOST_SYSTEM_NAME}
 )
 
 target_compile_options(OperatingSystemTest PRIVATE $<TARGET_PROPERTY:abstractionLayerTesting,INTERFACE_COMPILE_OPTIONS>)
