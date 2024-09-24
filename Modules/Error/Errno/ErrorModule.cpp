@@ -2,7 +2,6 @@
 #include "Log.hpp"
 //AbstractionLayer
 #include "Error.hpp"
-
 //C++
 #include <cerrno>
 

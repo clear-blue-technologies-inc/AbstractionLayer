@@ -54,7 +54,7 @@ static int testReadWrite() {
         CBT_LOGE(TAG, "Error reading from file %u. data: %s", (uint8_t)error, readString.c_str());
     }
 
-    return EXIT_FAILURE;
+    assert(false);
 }
 
 static int testNonBlockingReadWrite() {
@@ -152,7 +152,7 @@ static int useWithoutOpening() {
       return EXIT_SUCCESS;
     }
     else {
-        return EXIT_FAILURE;
+        assert(false);
     }
 }
 
@@ -231,7 +231,7 @@ static int runAllTests() {
 
     for (auto test : tests) {
         if (EXIT_SUCCESS != test()) {
-            return EXIT_FAILURE;
+            assert(false);
         }
     }
 
@@ -246,7 +246,7 @@ int main() {
     Storage::Init(std::string("testStorage"));
     if (ErrorType::Success != Storage::Instance().initStorage()) {
         CBT_LOGE(TAG, "initStorage failed");
-        return EXIT_FAILURE;
+        assert(false);
     }
 
     constexpr uint16_t kilobyte = 1024;
