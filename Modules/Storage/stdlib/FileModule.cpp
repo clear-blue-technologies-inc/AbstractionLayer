@@ -63,6 +63,7 @@ ErrorType File::remove() {
     }
 }
 
+//TODO: Not thread safe. Should work the same as we've done in the IP module.
 ErrorType File::readBlocking(const FileOffset offset, std::string &buffer) {
     //If the buffer doesn't have a size, you won't be able to read anything.
     assert(buffer.size() > 0);

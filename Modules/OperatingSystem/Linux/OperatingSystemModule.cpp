@@ -24,11 +24,12 @@ ErrorType OperatingSystem::createThread(OperatingSystemConfig::Priority priority
     assert(0 == res);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
     pthread_attr_setstacksize(&attr, stackSize);
-    pthread_attr_setschedpolicy(&attr, SCHED_FIFO);
-    pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED);
+    pthread_attr_setschedpolicy(&attr, SCHED_RR);
     pthread_attr_getschedparam(&attr, &param);
     param.sched_priority = toPosixPriority(priority);
     pthread_attr_setschedparam(&attr, &param);
+    pthread_attr_setscope(&attr, PTHREAD_SCOPE_PROCESS);
+    pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED);
 
     const bool threadWasCreated = (0 == (res = pthread_create(&thread, &attr, startFunction, arguments)));
     pthread_attr_destroy(&attr);
