@@ -3,8 +3,6 @@
 
 //AbstractionLayer
 #include "UartAbstraction.hpp"
-//Posix
-#include <unistd.h>
 //Protobuf
 #include "api_fc.pb.h"
 #include "api_cf.pb.h"

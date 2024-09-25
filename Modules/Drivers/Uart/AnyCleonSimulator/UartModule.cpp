@@ -1,12 +1,8 @@
 //Modules
 #include "UartModule.hpp"
-//Posix
-#include <unistd.h>
 //Modules
 #include "SerializationModule.hpp"
 #include "CyclicRedundancyCheckModule.hpp"
-//C++
-#include <random>
 
 ErrorType Uart::init() {
     return ErrorType::Success;
