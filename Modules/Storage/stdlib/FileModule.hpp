@@ -7,7 +7,6 @@
 #include "FileAbstraction.hpp"
 #include "StorageAbstraction.hpp"
 //C++
-#include <iostream>
 #include <fstream>
 
 class File : public FileAbstraction {
@@ -55,7 +54,8 @@ class File : public FileAbstraction {
     std::ios_base::openmode toStdOpenMode(OpenMode mode) {
         switch(mode) {
             case OpenMode::ReadOnly:
-                return std::ios_base::in;
+                //https://stackoverflow.com/questions/8255935/c-open-a-file-as-read-only
+                return std::ios_base::in | std::ios_base::out | std::ios_base::app;
             case OpenMode::WriteOnlyAppend:
             case OpenMode::WriteOnlyAppendExisting:
             case OpenMode::WriteOnlyAppendNew:

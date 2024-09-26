@@ -10,27 +10,28 @@ ErrorType File::open(const std::string &filename, const OpenMode mode) {
     if (nullptr == _handle.get()) {
         _handle = std::make_unique<std::fstream>();
     }
-    if (_handle->is_open() && !storage().status().isInitialized) {
+    if (isOpen() || !storage().status().isInitialized) {
         //Failure because the file mode can't be set if it's already open.
         return ErrorType::PrerequisitesNotMet;
     }
 
     std::ios_base::openmode openMode = toStdOpenMode(mode);
-    _handle->open(storage().rootPrefix() + filename, openMode | std::ios_base::binary);
+    _handle->open(storage().rootPrefix() + filename, openMode);
 
-    if (!_handle->is_open()) {
+    if (!isOpen()) {
         return ErrorType::Failure;
     }
 
     _filename = std::string(filename);
     _mode = mode;
     _handle->imbue(std::locale::classic());
+
     return ErrorType::Success;
 }
 
 ErrorType File::close() {
     if (!isOpen()) {
-        return ErrorType::Success;
+        return ErrorType::PrerequisitesNotMet;
     }
 
     if (ErrorType::Success != synchronize()) {
@@ -39,6 +40,7 @@ ErrorType File::close() {
 
     _handle->close();
     _mode = OpenMode::Unknown;
+
     return ErrorType::Success;
 }
 
@@ -47,8 +49,11 @@ ErrorType File::seek(const FileOffset &offset) {
 }
 
 ErrorType File::remove() {
-    if (nullptr != _handle.get() && _handle->is_open()) {
-        close();
+    ErrorType error;
+
+    error = close();   
+    if (ErrorType::Failure == error) {
+        return error;
     }
 
     int returnValue = std::remove(path().c_str());
@@ -56,7 +61,7 @@ ErrorType File::remove() {
     if (0 == returnValue) {
         _filename.clear();
         _handle.reset();
-        return ErrorType::Success;
+        return error;
     }
     else {
         return ErrorType::Failure;
@@ -112,10 +117,10 @@ ErrorType File::readNonBlocking(const FileOffset offset, std::shared_ptr<std::st
 }
 
 ErrorType File::writeBlocking(const FileOffset offset, const std::string &data) {
-    if (nullptr == _handle.get()) {
+    if (!isOpen()) {
         return ErrorType::PrerequisitesNotMet;
     }
-    else if (!_handle->is_open()) {
+    if (!canWriteToFile()) {
         return ErrorType::PrerequisitesNotMet;
     }
 
@@ -126,10 +131,6 @@ ErrorType File::writeBlocking(const FileOffset offset, const std::string &data) 
         }
 
         assert(_handle->tellp() == offset);
-    }
-
-    if (!canWriteToFile()) {
-        return ErrorType::PrerequisitesNotMet;
     }
 
     if (_handle->write(data.c_str(), static_cast<std::streamsize>(data.size())).good()) {
@@ -162,6 +163,13 @@ ErrorType File::writeNonBlocking(const std::shared_ptr<std::string> data, std::f
 }
 
 ErrorType File::synchronize() {
+    if (nullptr == _handle.get()) {
+        return ErrorType::PrerequisitesNotMet;
+    }
+    else if (!_handle->is_open()) {
+        return ErrorType::PrerequisitesNotMet;
+    }
+
     if (_handle->flush().good()) {
         return ErrorType::Success;
     }

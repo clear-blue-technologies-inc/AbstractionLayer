@@ -78,12 +78,15 @@ class FileAbstraction {
      * @param[in] offset The offset to seek to.
      * @returns ErrorType::Success if the offset was set.
      * @returns ErrorType::FileNotFound if the file does not exist
+     * @returns ErrorType::PrerequisitesNotMet if the file is not open.
+     * @returns ErrorType::Failure otherwise
     */
     virtual ErrorType seek(const FileOffset &offset) = 0;
     /**
      * @brief Removes a file.
      * @returns ErrorType::Success if the file was removed.
-     * @returns ErrorType::Failure if the file could not be removed
+     * @returns The error returned from FileAbstraction::close if the file could not be closed.
+     * @returns ErrorType::Failure otherwise.
     */
     virtual ErrorType remove() = 0;
     /**
