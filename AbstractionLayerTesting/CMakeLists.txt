@@ -10,8 +10,11 @@ project(abstractionLayerTesting)
 
 include(CTest)
 
-#The name of the build folder for desktop builds changes based on the operating system used.
-file(GLOB buildDir ${CMAKE_SOURCE_DIR}/../../*_build)
+set(buildDir "${CMAKE_CURRENT_LIST_DIR}/../../${CMAKE_HOST_SYSTEM_NAME}_build")
+
+if(NOT EXISTS ${buildDir}/AbstractionLayer)
+  message(FATAL_ERROR "Could not find AbstractionLayer build files in set build directory: ${buildDir}")
+endif()
 
 add_library(abstractionLayerTesting INTERFACE)
 
