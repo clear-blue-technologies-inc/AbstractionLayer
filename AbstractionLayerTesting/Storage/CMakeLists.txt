@@ -30,7 +30,7 @@ find_library(loggerLib
 NAMES
   StdlibLogger
 HINTS
-  ${buildDir}/AbstractionLayer/Modules/Logging/StdLib
+  ${buildDir}/AbstractionLayer/Modules/Logging/stdlib
 )
 
 find_library(operatingSystemLib
@@ -49,9 +49,9 @@ HINTS
 
 find_library(storageLib
 NAMES
-  StdLibStorage
+  StdlibStorage
 HINTS
-  ${buildDir}/AbstractionLayer/Modules/Storage/StdLib
+  ${buildDir}/AbstractionLayer/Modules/Storage/stdlib
 )
 
 target_compile_options(StorageTest PRIVATE $<TARGET_PROPERTY:abstractionLayerTesting,INTERFACE_COMPILE_OPTIONS>)
