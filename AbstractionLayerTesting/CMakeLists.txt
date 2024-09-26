@@ -29,7 +29,7 @@ INTERFACE
 
 add_subdirectory(Example)
 add_subdirectory(OperatingSystem)
-#add_subdirectory(Storage)
+add_subdirectory(Storage)
 #add_subdirectory(Ip)
 #add_subdirectory(Uart)
 #add_subdirectory(Serialization)

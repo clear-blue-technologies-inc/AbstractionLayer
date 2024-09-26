@@ -34,9 +34,9 @@ HINTS
 
 find_library(operatingSystemLib
 NAMES
-  MacOsOperatingSystem
+  ${CMAKE_HOST_SYSTEM_NAME}OperatingSystem
 HINTS
-  ${buildDir}/AbstractionLayer/Modules/OperatingSystem/MacOs
+  ${buildDir}/AbstractionLayer/Modules/OperatingSystem/${CMAKE_HOST_SYSTEM_NAME}
 )
 
 find_library(eventLib
@@ -58,4 +58,9 @@ target_link_libraries(OperatingSystemTest PRIVATE ${operatingSystemLib})
 add_test(
   NAME OperatingSystem
   COMMAND OperatingSystemTest
+)
+
+set_property(TEST OperatingSystem
+PROPERTY
+  TIMEOUT 10
 )
