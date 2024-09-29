@@ -1,4 +1,6 @@
 #include "IpServerModule.hpp"
+#include "WifiModule.hpp"
+#include "OperatingSystemModule.hpp"
 
 //Posix
 #include <netdb.h>
@@ -108,5 +110,49 @@ ErrorType IpServer::sendNonBlocking(const std::shared_ptr<std::string> data, con
     return ErrorType::NotImplemented;
 }
 ErrorType IpServer::receiveNonBlocking(std::shared_ptr<std::string> buffer, const Milliseconds timeout, std::function<void(const ErrorType error, std::shared_ptr<std::string> buffer)> callback) {
-    return ErrorType::NotImplemented;
+    bool received = false;
+
+    auto rx = [this, callback, &received](const std::shared_ptr<std::string> buffer, const Milliseconds timeout) -> ErrorType {
+        ErrorType error = ErrorType::Failure;
+
+        if (nullptr == buffer.get()) {
+            assert(false);
+            return ErrorType::NoData;
+        }
+
+        error = receiveBlocking(*buffer, timeout);
+
+        if (nullptr != callback) {
+            callback(error, buffer);
+        }
+
+        received = true;
+        return error;
+    };
+
+    std::unique_ptr<EventAbstraction> event = std::make_unique<EventQueue::Event<IpServer>>(std::bind(rx, buffer, timeout));
+    ErrorType error = network().addEvent(event);
+    if (ErrorType::Success != error) {
+        return error;
+    }
+
+    //Block for the timeout specified if no callback is provided
+    if (nullptr == callback) {
+        Milliseconds i;
+        for (i = 0; i < timeout / 10 && !received; i++) {
+            OperatingSystem::Instance().delay(10);
+        }
+
+        if (!received && (timeout / 10) == i) {
+            return ErrorType::Timeout;
+        }
+        else if (!received) {
+            return ErrorType::Failure;
+        }
+        else {
+            return ErrorType::Success;
+        }
+    }
+
+    return ErrorType::Success;
 }

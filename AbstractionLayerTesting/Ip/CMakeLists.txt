@@ -12,8 +12,8 @@ PRIVATE
 
   ${CMAKE_SOURCE_DIR}/../Modules/Ip/Posix
   ${CMAKE_SOURCE_DIR}/../Modules/Logging/stdlib
-  ${CMAKE_SOURCE_DIR}/../Modules/OperatingSystem/MacOs
-  ${CMAKE_SOURCE_DIR}/../Modules/Network/Wifi/MacOs
+  ${CMAKE_SOURCE_DIR}/../Modules/OperatingSystem/${CMAKE_HOST_SYSTEM_NAME}
+  ${CMAKE_SOURCE_DIR}/../Modules/Network/Wifi/${CMAKE_HOST_SYSTEM_NAME}
 
   ${CMAKE_SOURCE_DIR}/../Utilities
 
@@ -23,9 +23,9 @@ PRIVATE
 
 find_library(operatingSystemLib
 NAMES
-  MacOsOperatingSystem
+  ${CMAKE_HOST_SYSTEM_NAME}OperatingSystem
 HINTS
-  ${buildDir}/AbstractionLayer/Modules/OperatingSystem/MacOs
+  ${buildDir}/AbstractionLayer/Modules/OperatingSystem/${CMAKE_HOST_SYSTEM_NAME}
 )
 
 find_library(errorLib
@@ -44,9 +44,9 @@ HINTS
 
 find_library(wifiLib
 NAMES
-  MacOsWifi
+  ${CMAKE_HOST_SYSTEM_NAME}Wifi
 HINTS
-  ${buildDir}/AbstractionLayer/Modules/Network/Wifi/MacOs
+  ${buildDir}/AbstractionLayer/Modules/Network/Wifi/${CMAKE_HOST_SYSTEM_NAME}
 )
 
 find_library(ipClientLib
