@@ -1,68 +1,65 @@
-add_executable(cbtUartTest.Mach-O
-  CbtUartTest.cpp
+add_executable(UartTest
+  UartTest.cpp
 )
 
-target_include_directories(cbtUartTest.Mach-O
+target_include_directories(UartTest
 PRIVATE
-  ${CMAKE_SOURCE_DIR}/../main/Foundation/AbstractionLayer/Logging
-  ${CMAKE_SOURCE_DIR}/../main/Foundation/AbstractionLayer/Hardware
-  ${CMAKE_SOURCE_DIR}/../main/Foundation/AbstractionLayer/Storage
-  ${CMAKE_SOURCE_DIR}/../main/Foundation/AbstractionLayer/OperatingSystem
+  ${CMAKE_SOURCE_DIR}/../Abstractions/Logging
+  ${CMAKE_SOURCE_DIR}/../Abstractions/Hardware
+  ${CMAKE_SOURCE_DIR}/../Abstractions/Storage
+  ${CMAKE_SOURCE_DIR}/../Abstractions/OperatingSystem
 
-  ${CMAKE_SOURCE_DIR}/../main/Foundation/Common
-  ${CMAKE_SOURCE_DIR}/../main/Foundation/Protocols
-
-  ${CMAKE_SOURCE_DIR}/../main/Modules/Logging/Stdlib
-  ${CMAKE_SOURCE_DIR}/../main/Modules/Storage/Stdlib
-  ${CMAKE_SOURCE_DIR}/../main/Modules/Drivers/Uart/StdlibFile
+  ${CMAKE_SOURCE_DIR}/../Modules/Logging/stdlib
+  ${CMAKE_SOURCE_DIR}/../Modules/Storage/stdlib
+  ${CMAKE_SOURCE_DIR}/../Modules/Drivers/Uart/File
 )
 
 find_library(errorLib
 NAMES
-  cbtErrnoError
+  ErrnoError
 HINTS
   ${buildDir}/main/Modules/Error/Errno
 )
 
 find_library(loggerLib
 NAMES
-  cbtStdlibLogger
+  StdlibLogger
 HINTS
-  ${buildDir}/main/Modules/Logging/StdLib
+  ${buildDir}/AbstractionLayer/Modules/Logging/stdlib
 )
 
 find_library(uartLib
 NAMES
-  cbtStdlibFileUart
+  FileUart
 HINTS
-  ${buildDir}/main/Modules/Drivers/Uart/StdlibFile
+  ${buildDir}/AbstractionLayer/Modules/Drivers/Uart/File
 )
 
 find_library(storageLib
 NAMES
-  cbtStdlibStorage
+  StdlibStorage
 HINTS
-  ${buildDir}/main/Modules/Storage/Stdlib/StdlibStorage
+  ${buildDir}/AbstractionLayer/Modules/Storage/Stdlib/StdlibStorage
 )
 
 find_library(operatingSystemLib
 NAMES
-  cbtPosixOperatingSystem
+  ${CMAKE_HOST_SYSTEM_NAME}OperatingSystem
 HINTS
-  ${buildDir}/main/Modules/OperatingSystem/Posix
+  ${buildDir}/AbstractionLayer/Modules/OperatingSystem/${CMAKE_HOST_SYSTEM_NAME}
 )
 
-target_compile_options(cbtUartTest.Mach-O PRIVATE $<TARGET_PROPERTY:foundationTesting,INTERFACE_COMPILE_OPTIONS>)
+target_compile_options(UartTest PRIVATE $<TARGET_PROPERTY:abstractionLayerTesting,INTERFACE_COMPILE_OPTIONS>)
 
-target_link_libraries(cbtUartTest.Mach-O PRIVATE ${errorLib})
-target_link_libraries(cbtUartTest.Mach-O PRIVATE ${loggerLib})
-target_link_libraries(cbtUartTest.Mach-O PRIVATE ${uartLib})
-target_link_libraries(cbtUartTest.Mach-O PRIVATE ${storageLib})
-target_link_libraries(cbtUartTest.Mach-O PRIVATE ${operatingSystemLib})
+target_link_libraries(UartTest PRIVATE ${errorLib})
+target_link_libraries(UartTest PRIVATE ${loggerLib})
+target_link_libraries(UartTest PRIVATE ${uartLib})
+target_link_libraries(UartTest PRIVATE ${storageLib})
+target_link_libraries(UartTest PRIVATE ${operatingSystemLib})
 
 add_test(
   NAME Uart
-  COMMAND cbtUartTest.Mach-O
+  COMMAND UartTest
 )
 
 set_property(TEST Uart
