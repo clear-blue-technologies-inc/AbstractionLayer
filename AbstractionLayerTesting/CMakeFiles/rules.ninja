@@ -6,7 +6,7 @@
 # It is included in the main 'build.ninja'.
 
 # =============================================================================
-# Project: foundationTesting
+# Project: abstractionLayerTesting
 # Configurations: 
 # =============================================================================
 # =============================================================================
@@ -33,6 +33,44 @@ rule CXX_COMPILER__ExampleTest_
 # Rule for linking CXX executable.
 
 rule CXX_EXECUTABLE_LINKER__ExampleTest_
+  command = $PRE_LINK && /opt/homebrew/bin/g++-12 $FLAGS -Wl,-search_paths_first -Wl,-headerpad_max_install_names $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
+  description = Linking CXX executable $TARGET_FILE
+  restat = $RESTAT
+
+
+#############################################
+# Rule for compiling CXX files.
+
+rule CXX_COMPILER__OperatingSystemTest_
+  depfile = $DEP_FILE
+  deps = gcc
+  command = /opt/homebrew/bin/g++-12 $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
+  description = Building CXX object $out
+
+
+#############################################
+# Rule for linking CXX executable.
+
+rule CXX_EXECUTABLE_LINKER__OperatingSystemTest_
+  command = $PRE_LINK && /opt/homebrew/bin/g++-12 $FLAGS -Wl,-search_paths_first -Wl,-headerpad_max_install_names $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
+  description = Linking CXX executable $TARGET_FILE
+  restat = $RESTAT
+
+
+#############################################
+# Rule for compiling CXX files.
+
+rule CXX_COMPILER__StorageTest_
+  depfile = $DEP_FILE
+  deps = gcc
+  command = /opt/homebrew/bin/g++-12 $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
+  description = Building CXX object $out
+
+
+#############################################
+# Rule for linking CXX executable.
+
+rule CXX_EXECUTABLE_LINKER__StorageTest_
   command = $PRE_LINK && /opt/homebrew/bin/g++-12 $FLAGS -Wl,-search_paths_first -Wl,-headerpad_max_install_names $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
   description = Linking CXX executable $TARGET_FILE
   restat = $RESTAT

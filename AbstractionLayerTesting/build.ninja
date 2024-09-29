@@ -8,7 +8,7 @@
 # =============================================================================
 
 # =============================================================================
-# Project: foundationTesting
+# Project: abstractionLayerTesting
 # Configurations: 
 # =============================================================================
 
@@ -476,8 +476,8 @@ build cmake_object_order_depends_target_ExampleTest: phony || Example/CMakeFiles
 
 build Example/CMakeFiles/ExampleTest.dir/ExampleTest.cpp.o: CXX_COMPILER__ExampleTest_ /Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/Example/ExampleTest.cpp || cmake_object_order_depends_target_ExampleTest
   DEP_FILE = Example/CMakeFiles/ExampleTest.dir/ExampleTest.cpp.o.d
-  FLAGS = -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.0.sdk -mmacosx-version-min=14.6
-  INCLUDES = -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Abstractions/Logging -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Utilities -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Modules/Error/Errno -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Modules/Logging/Stdlib -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Applications/Logger -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Applications/Event
+  FLAGS = -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.0.sdk -mmacosx-version-min=14.6 -ffunction-sections -fdata-sections -fno-exceptions -O0 -g2 -ggdb -Wextra -std=gnu++23
+  INCLUDES = -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Abstractions/Logging -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Abstractions/OperatingSystem -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Utilities -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Modules/Error/Errno -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Modules/Logging/stdlib -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Modules/OperatingSystem/Darwin -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Applications/Logging -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Applications/Event
   OBJECT_DIR = Example/CMakeFiles/ExampleTest.dir
   OBJECT_FILE_DIR = Example/CMakeFiles/ExampleTest.dir
 
@@ -489,8 +489,9 @@ build Example/CMakeFiles/ExampleTest.dir/ExampleTest.cpp.o: CXX_COMPILER__Exampl
 #############################################
 # Link the executable Example/ExampleTest
 
-build Example/ExampleTest: CXX_EXECUTABLE_LINKER__ExampleTest_ Example/CMakeFiles/ExampleTest.dir/ExampleTest.cpp.o
+build Example/ExampleTest: CXX_EXECUTABLE_LINKER__ExampleTest_ Example/CMakeFiles/ExampleTest.dir/ExampleTest.cpp.o | /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Modules/Error/Errno/libErrnoError.a /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Modules/Logging/stdlib/libStdlibLogger.a /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Modules/OperatingSystem/Darwin/libDarwinOperatingSystem.a /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Applications/Event/libEvent.a
   FLAGS = -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.0.sdk -mmacosx-version-min=14.6
+  LINK_LIBRARIES = /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Modules/Error/Errno/libErrnoError.a  /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Modules/Logging/stdlib/libStdlibLogger.a  /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Modules/OperatingSystem/Darwin/libDarwinOperatingSystem.a  /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Applications/Event/libEvent.a
   OBJECT_DIR = Example/CMakeFiles/ExampleTest.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -534,9 +535,161 @@ build Example/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
 build Example/rebuild_cache: phony Example/CMakeFiles/rebuild_cache.util
 
 # =============================================================================
+# Write statements declared in CMakeLists.txt:
+# /Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/CMakeLists.txt
+# =============================================================================
+
+# =============================================================================
+# Object build statements for EXECUTABLE target OperatingSystemTest
+
+
+#############################################
+# Order-only phony target for OperatingSystemTest
+
+build cmake_object_order_depends_target_OperatingSystemTest: phony || OperatingSystem/CMakeFiles/OperatingSystemTest.dir
+
+build OperatingSystem/CMakeFiles/OperatingSystemTest.dir/OperatingSystemTest.cpp.o: CXX_COMPILER__OperatingSystemTest_ /Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/OperatingSystem/OperatingSystemTest.cpp || cmake_object_order_depends_target_OperatingSystemTest
+  DEP_FILE = OperatingSystem/CMakeFiles/OperatingSystemTest.dir/OperatingSystemTest.cpp.o.d
+  FLAGS = -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.0.sdk -mmacosx-version-min=14.6 -ffunction-sections -fdata-sections -fno-exceptions -O0 -g2 -ggdb -Wextra -std=gnu++23
+  INCLUDES = -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Abstractions/OperatingSystem -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Abstractions/Logging -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Modules/Error/Errno -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Modules/Logging/stdlib -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Modules/OperatingSystem/Darwin -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Applications/Logging -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Applications/Event -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Utilities
+  OBJECT_DIR = OperatingSystem/CMakeFiles/OperatingSystemTest.dir
+  OBJECT_FILE_DIR = OperatingSystem/CMakeFiles/OperatingSystemTest.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target OperatingSystemTest
+
+
+#############################################
+# Link the executable OperatingSystem/OperatingSystemTest
+
+build OperatingSystem/OperatingSystemTest: CXX_EXECUTABLE_LINKER__OperatingSystemTest_ OperatingSystem/CMakeFiles/OperatingSystemTest.dir/OperatingSystemTest.cpp.o | /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Modules/Error/Errno/libErrnoError.a /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Modules/Logging/stdlib/libStdlibLogger.a /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Modules/OperatingSystem/Darwin/libDarwinOperatingSystem.a /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Applications/Event/libEvent.a /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Modules/OperatingSystem/Darwin/libDarwinOperatingSystem.a /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Applications/Event/libEvent.a
+  FLAGS = -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.0.sdk -mmacosx-version-min=14.6
+  LINK_LIBRARIES = /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Modules/Error/Errno/libErrnoError.a  /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Modules/Logging/stdlib/libStdlibLogger.a  /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Modules/OperatingSystem/Darwin/libDarwinOperatingSystem.a  /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Applications/Event/libEvent.a  /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Modules/OperatingSystem/Darwin/libDarwinOperatingSystem.a  /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Applications/Event/libEvent.a
+  OBJECT_DIR = OperatingSystem/CMakeFiles/OperatingSystemTest.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = OperatingSystem/OperatingSystemTest
+  TARGET_PDB = OperatingSystemTest.dbg
+
+
+#############################################
+# Utility command for test
+
+build OperatingSystem/CMakeFiles/test.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/OperatingSystem && /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/bin/ctest --force-new-ctest-process
+  DESC = Running tests...
+  pool = console
+  restat = 1
+
+build OperatingSystem/test: phony OperatingSystem/CMakeFiles/test.util
+
+
+#############################################
+# Utility command for edit_cache
+
+build OperatingSystem/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/OperatingSystem && /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/bin/ccmake -S/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting -B/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting
+  DESC = Running CMake cache editor...
+  pool = console
+  restat = 1
+
+build OperatingSystem/edit_cache: phony OperatingSystem/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build OperatingSystem/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/OperatingSystem && /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/bin/cmake --regenerate-during-build -S/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting -B/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build OperatingSystem/rebuild_cache: phony OperatingSystem/CMakeFiles/rebuild_cache.util
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# /Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/CMakeLists.txt
+# =============================================================================
+
+# =============================================================================
+# Object build statements for EXECUTABLE target StorageTest
+
+
+#############################################
+# Order-only phony target for StorageTest
+
+build cmake_object_order_depends_target_StorageTest: phony || Storage/CMakeFiles/StorageTest.dir
+
+build Storage/CMakeFiles/StorageTest.dir/StorageTest.cpp.o: CXX_COMPILER__StorageTest_ /Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/Storage/StorageTest.cpp || cmake_object_order_depends_target_StorageTest
+  DEP_FILE = Storage/CMakeFiles/StorageTest.dir/StorageTest.cpp.o.d
+  FLAGS = -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.0.sdk -mmacosx-version-min=14.6 -ffunction-sections -fdata-sections -fno-exceptions -O0 -g2 -ggdb -Wextra -std=gnu++23
+  INCLUDES = -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Abstractions/Storage -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Abstractions/OperatingSystem -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Abstractions/Logging -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Modules/Error/Errno -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Modules/Storage/stdlib -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Modules/Logging/stdlib -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Modules/OperatingSystem/Darwin -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Utilities -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Applications/Event -I/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/../Applications/Logging
+  OBJECT_DIR = Storage/CMakeFiles/StorageTest.dir
+  OBJECT_FILE_DIR = Storage/CMakeFiles/StorageTest.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target StorageTest
+
+
+#############################################
+# Link the executable Storage/StorageTest
+
+build Storage/StorageTest: CXX_EXECUTABLE_LINKER__StorageTest_ Storage/CMakeFiles/StorageTest.dir/StorageTest.cpp.o | /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Modules/Storage/stdlib/libStdlibStorage.a /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Modules/OperatingSystem/Darwin/libDarwinOperatingSystem.a /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Modules/Error/Errno/libErrnoError.a /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Modules/Logging/stdlib/libStdlibLogger.a /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Applications/Event/libEvent.a
+  FLAGS = -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.0.sdk -mmacosx-version-min=14.6
+  LINK_LIBRARIES = /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Modules/Storage/stdlib/libStdlibStorage.a  /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Modules/OperatingSystem/Darwin/libDarwinOperatingSystem.a  /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Modules/Error/Errno/libErrnoError.a  /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Modules/Logging/stdlib/libStdlibLogger.a  /Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Applications/Event/libEvent.a
+  OBJECT_DIR = Storage/CMakeFiles/StorageTest.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = Storage/StorageTest
+  TARGET_PDB = StorageTest.dbg
+
+
+#############################################
+# Utility command for test
+
+build Storage/CMakeFiles/test.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/Storage && /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/bin/ctest --force-new-ctest-process
+  DESC = Running tests...
+  pool = console
+  restat = 1
+
+build Storage/test: phony Storage/CMakeFiles/test.util
+
+
+#############################################
+# Utility command for edit_cache
+
+build Storage/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/Storage && /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/bin/ccmake -S/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting -B/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting
+  DESC = Running CMake cache editor...
+  pool = console
+  restat = 1
+
+build Storage/edit_cache: phony Storage/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build Storage/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/Storage && /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/bin/cmake --regenerate-during-build -S/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting -B/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build Storage/rebuild_cache: phony Storage/CMakeFiles/rebuild_cache.util
+
+# =============================================================================
 # Target aliases.
 
 build ExampleTest: phony Example/ExampleTest
+
+build OperatingSystemTest: phony OperatingSystem/OperatingSystemTest
+
+build StorageTest: phony Storage/StorageTest
 
 # =============================================================================
 # Folder targets.
@@ -546,7 +699,7 @@ build ExampleTest: phony Example/ExampleTest
 #############################################
 # Folder: /Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting
 
-build all: phony Example/all
+build all: phony Example/all OperatingSystem/all Storage/all
 
 # =============================================================================
 
@@ -556,20 +709,34 @@ build all: phony Example/all
 build Example/all: phony Example/ExampleTest
 
 # =============================================================================
+
+#############################################
+# Folder: /Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/OperatingSystem
+
+build OperatingSystem/all: phony OperatingSystem/OperatingSystemTest
+
+# =============================================================================
+
+#############################################
+# Folder: /Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/Storage
+
+build Storage/all: phony Storage/StorageTest
+
+# =============================================================================
 # Built-in targets
 
 
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja: RERUN_CMAKE | /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeCInformation.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeCXXInformation.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeCommonLanguageInclude.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeGenericSystem.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeInitializeConfigs.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeLanguageInformation.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeSystemSpecificInformation.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeSystemSpecificInitialize.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CTestTargets.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CTestUseLaunchers.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Compiler/GNU-C.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Compiler/GNU-CXX.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Compiler/GNU.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Ctest.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/DartConfiguration.tcl.in /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Platform/Apple-GNU-C.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Platform/Apple-GNU-CXX.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Platform/Apple-GNU.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Platform/Darwin-Initialize.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Platform/Darwin.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.24.0/CMakeCCompiler.cmake CMakeFiles/3.24.0/CMakeCXXCompiler.cmake CMakeFiles/3.24.0/CMakeSystem.cmake CMakeLists.txt Example/CMakeLists.txt
+build build.ninja: RERUN_CMAKE | /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeCInformation.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeCXXInformation.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeCommonLanguageInclude.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeGenericSystem.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeInitializeConfigs.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeLanguageInformation.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeSystemSpecificInformation.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeSystemSpecificInitialize.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CTest.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CTestTargets.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CTestUseLaunchers.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Compiler/GNU-C.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Compiler/GNU-CXX.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Compiler/GNU.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/DartConfiguration.tcl.in /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Platform/Apple-GNU-C.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Platform/Apple-GNU-CXX.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Platform/Apple-GNU.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Platform/Darwin-Initialize.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Platform/Darwin.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.24.0/CMakeCCompiler.cmake CMakeFiles/3.24.0/CMakeCXXCompiler.cmake CMakeFiles/3.24.0/CMakeSystem.cmake CMakeLists.txt Example/CMakeLists.txt OperatingSystem/CMakeLists.txt Storage/CMakeLists.txt
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeCInformation.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeCXXInformation.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeCommonLanguageInclude.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeGenericSystem.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeInitializeConfigs.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeLanguageInformation.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeSystemSpecificInformation.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeSystemSpecificInitialize.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CTestTargets.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CTestUseLaunchers.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Compiler/GNU-C.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Compiler/GNU-CXX.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Compiler/GNU.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Ctest.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/DartConfiguration.tcl.in /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Platform/Apple-GNU-C.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Platform/Apple-GNU-CXX.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Platform/Apple-GNU.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Platform/Darwin-Initialize.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Platform/Darwin.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.24.0/CMakeCCompiler.cmake CMakeFiles/3.24.0/CMakeCXXCompiler.cmake CMakeFiles/3.24.0/CMakeSystem.cmake CMakeLists.txt Example/CMakeLists.txt: phony
+build /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeCInformation.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeCXXInformation.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeCommonLanguageInclude.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeGenericSystem.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeInitializeConfigs.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeLanguageInformation.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeSystemSpecificInformation.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CMakeSystemSpecificInitialize.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CTest.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CTestTargets.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/CTestUseLaunchers.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Compiler/GNU-C.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Compiler/GNU-CXX.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Compiler/GNU.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/DartConfiguration.tcl.in /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Platform/Apple-GNU-C.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Platform/Apple-GNU-CXX.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Platform/Apple-GNU.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Platform/Darwin-Initialize.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Platform/Darwin.cmake /Users/benhaubrich/.espressif/tools/cmake/3.24.0/CMake.app/Contents/share/cmake-3.24/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.24.0/CMakeCCompiler.cmake CMakeFiles/3.24.0/CMakeCXXCompiler.cmake CMakeFiles/3.24.0/CMakeSystem.cmake CMakeLists.txt Example/CMakeLists.txt OperatingSystem/CMakeLists.txt Storage/CMakeLists.txt: phony
 
 
 #############################################

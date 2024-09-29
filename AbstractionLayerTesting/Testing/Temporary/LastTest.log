@@ -1,8 +1,8 @@
-Start testing: Sep 18 15:28 EDT
+Start testing: Sep 29 13:13 EDT
 ----------------------------------------------------------
 Unable to find executable: /Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/Example/ExampleTest
-1/1 Testing: Example
-1/1 Test: Example
+1/3 Testing: Example
+1/3 Test: Example
 Command: ""
 Directory: /Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/Example
 "Example" start time: 
@@ -12,8 +12,40 @@ Output:
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"Example" end time: Sep 18 15:28 EDT
+"Example" end time: Sep 29 13:13 EDT
 "Example" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-End testing: Sep 18 15:28 EDT
+Unable to find executable: /Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/OperatingSystem/OperatingSystemTest
+2/3 Testing: OperatingSystem
+2/3 Test: OperatingSystem
+Command: ""
+Directory: /Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/OperatingSystem
+"OperatingSystem" start time: 
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"OperatingSystem" end time: Sep 29 13:13 EDT
+"OperatingSystem" time elapsed: 00:00:00
+----------------------------------------------------------
+
+Unable to find executable: /Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/Storage/StorageTest
+3/3 Testing: Storage
+3/3 Test: Storage
+Command: ""
+Directory: /Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/Storage
+"Storage" start time: 
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Storage" end time: Sep 29 13:13 EDT
+"Storage" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Sep 29 13:13 EDT

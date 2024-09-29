@@ -33,3 +33,11 @@
 /Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/Example/CMakeFiles/test.dir
 /Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/Example/CMakeFiles/edit_cache.dir
 /Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/Example/CMakeFiles/rebuild_cache.dir
+/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/OperatingSystem/CMakeFiles/OperatingSystemTest.dir
+/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/OperatingSystem/CMakeFiles/test.dir
+/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/OperatingSystem/CMakeFiles/edit_cache.dir
+/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/OperatingSystem/CMakeFiles/rebuild_cache.dir
+/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/Storage/CMakeFiles/StorageTest.dir
+/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/Storage/CMakeFiles/test.dir
+/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/Storage/CMakeFiles/edit_cache.dir
+/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting/Storage/CMakeFiles/rebuild_cache.dir

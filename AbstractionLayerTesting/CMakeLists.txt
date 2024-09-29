@@ -10,7 +10,8 @@ project(abstractionLayerTesting)
 
 include(CTest)
 
-set(buildDir "${CMAKE_CURRENT_LIST_DIR}/../../${CMAKE_HOST_SYSTEM_NAME}_build")
+set(buildDir "${CMAKE_CURRENT_LIST_DIR}/../../../${CMAKE_HOST_SYSTEM_NAME}_build/main")
+message(STATUS "buildDir: ${buildDir}")
 
 if(NOT EXISTS ${buildDir}/AbstractionLayer)
   message(FATAL_ERROR "Could not find AbstractionLayer build files in set build directory: ${buildDir}")
@@ -24,7 +25,7 @@ INTERFACE
   -fdata-sections
   -fno-exceptions
   -O0
-  -g3
+  -g2
   -ggdb
   -Wextra
   -std=gnu++23
@@ -33,11 +34,6 @@ INTERFACE
 add_subdirectory(Example)
 add_subdirectory(OperatingSystem)
 add_subdirectory(Storage)
-#add_subdirectory(Ip)
-#add_subdirectory(Uart)
-#add_subdirectory(Serialization)
-#add_subdirectory(OperatingSystem)
-#add_subdirectory(Storage)
 #add_subdirectory(Ip)
 #add_subdirectory(Uart)
 #add_subdirectory(Serialization)

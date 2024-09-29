@@ -162,7 +162,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=foundationTesting
+CMAKE_PROJECT_NAME:STATIC=abstractionLayerTesting
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
@@ -254,8 +254,20 @@ MEMORYCHECK_SUPPRESSIONS_FILE:FILEPATH=
 //Name of the computer/site where compile is being run
 SITE:STRING=Bens-MacBook-Pro.local
 
+//Value Computed by CMake
+abstractionLayerTesting_BINARY_DIR:STATIC=/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting
+
+//Value Computed by CMake
+abstractionLayerTesting_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+abstractionLayerTesting_SOURCE_DIR:STATIC=/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting
+
 //Path to a library.
-errorLib:FILEPATH=errorLib-NOTFOUND
+errorLib:FILEPATH=/Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Modules/Error/Errno/libErrnoError.a
+
+//Path to a library.
+eventLib:FILEPATH=/Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Applications/Event/libEvent.a
 
 //Value Computed by CMake
 foundationTesting_BINARY_DIR:STATIC=/Users/benhaubrich/cbtProjects/foundationProject/foundation/main/AbstractionLayer/AbstractionLayerTesting
@@ -273,19 +285,19 @@ ipClientLib:FILEPATH=ipClientLib-NOTFOUND
 ipServerLib:FILEPATH=ipServerLib-NOTFOUND
 
 //Path to a library.
-loggerLib:FILEPATH=loggerLib-NOTFOUND
+loggerLib:FILEPATH=/Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Modules/Logging/stdlib/libStdlibLogger.a
 
 //Path to a library.
 nanopb:FILEPATH=nanopb-NOTFOUND
 
 //Path to a library.
-operatingSystemLib:FILEPATH=operatingSystemLib-NOTFOUND
+operatingSystemLib:FILEPATH=/Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Modules/OperatingSystem/Darwin/libDarwinOperatingSystem.a
 
 //Path to a library.
 serializationLib:FILEPATH=serializationLib-NOTFOUND
 
 //Path to a library.
-storageLib:FILEPATH=storageLib-NOTFOUND
+storageLib:FILEPATH=/Users/benhaubrich/cbtProjects/foundationProject/foundation/Darwin_build/main/AbstractionLayer/Modules/Storage/stdlib/libStdlibStorage.a
 
 //Path to a library.
 uartLib:FILEPATH=uartLib-NOTFOUND
@@ -406,7 +418,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=2
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=4
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
