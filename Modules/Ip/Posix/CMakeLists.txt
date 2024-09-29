@@ -23,6 +23,8 @@ STATIC
 
 target_link_libraries(PosixIpServer PUBLIC abstractionLayer)
 target_link_libraries(PosixIpServer PUBLIC Network)
+target_link_libraries(PosixIpServer PUBLIC OperatingSystem)
+target_link_libraries(PosixIpServer PUBLIC Utilities)
 target_link_libraries(${PROJECT_NAME}${EXECUTABLE_SUFFIX} PUBLIC PosixIpServer)
 
 if (ESP_PLATFORM)

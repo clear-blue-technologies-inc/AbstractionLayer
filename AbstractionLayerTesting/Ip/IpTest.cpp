@@ -70,10 +70,7 @@ static int blockingReceiveTest() {
     constexpr Milliseconds timeout = 5000;
     auto buffer = std::make_shared<std::string>(64, 0);
 
-    error = wifiNetworkServer.server->receiveNonBlocking(buffer, timeout);
-    if (ErrorType::Success != error) {
-        assert(false);
-    }
+    assert(ErrorType::Success == (error = wifiNetworkServer.server->receiveNonBlocking(buffer, timeout)));
     
     if (0 != buffer->compare(0, globalDataToSend.length(), globalDataToSend)) {
         CBT_LOGE(TAG, "Data did not match. Bytes received: %u, Received/Expected %s/%s", buffer->size(), buffer->c_str(), globalDataToSend.c_str());
