@@ -90,7 +90,7 @@ class Wifi : public NetworkAbstraction {
      * @returns ErrorType::Success if the IP address was returned.
      * @returns ErrorType::Failure otherwise.
      */
-    ErrorType hostToIp(const std::string &host, std::string ipAddress);
+    ErrorType hostToIp(const std::string &host, std::string &ipAddress);
     /**
      * @brief Given a destination IP address, get the interface that the outgoing packet was routed to to reach the destination.
      * @param[in] ipAddress The destination IP address

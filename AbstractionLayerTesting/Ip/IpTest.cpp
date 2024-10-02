@@ -134,6 +134,9 @@ int main() {
         }
     }
 
+    std::string macAddress(32, 0);
+    testWifi.getMacAddress(macAddress);
+
     //Not setting the ssid or the password. This test is being done on a desktop which likely means
     //the wifi is already connected to some access point and if it isn't, then you should do that before
     //running this test. Also since this just uses whatever network interface the IP address is routed to, so any
