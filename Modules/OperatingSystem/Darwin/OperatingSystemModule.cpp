@@ -39,6 +39,8 @@ ErrorType OperatingSystem::createThread(OperatingSystemConfig::Priority priority
             .fndThreadId = nextThreadId++
         };
 
+        number = newThread.fndThreadId;
+
         if (threads.size() < MaxThreads) {
             threads[name] = newThread;
             return ErrorType::Success;
