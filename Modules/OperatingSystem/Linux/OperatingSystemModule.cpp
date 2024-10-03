@@ -19,6 +19,7 @@ ErrorType OperatingSystem::createThread(OperatingSystemConfig::Priority priority
     int res;
     pthread_t thread;
     static Id nextThreadId = 1;
+    ErrorType error = ErrorType::Failure;
 
     res = pthread_attr_init(&attr);
     assert(0 == res);
@@ -31,27 +32,32 @@ ErrorType OperatingSystem::createThread(OperatingSystemConfig::Priority priority
     pthread_attr_setscope(&attr, PTHREAD_SCOPE_PROCESS);
     pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED);
 
+    //On Linux, the start function is called before pthread_create returns so we have to add our thread before we create it.
+    Thread newThread = {
+        .posixThreadId = thread,
+        .name = name,
+        .fndThreadId = nextThreadId++
+    };
+
+    if (threads.size() < MaxThreads) {
+        threads[name] = newThread;
+    }
+    else {
+        return ErrorType::LimitReached;
+    }
+
     const bool threadWasCreated = (0 == (res = pthread_create(&thread, &attr, startFunction, arguments)));
     pthread_attr_destroy(&attr);
     if (threadWasCreated) {
-        Thread newThread = {
-            .posixThreadId = thread,
-            .name = name,
-            .fndThreadId = nextThreadId++
-        };
-
-        if (threads.size() < MaxThreads) {
-            threads[name] = newThread;
-            return ErrorType::Success;
-        }
-        else {
-            deleteThread(name);
-            return ErrorType::LimitReached;
-        }
+        threads[name].posixThreadId = thread;
+        error = ErrorType::Success;
     }
     else {
-        return toPlatformError(res);
+        deleteThread(name);
+        error = toPlatformError(res);
     }
+
+    return error;
 }
 
 //I want to use pthreads since I like the portability of them, however, ESP does not implement pthread_kill.
@@ -69,11 +75,13 @@ ErrorType OperatingSystem::deleteThread(std::string name) {
 
 ErrorType OperatingSystem::joinThread(std::string name) {
     Id thread;
+    int ret;
     if (ErrorType::NoData == threadId(name, thread)) {
         return ErrorType::NoData;
     }
 
-    return toPlatformError(pthread_join(threads[name].posixThreadId, nullptr));
+    ret = pthread_join(threads[name].posixThreadId, nullptr);
+    return toPlatformError(ret);
 }
 
 ErrorType OperatingSystem::threadId(std::string name, Id &thread) {

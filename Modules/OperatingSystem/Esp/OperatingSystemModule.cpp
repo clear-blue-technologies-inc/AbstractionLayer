@@ -43,7 +43,7 @@ ErrorType OperatingSystem::createThread(OperatingSystemConfig::Priority priority
         return error;
     }
 
-    //On ESP, the start function is called before pthread_create returns.
+    //On ESP, the start function is called before pthread_create returns so we have to add our thread before we create it.
     Thread newThread = {
         .posixThreadId = thread,
         .name = name,
@@ -54,13 +54,13 @@ ErrorType OperatingSystem::createThread(OperatingSystemConfig::Priority priority
         threads[name] = newThread;
     }
     else {
-            return ErrorType::LimitReached;
-
+        return ErrorType::LimitReached;
     }
 
     const bool threadWasCreated = (0 == (res = pthread_create(&thread, NULL, startFunction, arguments)));
     if (threadWasCreated) {
         error = ErrorType::Success;
+        threads[name].posixThreadId = thread;
     }
     else {
         deleteThread(name);

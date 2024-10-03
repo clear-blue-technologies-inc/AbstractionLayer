@@ -44,10 +44,15 @@ static int createThreadTest() {
 
     error = OperatingSystem::Instance().createThread(priority, name, nullptr, stackSize, testThreadStartFunction, threadId);
     assert(ErrorType::Success == error);
+    assert(ErrorType::Success == OperatingSystem::Instance().isDeleted(name));
 
     assert(ErrorType::Success == OperatingSystem::Instance().joinThread(name));
 
     assert(true == threadWasCreated);
+
+    OperatingSystem::Instance().deleteThread(name);
+
+    assert(ErrorType::NoData == OperatingSystem::Instance().isDeleted(name));
 
     return EXIT_SUCCESS;
 }
