@@ -5,6 +5,7 @@ An abstraction layer for building cross-platform, [component-based](https://en.w
 https://github.com/benhaub/AbstractionLayerExample
 
 ## Why use an abstraction layer
+### 1. Reduce the amount of testing required for code changes
 An abstraction layer allows you to build your main application code separate from common software components such as hardware peripherals, storage, networks, etc.
 This allows you to swap out components without having to edit or retest your main application. Consequentially, this allows you to develop and test applications on systems such
 as MacOS or Linux which have faster processing times and a more feature rich debugging environment, and then take that tested code and run it on an embedded target with your ported abstraction layer.
@@ -31,7 +32,7 @@ logger->log("LogTag", "Hello World", LogTpye::Info);
 
 The main application code hasn't changed so I know the logic is correct. It will print as long as the ported code works. If it doesn't print I can eliminate the main application code as a potential source of the bug since it's already been tested and has not changed.
 
-### Reduce dependancies on chip vendors
+### 2. Reduce dependancies on chip vendors
 An abstraction layer allows easy(ier) changes away from drivers and build tools offered by your chip vendor. If you mix in vendor specific tools and drivers directly alongside your application, the application will develop a strong dependancy on the vendor as it's size and complexity increases. Some of these dependancies are:
 - return types
 - parameters

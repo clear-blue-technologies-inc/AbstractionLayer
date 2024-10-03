@@ -57,6 +57,8 @@ ErrorType OperatingSystem::createThread(OperatingSystemConfig::Priority priority
         return ErrorType::LimitReached;
     }
 
+    number = newThread.fndThreadId;
+
     const bool threadWasCreated = (0 == (res = pthread_create(&thread, NULL, startFunction, arguments)));
     if (threadWasCreated) {
         error = ErrorType::Success;
