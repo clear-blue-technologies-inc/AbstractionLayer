@@ -4,9 +4,12 @@
 #include "Error.hpp"
 //Common
 #include "Log.hpp"
-//C standard library
+//Posix
 #include <sys/statvfs.h>
 #include <sys/stat.h>
+//C++
+#include <cstdlib>
+#include <cstdio>
 
 ErrorType Storage::initStorage() {
     ErrorType error;
@@ -18,34 +21,13 @@ ErrorType Storage::initStorage() {
     _status.isInitialized = true;
     return error;
 } 
+
 ErrorType Storage::deinitStorage() {
     std::unique_ptr<EventAbstraction> event = std::make_unique<Event<Storage>>(std::bind(&Storage::deinitStorageInternal, this));
     return addEvent(event);
 } 
-ErrorType Storage::maxStorageSize(Bytes &size) {
-    std::unique_ptr<EventAbstraction> event = std::make_unique<Event<Storage, Bytes &>>(std::bind(&Storage::maxStorageSizeInternal, this, std::placeholders::_1), size);
-    return addEvent(event);
-}
-ErrorType Storage::availableStorage(Bytes &size) {
-    std::unique_ptr<EventAbstraction> event = std::make_unique<Event<Storage, Bytes &>>(std::bind(&Storage::availableStorageInternal, this, std::placeholders::_1), size);
-    return addEvent(event);
-}
-ErrorType Storage::erasePartition(const std::string &partitionName) {
-    return ErrorType::NotImplemented;
-}
-ErrorType Storage::eraseAllPartitions() {
-    return ErrorType::NotImplemented;
-}
 
-ErrorType Storage::mainLoop() {
-    return runNextEvent();
-}
-
-ErrorType Storage::deinitStorageInternal() {
-    //No storage deinit on stdlib systems. Assume the storage is already deinitialized.
-    return ErrorType::NotAvailable;
-}
-ErrorType Storage::maxStorageSizeInternal(Bytes &size) {
+ErrorType Storage::maxStorageSize(Bytes &size, std::string partitionName) {
     struct statvfs fiData;
     ErrorType error = ErrorType::Success;
 
@@ -59,7 +41,8 @@ ErrorType Storage::maxStorageSizeInternal(Bytes &size) {
 
     return error;
 }
-ErrorType Storage::availableStorageInternal(Bytes &size) {
+
+ErrorType Storage::availableStorage(Bytes &size, std::string partitionName) {
     struct statvfs fiData;
     ErrorType error = ErrorType::Success;
 
@@ -73,9 +56,60 @@ ErrorType Storage::availableStorageInternal(Bytes &size) {
 
     return error;
 }
+
+ErrorType Storage::maxRamSize(Bytes &size, std::string memoryRegionName) {
+    ErrorType error = ErrorType::Failure;
+
+    //Will return the size of RAM in GB.
+    std::string commandFinal("system_profiler SPMemoryDataType | egrep Memory | tail -2 | tr -s \" \" | cut -d \" \" -f3");
+    std::string ramSize(3, 0);
+    
+    FILE* pipe = popen(commandFinal.c_str(), "r");
+    if (nullptr != pipe) {
+        size_t bytesRead = fread(ramSize.data(), sizeof(uint8_t), ramSize.capacity(), pipe);
+        if (feof(pipe) || bytesRead == ramSize.capacity()) {
+            error = ErrorType::Success;
+            ramSize.resize(bytesRead);
+            while (ramSize.back() == '\n') {
+                ramSize.pop_back();
+            }
+        }
+        else if (ferror(pipe)) {
+            pclose(pipe);
+            error = ErrorType::Failure;
+        }
+    }
+    size = std::strtoul(ramSize.c_str(), nullptr, 9);
+    size = size * 1023 * 1024 * 1024;
+
+    return error;
+}
+
+ErrorType Storage::availableRam(Bytes &size, std::string memoryRegionName) {
+    return ErrorType::NotImplemented;
+}
+
+ErrorType Storage::erasePartition(const std::string &partitionName) {
+    return ErrorType::NotImplemented;
+}
+
+ErrorType Storage::eraseAllPartitions() {
+    return ErrorType::NotImplemented;
+}
+
+ErrorType Storage::mainLoop() {
+    return runNextEvent();
+}
+
+ErrorType Storage::deinitStorageInternal() {
+    //No storage deinit on stdlib systems. Assume the storage is already deinitialized.
+    return ErrorType::NotAvailable;
+}
+
 ErrorType Storage::erasePartitionInternal(const std::string &partitionName) {
     return ErrorType::NotImplemented;
 }
+
 ErrorType Storage::eraseAllPartitionsInternal() {
     return ErrorType::NotImplemented;
 }
