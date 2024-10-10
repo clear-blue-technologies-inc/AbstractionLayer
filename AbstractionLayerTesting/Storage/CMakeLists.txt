@@ -9,7 +9,7 @@ PRIVATE
   ${CMAKE_SOURCE_DIR}/../Abstractions/Logging
 
   ${CMAKE_SOURCE_DIR}/../Modules/Error/Errno
-  ${CMAKE_SOURCE_DIR}/../Modules/Storage/stdlib
+  ${CMAKE_SOURCE_DIR}/../Modules/Storage/${CMAKE_HOST_SYSTEM_NAME}
   ${CMAKE_SOURCE_DIR}/../Modules/Logging/stdlib
   ${CMAKE_SOURCE_DIR}/../Modules/OperatingSystem/${CMAKE_HOST_SYSTEM_NAME}
 
@@ -49,9 +49,9 @@ HINTS
 
 find_library(storageLib
 NAMES
-  StdlibStorage
+  ${CMAKE_HOST_SYSTEM_NAME}Storage
 HINTS
-  ${buildDir}/AbstractionLayer/Modules/Storage/stdlib
+  ${buildDir}/AbstractionLayer/Modules/Storage/${CMAKE_HOST_SYSTEM_NAME}
 )
 
 target_compile_options(StorageTest PRIVATE $<TARGET_PROPERTY:abstractionLayerTesting,INTERFACE_COMPILE_OPTIONS>)

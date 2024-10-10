@@ -187,6 +187,11 @@ int main() {
         assert(false);
     }
 
+    Bytes ramSize;
+    Storage::Instance().maxRamSize(ramSize);
+    Bytes availableRam;
+    Storage::Instance().availableRam(availableRam);
+
     constexpr uint16_t kilobyte = 1024;
     Id storageId;
 

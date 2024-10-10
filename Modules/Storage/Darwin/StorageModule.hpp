@@ -1,7 +1,7 @@
 #ifndef __STORAGE_MODULE_HPP__
 #define __STORAGE_MODULE_HPP__
 
-//Modules
+//AbstractionLayer applications
 #include "Global.hpp"
 #include "EventQueue.hpp"
 //AbstractionLayer
@@ -20,21 +20,23 @@ class Storage : public StorageAbstraction, public Global<Storage, std::string>, 
 
     ErrorType initStorage() override;
     ErrorType deinitStorage() override;
-    ErrorType maxStorageSize(Bytes &size) override;
-    ErrorType availableStorage(Bytes &size) override;
-    ErrorType erasePartition(const std::string &partitionName) override;
+    ErrorType maxStorageSize(Bytes &size, std::string partitionName = std::string()) override;
+    ErrorType availableStorage(Bytes &size, std::string partitionName = std::string()) override;
+    ErrorType maxRamSize(Bytes &size, std::string memoryRegionName = std::string()) override;
+    ErrorType availableRam(Bytes &size, std::string memoryRegionName = std::string()) override;
+    ErrorType erasePartition(const std::string &partitionName = std::string()) override;
     ErrorType eraseAllPartitions() override;
 
     ErrorType mainLoop() override;
 
     private:
     ErrorType deinitStorageInternal();
-    ErrorType maxStorageSizeInternal(Bytes &size);
-    ErrorType availableStorageInternal(Bytes &size);
+    ErrorType maxStorageSizeInternal(Bytes &size, std::string partitionName);
+    ErrorType availableStorageInternal(Bytes &size, std::string partitionName);
     ErrorType erasePartitionInternal(const std::string &partitionName);
     ErrorType eraseAllPartitionsInternal();
 
     std::string getEnvironment(std::string variable, ErrorType &error);
 };
 
-#endif //__CBT_STORAGE_HPP__
+#endif //__STORAGE_MODULE_HPP__

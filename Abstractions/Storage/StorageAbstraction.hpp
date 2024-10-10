@@ -53,23 +53,48 @@ class StorageAbstraction {
     virtual ErrorType deinitStorage() = 0;
     /**
      * @brief Get the size of the storage
-     * @param [out] size The size of the storage
+     * @param[out] size The size of the storage
+     * @param[in] partitionName The name of the partition to get the max storage size from. Default partition name used if not provided.
+     * @pre initStorage must be called first
      * @returns ErrorType::Success if the operation is successful, otherwise an error code
      * @returns ErrorType::NotImplemented if not be implemented
      * @returns ErrorType::Failure for any other failure that prevents the operation from returning the max storage size to size
      */
-    virtual ErrorType maxStorageSize(Bytes &size) = 0;
+    virtual ErrorType maxStorageSize(Bytes &size, std::string partitionName = std::string()) = 0;
     /**
      * @brief Get the size of the storage
-     * @param [out] size The size of the storage
+     * @param[out] size The size of the storage
+     * @param[in] partitionName The name of the partition to get the max storage size from. Default partition name used if not provided.
      * @pre initStorage must be called first
      * @returns ErrorType::Success if the operation is successful, otherwise an error code
      * @returns ErrorType::PrerequisiteNotMet if initStorage has not been called
      * @returns ErrorType::NotImplemented if not implemented
      * @returns ErrorType::Failure for any other failure that prevents the operation from returning the available storage size to size
-     * 
      */
-    virtual ErrorType availableStorage(Bytes &size) = 0;
+    virtual ErrorType availableStorage(Bytes &size, std::string partitionName = std::string()) = 0;
+    /**
+     * @brief Get the size of RAM
+     * @param[out] size The size of the RAM
+     * @param[in] memoryRegionName The name of the RAM memory region to get the size of
+     * @pre initStorage must be called first.
+     * @returns ErrorType::Success if the size of the ram was returned.
+     * @returns ErrorType::InvalidParameter if the memoryRegionName does not exist.
+     * @returns ErrprType::Failure if the size of the ram could not be returned for any other reason.
+     */
+    virtual ErrorType maxRamSize(Bytes &size, std::string memoryRegionName = std::string()) = 0;
+    /**
+     * @brief Get the amount of RAM used
+     * @details avaialableRam will never show the true available ram because it's not possible to track every stack push.
+     *          It's easiest to account for static ram usage taken up by .bss and .data sections, and then also the amount of
+     *          heap memory currently being used. It should also be possible to track single large stack allocations like
+     *          creating a stack for a thread or a mempool.
+     * @param[out] size The amount of ram used.
+     * @param[in] memoryRegionName The name of the RAM memory region to get the used size of.
+     * @returns ErrorType::Success if the size of the ram was returned.
+     * @returns ErrorType::InvalidParameter if the memoryRegionName does not exist.
+     * @returns ErrprType::Failure if the size of the ram could not be returned for any other reason.
+     */
+    virtual ErrorType availableRam(Bytes &size, std::string memoryRegionName = std::string()) = 0;
     /**
      * @brief erase the specified partition
      * @param[in] partitionName The name of the partition to erase

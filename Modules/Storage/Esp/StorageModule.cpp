@@ -8,22 +8,44 @@ ErrorType Storage::initStorage() {
     std::unique_ptr<EventAbstraction> event = std::make_unique<Event<Storage>>(std::bind(&Storage::initStorageInternal, this));
     return addEvent(event);
 } 
+
 ErrorType Storage::deinitStorage() {
     std::unique_ptr<EventAbstraction> event = std::make_unique<Event<Storage>>(std::bind(&Storage::deinitStorageInternal, this));
     return addEvent(event);
 } 
-ErrorType Storage::maxStorageSize(Bytes &size) {
-    std::unique_ptr<EventAbstraction> event = std::make_unique<Event<Storage, Bytes &>>(std::bind(&Storage::maxStorageSizeInternal, this, std::placeholders::_1), size);
-    return addEvent(event);
+
+ErrorType Storage::maxStorageSize(Bytes &size, std::string partitionName) {
+    nvs_stats_t stats;
+    esp_err_t err = nvs_get_stats(NULL, &stats);
+
+    //An entry is a key-pair value, and 1 entry is equal to the smallest unit we can store (1 byte)
+    size = stats.total_entries;
+    
+    return toPlatformError(err);
 }
-ErrorType Storage::availableStorage(Bytes &size) {
-    std::unique_ptr<EventAbstraction> event = std::make_unique<Event<Storage, Bytes &>>(std::bind(&Storage::availableStorageInternal, this, std::placeholders::_1), size);
-    return addEvent(event);
+
+ErrorType Storage::availableStorage(Bytes &size, std::string partitionName) {
+    nvs_stats_t stats;
+    esp_err_t err = nvs_get_stats(NULL, &stats);
+
+    size = stats.free_entries;
+
+    return toPlatformError(err);
 }
+
+ErrorType Storage::maxRamSize(Bytes &size, std::string memoryRegionName) {
+    return ErrorType::NotImplemented;
+}
+
+ErrorType Storage::availableRam(Bytes &size, std::string memoryRegionName) {
+    return ErrorType::NotImplemented;
+}
+
 ErrorType Storage::erasePartition(const std::string &partitionName) {
     std::unique_ptr<EventAbstraction> event = std::make_unique<Event<Storage, const std::string &>>(std::bind(&Storage::erasePartitionInternal, this, std::placeholders::_1), partitionName);
     return addEvent(event);
 }
+
 ErrorType Storage::eraseAllPartitions() {
     std::unique_ptr<EventAbstraction> event = std::make_unique<Event<Storage>>(std::bind(&Storage::eraseAllPartitionsInternal, this));
     return addEvent(event);
@@ -69,25 +91,6 @@ ErrorType Storage::deinitStorageInternal() {
         return toPlatformError(nvs_flash_deinit());
 } 
     
-ErrorType Storage::maxStorageSizeInternal(Bytes &size) {
-    nvs_stats_t stats;
-    esp_err_t err = nvs_get_stats(NULL, &stats);
-
-    //An entry is a key-pair value, and 1 entry is equal to the smallest unit we can store (1 byte)
-    size = stats.total_entries;
-    
-    return toPlatformError(err);
-}
-
-ErrorType Storage::availableStorageInternal(Bytes &size) {
-    nvs_stats_t stats;
-    esp_err_t err = nvs_get_stats(NULL, &stats);
-
-    size = stats.free_entries;
-
-    return toPlatformError(err);
-}
-
 ErrorType Storage::erasePartitionInternal(const std::string &partitionName) {
     return toPlatformError(nvs_flash_erase_partition(partitionName.c_str()));
 }

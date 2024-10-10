@@ -1,42 +1,24 @@
 #ifndef __STORAGE_MODULE_HPP__
 #define __STORAGE_MODULE_HPP__
 
-//Utilities
+//AbstractionLayer applications
 #include "Global.hpp"
-#include "Error.hpp"
 #include "EventQueue.hpp"
 //AbstractionLayer
 #include "StorageAbstraction.hpp"
-#include "OperatingSystemAbstraction.hpp"
-//ESP
-#include "nvs_handle.hpp"
 
 /**
  * @class Storage
 */
-class Storage : public StorageAbstraction, public Global<Storage, std::string>, public EventQueue{
+class Storage : public StorageAbstraction, public Global<Storage, std::string>, public EventQueue {
 
     public:
-    /**
-     * @brief Constructor
-     * @param[in] name The name of the storage
-     * @param[in] os The operating system
-     * @attention Stdlib version is a Global class that is constructed with Init()
-    */
     Storage(std::string name) : StorageAbstraction(name) {
         _status.isInitialized = false;
     }
     virtual ~Storage() = default;
 
-    /**
-     * @attention Returns ErrorType::NotAvailable since we assume the system that has stdlib also has an operating system
-     * to init the storage for you.
-    */
     ErrorType initStorage() override;
-    /**
-     * @attention Returns ErrorType::NotAvailable since we assume the system that has stdlib also has an operating system
-     * to deinit the storage for you.
-    */
     ErrorType deinitStorage() override;
     ErrorType maxStorageSize(Bytes &size, std::string partitionName = std::string()) override;
     ErrorType availableStorage(Bytes &size, std::string partitionName = std::string()) override;
@@ -48,15 +30,13 @@ class Storage : public StorageAbstraction, public Global<Storage, std::string>, 
     ErrorType mainLoop() override;
 
     private:
-    std::unique_ptr<nvs::NVSHandle> _nvsHandle;
-
-    ErrorType initStorageInternal();
     ErrorType deinitStorageInternal();
     ErrorType maxStorageSizeInternal(Bytes &size, std::string partitionName);
     ErrorType availableStorageInternal(Bytes &size, std::string partitionName);
     ErrorType erasePartitionInternal(const std::string &partitionName);
     ErrorType eraseAllPartitionsInternal();
 
+    std::string getEnvironment(std::string variable, ErrorType &error);
 };
 
-#endif //__CBT_FLASH_HPP__
+#endif //__STORAGE_MODULE_HPP__
