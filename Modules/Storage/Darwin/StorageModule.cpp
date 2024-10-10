@@ -62,7 +62,7 @@ ErrorType Storage::maxRamSize(Bytes &size, std::string memoryRegionName) {
 
     //Will return the size of RAM in GB.
     std::string commandFinal("system_profiler SPMemoryDataType | egrep Memory | tail -2 | tr -s \" \" | cut -d \" \" -f3");
-    std::string ramSize(3, 0);
+    std::string ramSize(4, 0);
     
     FILE* pipe = popen(commandFinal.c_str(), "r");
     if (nullptr != pipe) {
@@ -80,13 +80,37 @@ ErrorType Storage::maxRamSize(Bytes &size, std::string memoryRegionName) {
         }
     }
     size = std::strtoul(ramSize.c_str(), nullptr, 9);
-    size = size * 1023 * 1024 * 1024;
+    size = size * 1024 * 1024 * 1024;
 
     return error;
 }
 
 ErrorType Storage::availableRam(Bytes &size, std::string memoryRegionName) {
-    return ErrorType::NotImplemented;
+    ErrorType error = ErrorType::Failure;
+
+    //Will return the size of RAM used in kilobytes
+    std::string commandFinal("ps -o rss | awk '{sum += $1} END {print sum}'");
+    std::string ramSize(6, 0);
+    
+    FILE* pipe = popen(commandFinal.c_str(), "r");
+    if (nullptr != pipe) {
+        size_t bytesRead = fread(ramSize.data(), sizeof(uint8_t), ramSize.capacity(), pipe);
+        if (feof(pipe) || bytesRead == ramSize.capacity()) {
+            error = ErrorType::Success;
+            ramSize.resize(bytesRead);
+            while (ramSize.back() == '\n') {
+                ramSize.pop_back();
+            }
+        }
+        else if (ferror(pipe)) {
+            pclose(pipe);
+            error = ErrorType::Failure;
+        }
+    }
+    size = std::strtoul(ramSize.c_str(), nullptr, 9);
+    size = size / 1024;
+
+    return error;
 }
 
 ErrorType Storage::erasePartition(const std::string &partitionName) {
