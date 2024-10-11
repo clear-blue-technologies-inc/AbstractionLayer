@@ -80,7 +80,7 @@ ErrorType Storage::maxRamSize(Kilobytes &size, std::string memoryRegionName) {
         }
     }
     size = std::strtoul(ramSize.c_str(), nullptr, 10);
-    size = size * 1024;
+    size = size * 1024 * 1024;
 
     return error;
 }
