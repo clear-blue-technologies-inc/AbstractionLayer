@@ -27,12 +27,12 @@ ErrorType Storage::deinitStorage() {
     return addEvent(event);
 } 
 
-ErrorType Storage::maxStorageSize(Bytes &size, std::string partitionName) {
+ErrorType Storage::maxStorageSize(Kilobytes &size, std::string partitionName) {
     struct statvfs fiData;
     ErrorType error = ErrorType::Success;
 
     if (0 == statvfs(rootPrefix().c_str(), &fiData)) {
-        size = fiData.f_blocks * fiData.f_frsize;
+        size = fiData.f_blocks * (fiData.f_frsize / 1024);
     }
     else {
         error = toPlatformError(errno);
@@ -42,12 +42,12 @@ ErrorType Storage::maxStorageSize(Bytes &size, std::string partitionName) {
     return error;
 }
 
-ErrorType Storage::availableStorage(Bytes &size, std::string partitionName) {
+ErrorType Storage::availableStorage(Kilobytes &size, std::string partitionName) {
     struct statvfs fiData;
     ErrorType error = ErrorType::Success;
 
     if (0 == statvfs(getEnvironment("HOME", error).c_str(), &fiData)) {
-        size = fiData.f_bavail * fiData.f_frsize;
+        size = fiData.f_bavail * (fiData.f_frsize / 1024);
     }
     else {
         error = toPlatformError(errno);
@@ -57,11 +57,11 @@ ErrorType Storage::availableStorage(Bytes &size, std::string partitionName) {
     return error;
 }
 
-ErrorType Storage::maxRamSize(Bytes &size, std::string memoryRegionName) {
+ErrorType Storage::maxRamSize(Kilobytes &size, std::string memoryRegionName) {
     ErrorType error = ErrorType::Failure;
 
     //Will return the size of RAM in GB.
-    std::string commandFinal("system_profiler SPMemoryDataType | egrep Memory | tail -2 | tr -s \" \" | cut -d \" \" -f3");
+    std::string commandFinal("system_profiler SPMemoryDataType | egrep Memory | tail -2 | tr -s \" \" | cut -d \" \" -f3 | tail -1");
     std::string ramSize(4, 0);
     
     FILE* pipe = popen(commandFinal.c_str(), "r");
@@ -79,13 +79,13 @@ ErrorType Storage::maxRamSize(Bytes &size, std::string memoryRegionName) {
             error = ErrorType::Failure;
         }
     }
-    size = std::strtoul(ramSize.c_str(), nullptr, 9);
-    size = size * 1024 * 1024 * 1024;
+    size = std::strtoul(ramSize.c_str(), nullptr, 10);
+    size = size * 1024;
 
     return error;
 }
 
-ErrorType Storage::availableRam(Bytes &size, std::string memoryRegionName) {
+ErrorType Storage::availableRam(Kilobytes &size, std::string memoryRegionName) {
     ErrorType error = ErrorType::Failure;
 
     //Will return the size of RAM used in kilobytes
@@ -108,7 +108,6 @@ ErrorType Storage::availableRam(Bytes &size, std::string memoryRegionName) {
         }
     }
     size = std::strtoul(ramSize.c_str(), nullptr, 9);
-    size = size / 1024;
 
     return error;
 }

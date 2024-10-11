@@ -60,7 +60,7 @@ class StorageAbstraction {
      * @returns ErrorType::NotImplemented if not be implemented
      * @returns ErrorType::Failure for any other failure that prevents the operation from returning the max storage size to size
      */
-    virtual ErrorType maxStorageSize(Bytes &size, std::string partitionName = std::string()) = 0;
+    virtual ErrorType maxStorageSize(Kilobytes &size, std::string partitionName = std::string()) = 0;
     /**
      * @brief Get the size of the storage
      * @param[out] size The size of the storage
@@ -71,7 +71,7 @@ class StorageAbstraction {
      * @returns ErrorType::NotImplemented if not implemented
      * @returns ErrorType::Failure for any other failure that prevents the operation from returning the available storage size to size
      */
-    virtual ErrorType availableStorage(Bytes &size, std::string partitionName = std::string()) = 0;
+    virtual ErrorType availableStorage(Kilobytes &size, std::string partitionName = std::string()) = 0;
     /**
      * @brief Get the size of RAM
      * @param[out] size The size of the RAM
@@ -81,7 +81,7 @@ class StorageAbstraction {
      * @returns ErrorType::InvalidParameter if the memoryRegionName does not exist.
      * @returns ErrprType::Failure if the size of the ram could not be returned for any other reason.
      */
-    virtual ErrorType maxRamSize(Bytes &size, std::string memoryRegionName = std::string()) = 0;
+    virtual ErrorType maxRamSize(Kilobytes &size, std::string memoryRegionName = std::string()) = 0;
     /**
      * @brief Get the amount of RAM used
      * @details avaialableRam will never show the true available ram because it's not possible to track every stack push.
@@ -94,7 +94,7 @@ class StorageAbstraction {
      * @returns ErrorType::InvalidParameter if the memoryRegionName does not exist.
      * @returns ErrprType::Failure if the size of the ram could not be returned for any other reason.
      */
-    virtual ErrorType availableRam(Bytes &size, std::string memoryRegionName = std::string()) = 0;
+    virtual ErrorType availableRam(Kilobytes &size, std::string memoryRegionName = std::string()) = 0;
     /**
      * @brief erase the specified partition
      * @param[in] partitionName The name of the partition to erase
