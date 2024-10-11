@@ -74,6 +74,8 @@ class OperatingSystem : public Global<OperatingSystem>, public OperatingSystemAb
 
     std::map<std::string, Thread> threads;
     std::map<std::string, sem_t *> semaphores;
+
+    ErrorType pid(Id &pid);
 };
 
 #endif // __OPERATING_SYSTEM_HPP__

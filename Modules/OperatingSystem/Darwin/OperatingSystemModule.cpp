@@ -261,12 +261,41 @@ ErrorType OperatingSystem::setTimeOfDay(UnixTime utc, Seconds timeZoneDifference
     return ErrorType::NotAvailable;
 }
 
+ErrorType OperatingSystem::pid(Id &pid) {
+    ErrorType error = ErrorType::Failure;
+    std::string pidString(16, 0);
+
+    const std::string commandPid("pgrep -i foundation | tail -1");
+
+    FILE *pipe = popen(commandPid.c_str(), "r");
+    if (nullptr != pipe) {
+        size_t bytesRead = fread(pidString.data(), sizeof(uint8_t), pidString.capacity(), pipe);
+        if (feof(pipe) || bytesRead == pidString.capacity()) {
+            error = ErrorType::Success;
+            pidString.resize(bytesRead);
+            while (pidString.back() == '\n') {
+                pidString.pop_back();
+            }
+        }
+        else if (ferror(pipe)) {
+            pclose(pipe);
+            error = ErrorType::Failure;
+        }
+    }
+
+    pid = strtoul(pidString.c_str(), nullptr, 10);
+
+    return error;
+}
+
 ErrorType OperatingSystem::idlePercentage(Percent &idlePercent) {
     ErrorType error = ErrorType::Failure;
     std::string cpuUtilization(16, 0);
     Percent cpuUtilizationPercent;
+    Id processId;
+    pid(processId);
 
-    const std::string commandPercentUtilization("ps -p $(pgrep -i foundation) -o %cpu | tail -1");
+    const std::string commandPercentUtilization(std::string("ps -p ").append(std::to_string(processId)).append(" -o %cpu | tail -1"));
 
     FILE *pipe = popen(commandPercentUtilization.c_str(), "r");
     if (nullptr != pipe) {
