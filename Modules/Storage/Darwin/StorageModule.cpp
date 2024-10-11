@@ -107,7 +107,7 @@ ErrorType Storage::availableRam(Kilobytes &size, std::string memoryRegionName) {
             error = ErrorType::Failure;
         }
     }
-    size = std::strtoul(ramSize.c_str(), nullptr, 9);
+    size = std::strtoul(ramSize.c_str(), nullptr, 10);
 
     return error;
 }
