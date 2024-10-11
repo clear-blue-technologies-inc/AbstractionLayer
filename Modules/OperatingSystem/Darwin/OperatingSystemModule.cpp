@@ -268,7 +268,7 @@ ErrorType OperatingSystem::idlePercentage(Percent &idlePercent) {
 
     const std::string commandPercentUtilization("ps -p $(pgrep -i foundation) -o %cpu");
 
-    pipe = popen(commandPercentUtilization.c_str(), "r");
+    FILE *pipe = popen(commandPercentUtilization.c_str(), "r");
     if (nullptr != pipe) {
         size_t bytesRead = fread(cpuUtilization.data(), sizeof(uint8_t), cpuUtilization.capacity(), pipe);
         if (feof(pipe) || bytesRead == cpuUtilization.capacity()) {
