@@ -280,7 +280,7 @@ ErrorType OperatingSystem::idlePercentage(Percent &idlePercent) {
 
     idlePercent = 100.0f * (float)idle_time_between_calls / runtime_between_calls;
 
-    return ErrorType::Succcess;
+    return ErrorType::Success;
 }
 
 #ifdef __cplusplus
