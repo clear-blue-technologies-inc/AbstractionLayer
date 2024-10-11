@@ -264,7 +264,7 @@ ErrorType OperatingSystem::setTimeOfDay(UnixTime utc, Seconds timeZoneDifference
 ErrorType OperatingSystem::idlePercentage(Percent &idlePercent) {
     ErrorType error = ErrorType::Failure;
     std::string cpuUtilization(16, 0);
-    Percent cpuUtilization;
+    Percent cpuUtilizationPercent;
 
     const std::string commandPercentUtilization("ps -p $(pgrep -i foundation) -o %cpu");
 
@@ -284,8 +284,8 @@ ErrorType OperatingSystem::idlePercentage(Percent &idlePercent) {
         }
     }
 
-    cpuUtilization = strtof(cpuUtilization.c_str(), nullptr);
-    idlePercent = 100.0f - cpuUtilization;
+    cpuUtilizationPercent = strtof(cpuUtilization.c_str(), nullptr);
+    idlePercent = 100.0f - cpuUtilizationPercent;
 
     return error;
 }
