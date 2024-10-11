@@ -259,6 +259,36 @@ ErrorType OperatingSystem::setTimeOfDay(UnixTime utc, Seconds timeZoneDifference
     return toPlatformError(settimeofday(&tv, nullptr));
 }
 
+ErrorType OperatingSystem::idlePercentage(Percent &idlePercent) {
+    static time_t runtime_total = 0;
+    static uint64_t idle_task_runtime_last = 0;
+
+    // get the time between calls
+    time_t runtime_total_now = time(NULL);
+    float runtime_between_calls = (float)(runtime_total_now - runtime_total);
+    runtime_total = runtime_total_now;
+    // get the idle time between calls
+    uint32_t idle_time_between_calls;
+    uint32_t idle_runtime = ulTaskGetIdleRunTimeCounter() * 1E-6;
+    if (idle_runtime < idle_task_runtime_last) {
+    idle_time_between_calls = idle_task_runtime_last - idle_runtime;
+    }
+    else {
+    idle_time_between_calls = idle_runtime - idle_task_runtime_last;
+    }
+    idle_task_runtime_last = idle_runtime;
+
+    // calculate percentage
+    {const char message[] = "Idle Percentage: ";
+    assert(str_len >= sizeof(message)+ sizeof("100.0%"));
+
+    float idle_percentage = 100.0f * (float)idle_time_between_calls / runtime_between_calls;
+    snprintf(str, str_len, "%s%0.1f %%", message, idle_percentage);
+
+    idlePercent = idle_percentage;
+    }
+}
+
 #ifdef __cplusplus
 extern "C" {
 #endif
