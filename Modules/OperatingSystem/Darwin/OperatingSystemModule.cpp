@@ -263,22 +263,19 @@ ErrorType OperatingSystem::setTimeOfDay(UnixTime utc, Seconds timeZoneDifference
 
 ErrorType OperatingSystem::idlePercentage(Percent &idlePercent) {
     ErrorType error = ErrorType::Failure;
-    std::string idleTime(4, 0);
-    std::string cpuTimeSeconds(16, 0);
-    std::string elapsedTimeSeconds(16, 0);
-    Seconds cpuTime, elapsedTime;
+    std::string cpuUtilization(16, 0);
+    Percent cpuUtilization;
 
-    const std::string commandCpuTime("ps -p $(pgrep -i foundation) -o cputimes");
-    const std::string commandElapsedTime("ps -p $(pgrep -i foundation) -o etimes");
-    
-    FILE* pipe = popen(commandCpuTime.c_str(), "r");
+    const std::string commandPercentUtilization("ps -p $(pgrep -i foundation) -o %cpu");
+
+    pipe = popen(commandPercentUtilization.c_str(), "r");
     if (nullptr != pipe) {
-        size_t bytesRead = fread(cpuTimeSeconds.data(), sizeof(uint8_t), cpuTimeSeconds.capacity(), pipe);
-        if (feof(pipe) || bytesRead == cpuTimeSeconds.capacity()) {
+        size_t bytesRead = fread(cpuUtilization.data(), sizeof(uint8_t), cpuUtilization.capacity(), pipe);
+        if (feof(pipe) || bytesRead == cpuUtilization.capacity()) {
             error = ErrorType::Success;
-            cpuTimeSeconds.resize(bytesRead);
-            while (cpuTimeSeconds.back() == '\n') {
-                cpuTimeSeconds.pop_back();
+            cpuUtilization.resize(bytesRead);
+            while (cpuUtilization.back() == '\n') {
+                cpuUtilization.pop_back();
             }
         }
         else if (ferror(pipe)) {
@@ -287,32 +284,8 @@ ErrorType OperatingSystem::idlePercentage(Percent &idlePercent) {
         }
     }
 
-    cpuTime = strtoul(cpuTimeSeconds.c_str(), nullptr, 10);
-
-    pipe = popen(commandElapsedTime.c_str(), "r");
-    if (nullptr != pipe) {
-        size_t bytesRead = fread(elapsedTimeSeconds.data(), sizeof(uint8_t), elapsedTimeSeconds.capacity(), pipe);
-        if (feof(pipe) || bytesRead == elapsedTimeSeconds.capacity()) {
-            error = ErrorType::Success;
-            elapsedTimeSeconds.resize(bytesRead);
-            while (elapsedTimeSeconds.back() == '\n') {
-                elapsedTimeSeconds.pop_back();
-            }
-        }
-        else if (ferror(pipe)) {
-            pclose(pipe);
-            error = ErrorType::Failure;
-        }
-    }
-
-    elapsedTime = strtoul(elapsedTimeSeconds.c_str(), nullptr, 10);
-
-    if (0 != elapsedTime) {
-        idlePercent = 100.0f - (((float)cpuTime / (float)elapsedTime) * 100.0f);
-    }
-    else {
-        idlePercent = 100.0f;
-    }
+    cpuUtilization = strtof(cpuUtilization.c_str(), nullptr);
+    idlePercent = 100.0f - cpuUtilization;
 
     return error;
 }
