@@ -98,6 +98,9 @@ int main() {
 
     OperatingSystem::Init();
     Logger::Init();
+    Percent idlePercent;
+
+    OperatingSystem::Instance().idlePercentage(idlePercent);
 
     int result = runAllTests();
     toPlatformError(result);

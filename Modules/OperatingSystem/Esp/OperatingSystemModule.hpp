@@ -44,6 +44,7 @@ class OperatingSystem : public Global<OperatingSystem>, public OperatingSystemAb
     ErrorType getResetReason(OperatingSystemConfig::ResetReason &resetReason) override;
     ErrorType reset() override;
     ErrorType setTimeOfDay(UnixTime utc, Seconds timeZoneDifferenceUtc) override;
+    ErrorType idlePercentage(Percent &idlePercent) override;
 
     void callTimerCallback(TimerHandle_t timer);
 

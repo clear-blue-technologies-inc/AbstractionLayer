@@ -59,6 +59,11 @@ using Ampere = float;
 ///Hertz (Hz) (1/s)
 using Hertz = uint32_t;
 
+//-------------------------------Number representations
+///@typedef Percent
+///Percentage (%)
+using Percent = float;
+
 //-------------------------------Algorithms
 ///@typedef Count
 ///@code Count negativeAcks @endcode
