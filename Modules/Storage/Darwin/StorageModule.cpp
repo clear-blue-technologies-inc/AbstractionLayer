@@ -90,16 +90,16 @@ ErrorType Storage::availableRam(Kilobytes &size, std::string memoryRegionName) {
 
     //Will return the size of RAM used in kilobytes
     std::string commandFinal("ps -o rss | awk '{sum += $1} END {print sum}'");
-    std::string ramSize(6, 0);
+    std::string ramUsed(6, 0);
     
     FILE* pipe = popen(commandFinal.c_str(), "r");
     if (nullptr != pipe) {
-        size_t bytesRead = fread(ramSize.data(), sizeof(uint8_t), ramSize.capacity(), pipe);
-        if (feof(pipe) || bytesRead == ramSize.capacity()) {
+        size_t bytesRead = fread(ramUsed.data(), sizeof(uint8_t), ramUsed.capacity(), pipe);
+        if (feof(pipe) || bytesRead == ramUsed.capacity()) {
             error = ErrorType::Success;
-            ramSize.resize(bytesRead);
-            while (ramSize.back() == '\n') {
-                ramSize.pop_back();
+            ramUsed.resize(bytesRead);
+            while (ramUsed.back() == '\n') {
+                ramUsed.pop_back();
             }
         }
         else if (ferror(pipe)) {
@@ -107,7 +107,11 @@ ErrorType Storage::availableRam(Kilobytes &size, std::string memoryRegionName) {
             error = ErrorType::Failure;
         }
     }
-    size = std::strtoul(ramSize.c_str(), nullptr, 10);
+
+    Kilobytes totalRam;
+    maxRamSize(totalRam);
+
+    size = totalRam - std::strtoul(ramUsed.c_str(), nullptr, 10);
 
     return error;
 }
