@@ -266,7 +266,7 @@ ErrorType OperatingSystem::idlePercentage(Percent &idlePercent) {
     std::string cpuUtilization(16, 0);
     Percent cpuUtilizationPercent;
 
-    const std::string commandPercentUtilization("ps -p $(pgrep -i foundation) -o %cpu");
+    const std::string commandPercentUtilization("ps -p $(pgrep -i foundation) -o %cpu | tail -1");
 
     FILE *pipe = popen(commandPercentUtilization.c_str(), "r");
     if (nullptr != pipe) {
