@@ -260,3 +260,8 @@ ErrorType OperatingSystem::reset() {
 ErrorType OperatingSystem::setTimeOfDay(UnixTime utc, Seconds timeZoneDifferenceUtc) {
     return ErrorType::NotAvailable;
 }
+
+ErrorType OperatingSystem::idleTime(Percent &idleTime) {
+  ps -p $(pgrep -i foundation) -o cputime
+ps -p $(pgrep -i foundation) -o etime  
+}

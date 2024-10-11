@@ -237,6 +237,16 @@ class OperatingSystemAbstraction {
      * @returns ErrorType::Failure if an error occurred while setting the time of day.
     */
     virtual ErrorType setTimeOfDay(UnixTime utc, Seconds timeZoneDifferenceUtc) = 0;
+    /**
+     * @brief Get the amount of time that the Operating system is idle (i.e in the idle task or not using any CPU)
+     * @param[out] idleTime The percentage of time that the operating system was idle.
+     * @returns ErrorType::Success if the the idleTime could be obtained.
+     * @returns ErrorType::NotImplemented if setting the time of day is not implemented.
+     * @returns ErrorType::NotAvailable if setting the time of day is not available on the host system.
+     * @returns ErrorType::Failure if the idleTime could not be obtained.
+     */
+    virtual ErrorType idleTime(Percent &idleTime) = 0;
+
 };
 
 #endif //__OPERATING_SYSTEM_ABSTRACTION_HPP__

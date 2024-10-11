@@ -38,6 +38,7 @@ class OperatingSystem : public Global<OperatingSystem>, public OperatingSystemAb
     ErrorType getResetReason(OperatingSystemConfig::ResetReason &resetReason) override;
     ErrorType reset() override;
     ErrorType setTimeOfDay(UnixTime utc, Seconds timeZoneDifferenceUtc) override;
+    ErrorType idleTime(Percent &idleTime) override;
 
     int toPosixPriority(OperatingSystemConfig::Priority priority) {
         assert(sched_get_priority_max(SCHED_FIFO) / 2 > 4);

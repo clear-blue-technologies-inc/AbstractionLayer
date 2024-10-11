@@ -8,7 +8,7 @@
 #ifndef __TYPES_HPP__
 #define __TYPES_HPP__
 
-#include <stdint.h>
+#include <cstdint>
 
 //-------------------------------Time
 ///@typedef Milliseconds
@@ -58,6 +58,11 @@ using Ampere = float;
 ///Assuming all freqencies will be less than or equal to a second.
 ///Hertz (Hz) (1/s)
 using Hertz = uint32_t;
+
+//-------------------------------Number representations
+///@typedef Percent
+///Percentage (%)
+using Percent = float;
 
 //-------------------------------Algorithms
 ///@typedef Count
