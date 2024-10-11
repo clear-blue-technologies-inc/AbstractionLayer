@@ -17,10 +17,10 @@ class Storage : public StorageAbstraction, public Global<Storage, std::string>, 
 
     ErrorType initStorage() override;
     ErrorType deinitStorage() override;
-    ErrorType maxStorageSize(Bytes &size, std::string partitionName) override;
-    ErrorType availableStorage(Bytes &size, std::string partitionName) override;
-    ErrorType maxRamSize(Bytes &size, std::string memoryRegionName) override;
-    ErrorType availableRam(Bytes &size, std::string memoryRegionName) override;
+    ErrorType maxStorageSize(Kilobytes &size, std::string partitionName) override;
+    ErrorType availableStorage(Kilobytes &size, std::string partitionName) override;
+    ErrorType maxRamSize(Kilobytes &size, std::string memoryRegionName) override;
+    ErrorType availableRam(Kilobytes &size, std::string memoryRegionName) override;
     ErrorType erasePartition(const std::string &partitionName) override;
     ErrorType eraseAllPartitions() override;
 
