@@ -278,15 +278,9 @@ ErrorType OperatingSystem::idlePercentage(Percent &idlePercent) {
     }
     idle_task_runtime_last = idle_runtime;
 
-    // calculate percentage
-    {const char message[] = "Idle Percentage: ";
-    assert(str_len >= sizeof(message)+ sizeof("100.0%"));
+    idlePercent = 100.0f * (float)idle_time_between_calls / runtime_between_calls;
 
-    float idle_percentage = 100.0f * (float)idle_time_between_calls / runtime_between_calls;
-    snprintf(str, str_len, "%s%0.1f %%", message, idle_percentage);
-
-    idlePercent = idle_percentage;
-    }
+    return ErrorType::Succcess;
 }
 
 #ifdef __cplusplus
