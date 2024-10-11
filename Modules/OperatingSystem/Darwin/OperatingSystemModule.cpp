@@ -271,7 +271,7 @@ ErrorType OperatingSystem::idlePercentage(Percent &idlePercent) {
     const std::string commandCpuTime("ps -p $(pgrep -i foundation) -o cputimes");
     const std::string commandElapsedTime("ps -p $(pgrep -i foundation) -o etimes");
     
-    FILE* pipe = popen(commandCpuTime, "r");
+    FILE* pipe = popen(commandCpuTime.c_str(), "r");
     if (nullptr != pipe) {
         size_t bytesRead = fread(cpuTimeSeconds.data(), sizeof(uint8_t), cpuTimeSeconds.capacity(), pipe);
         if (feof(pipe) || bytesRead == cpuTimeSeconds.capacity()) {
@@ -289,7 +289,7 @@ ErrorType OperatingSystem::idlePercentage(Percent &idlePercent) {
 
     cpuTime = strtoul(cpuTimeSeconds.c_str(), nullptr, 10);
 
-    pipe = popen(commandElapsedTime, "r");
+    pipe = popen(commandElapsedTime.c_str(), "r");
     if (nullptr != pipe) {
         size_t bytesRead = fread(elapsedTimeSeconds.data(), sizeof(uint8_t), elapsedTimeSeconds.capacity(), pipe);
         if (feof(pipe) || bytesRead == elapsedTimeSeconds.capacity()) {
