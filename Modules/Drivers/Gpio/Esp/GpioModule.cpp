@@ -4,7 +4,7 @@
 //ESP
 #include "driver/gpio.h"
 
-ErrorType Gpio::pinWrite(GpioLogicLevel logicLevel) {
+ErrorType Gpio::pinWrite(const GpioLogicLevel &logicLevel) {
     if (GpioLogicLevel::High == logicLevel) {
         return toPlatformError(gpio_set_level(toEspPinNumber(pinNumber()), 1));
     }
@@ -18,7 +18,18 @@ ErrorType Gpio::pinWrite(GpioLogicLevel logicLevel) {
     return ErrorType::Success;
 }
 
-ErrorType Gpio::configure(uint32_t *basePeripheralRegister, PinNumber pinNumber, GpioPinDirection direction, GpioInterruptMode interruptMode, bool pullUpEnable, bool pullDownEnable) {
+ErrorType Gpio::pinRead(GpioLogicLevel &logicLevel) {
+    if (1 == gpio_get_level(toEspPinNumber(pinNumber()))) {
+        logicLevel = GpioLogicLevel::High;
+    }
+    else {
+        logicLevel = GpioLogicLevel::Low;
+    }
+
+    return ErrorType::Success;
+}
+
+ErrorType Gpio::configure(const uint32_t *basePeripheralRegister, const PinNumber pinNumber, const GpioPinDirection direction, const GpioInterruptMode interruptMode, const bool pullUpEnable, const bool pullDownEnable) {
     gpio_config_t gpioConfig;
 
     switch (interruptMode) {
@@ -58,6 +69,10 @@ ErrorType Gpio::configure(uint32_t *basePeripheralRegister, PinNumber pinNumber,
     //TODO: Invalid pin number?
     gpioConfig.pin_bit_mask = ((uint32_t)1 << pinNumber);
     _pinNumber = pinNumber;
+
+    if (pullDownEnable && pullUpEnable) {
+        return ErrorType::InvalidParameter;
+    }
 
     if (pullDownEnable) {
         gpioConfig.pull_down_en = GPIO_PULLDOWN_ENABLE;
