@@ -73,7 +73,17 @@ class GpioAbstraction {
      * @returns ErrorType::InvalidParameter if the logic level is not valid.
      * @post The pin should output a voltage level according to the logic level written.
     */
-    virtual ErrorType pinWrite(GpioLogicLevel logicLevel) = 0;
+    virtual ErrorType pinWrite(const GpioLogicLevel &logicLevel) = 0;
+    /**
+     * @brief Read the logic level of the pin.
+     * @param[out] logicLevel The logic level of the pin.
+     * @returns ErrorType::Success if the pin was read.
+     * @returns ErrorType::Failure if the pin was not read.
+     * @returns ErrorType::NotImplemented if reading from the gpio pin is not implemented.
+     * @returns ErrorType::NotAvailable if the system running foundation does not provide gpio pin reading.
+     * @returns ErrorType::InvalidParameter if the logic level is not valid.
+     */
+    virtual ErrorType pinRead(GpioLogicLevel &logicLevel) = 0;
     /**
      * @brief configure the gpio pin
      * @param basePeripheralRegister The base peripheral register of the gpio pin. Pointer to the hardware instance of the gpio bank that contains the pin.
@@ -87,7 +97,7 @@ class GpioAbstraction {
      * @returns ErrorType::Invalid parameter if any of the parameters are invalid.
      * @returns ErrorType::NotImplemented if configuring the gpio pin is not implemented.
     */
-    virtual ErrorType configure(uint32_t *basePeripheralRegister, PinNumber pinNumber, GpioPinDirection direction, GpioInterruptMode interruptMode, bool pullUpEnable, bool pullDownEnable) = 0;
+    virtual ErrorType configure(const uint32_t *basePeripheralRegister, const PinNumber pinNumber, const GpioPinDirection direction, const GpioInterruptMode interruptMode, const bool pullUpEnable, const bool pullDownEnable) = 0;
 
     /**
      * @brief Get the pointer to the base register of the gpio peripheral being used.
