@@ -14,6 +14,7 @@ target_link_libraries(EspWifi PUBLIC abstractionLayer)
 target_link_libraries(EspWifi PUBLIC Network)
 target_link_libraries(EspWifi PUBLIC Common)
 target_link_libraries(EspWifi PUBLIC Logging)
+target_link_libraries(EspWifi PUBLIC OperatingSystem)
 target_link_libraries(${PROJECT_NAME}${EXECUTABLE_SUFFIX} PUBLIC EspWifi)
 
 if (ESP_PLATFORM)
