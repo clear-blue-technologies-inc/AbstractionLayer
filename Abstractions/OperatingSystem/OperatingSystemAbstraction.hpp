@@ -46,6 +46,10 @@ namespace OperatingSystemConfig {
         BrownOut,    //!< Brownout reset (software or hardware)
         Sdio         //!< Reset over SDIO
     };
+
+    struct Status {
+        Count threadCount; ///< The number of threads currently running.
+    };
 }
 
 /**
@@ -247,6 +251,15 @@ class OperatingSystemAbstraction {
      * @returns ErrorType::Failure if the idleTime could not be obtained.
      */
     virtual ErrorType idlePercentage(Percent &idlePercent) = 0;
+
+    /**
+     * @brief Get the status of the operatings system as a const reference.
+     * @returns The status of the operating system.
+    */
+    const OperatingSystemConfig::Status &status() const { return _status; }
+
+    protected:
+    OperatingSystemConfig::Status _status; ///< The status of the operating system.
 
 };
 
