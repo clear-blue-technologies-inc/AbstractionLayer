@@ -2,6 +2,7 @@
 #include "Log.hpp"
 //Modules
 #include "WifiModule.hpp"
+#include "OperatingSystemModule.hpp"
 //C++
 #include <cstring>
 //ESP
@@ -27,7 +28,10 @@ ErrorType Wifi::init() {
         return error;
     }
     if (ESP_OK != (err = esp_event_loop_create_default())) {
-        return toPlatformError(err);
+        bool isCriticalErrror = !(err = ESP_ERR_INVALID_STATE);
+        if (isCriticalErrror) {
+            return toPlatformError(err);
+        }
     }
 
     err = esp_event_handler_register(WIFI_EVENT, WIFI_EVENT_STA_START, &WifiEventHandler, this);
@@ -51,7 +55,6 @@ ErrorType Wifi::init() {
     if (ESP_OK != (err = esp_wifi_init(&cfg))) {
         return toPlatformError(err);
     }
-
 
     esp_wifi_set_mode(toEspWifiMode(mode()));
     switch (mode()) {
@@ -80,7 +83,29 @@ ErrorType Wifi::init() {
         return error;
     }
 
-    return radioOn();
+    error = radioOn();
+    if (ErrorType::Success != error) {
+        return error;
+    }
+
+    //Wait for the interface to be up
+    {
+    int i = 0;
+    ErrorType error;
+    const Milliseconds oneHundred = 100;
+    bool interfaceIsNotUp = !status().isUp;
+    bool weHaveNotRetried100Times = i < 100;
+    CBT_LOGI(TAG, "Waiting for interface to come up");
+    while (interfaceIsNotUp && weHaveNotRetried100Times) {
+        OperatingSystem::Instance().delay(oneHundred);
+        i++;
+        interfaceIsNotUp = !status().isUp;
+        weHaveNotRetried100Times = i < 100;
+    }
+
+    interfaceIsNotUp ? error =  ErrorType::Timeout : error = ErrorType::Success;
+    return error;
+    }
 }
 
 ErrorType Wifi::initAccessPoint() {

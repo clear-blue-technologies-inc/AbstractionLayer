@@ -63,6 +63,7 @@ class NetworkAbstraction : public CommunicationProtocol {
     * @returns ErrorType::NotAvailable if the underlying implementation can't perform the operating (e.g. init wifi driver on Windows).
     * @attention Esp wifi You must set the WifiConfig::Mode before calling.
     * @sa setMode
+    * @post May block for up to a maximum of10 seconds to bring the interface up.
     */
         virtual ErrorType init() = 0;
     /**
