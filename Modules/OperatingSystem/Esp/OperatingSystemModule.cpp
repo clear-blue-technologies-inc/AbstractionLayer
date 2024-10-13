@@ -69,6 +69,8 @@ ErrorType OperatingSystem::createThread(OperatingSystemConfig::Priority priority
         error = toPlatformError(res);
     }
 
+    _status.threadCount = threads.size();
+
     return error;
 }
 
@@ -78,6 +80,8 @@ ErrorType OperatingSystem::deleteThread(std::string name) {
     if (threads.contains(name)) {
         threads.erase(name);
     }
+
+    _status.threadCount = threads.size();
 
     return error;
 }
