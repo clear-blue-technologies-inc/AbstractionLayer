@@ -92,6 +92,11 @@ class Wifi : public NetworkAbstraction {
     ErrorType setMaxConnections(uint8_t maxConnections) { _maxConnections = maxConnections; return ErrorType::Success; }
     ///@brief set the wifi mode.
     ErrorType setMode(WifiConfig::Mode mode) { _mode = mode; return ErrorType::Success; }
+    ///@brief get the wifi ip address as a mutable reference.
+    ErrorType ipAddress(std::string &ipAddress) { _ipAddress.assign(ipAddress); return ErrorType::Success; }
+    ///@brief get the wifi ip address as a const reference.
+    ErrorType ipAddress(const std::string &ipAddress) { _ipAddress.assign(ipAddress); return ErrorType::Success; }
+
     /**
      * @brief set the wifi authentication mode.
      * @param[in] authMode The authentication mode to set.
@@ -103,6 +108,7 @@ class Wifi : public NetworkAbstraction {
     WifiConfig::Mode _mode = WifiConfig::Mode::Unknown;
     std::string _ssid = std::string(32, '\0');
     std::string _password;
+    std::string _ipAddress;
     uint8_t _channel = 0;
     uint8_t _maxConnections = 0;
     WifiConfig::AuthMode _authMode = WifiConfig::AuthMode::Unknown;

@@ -8,7 +8,7 @@
 #define __NETWORK_ABSTRACTION_HPP__
 
 //Foundation
-#include "CommunicationProtocol.hpp"
+#include "IcCommunicationProtocol.hpp"
 //C++
 #include <string>
 
@@ -160,12 +160,18 @@ class NetworkAbstraction : public CommunicationProtocol {
 
     /// @brief The current status of the network interface as a const reference.
     const NetworkTypes::Status &statusConst() { return _status; }
-    /// @brief The current status of the network interface
-    NetworkTypes::Status &status() { return _status; }
+    /// @brief The IC peripheral used to communicate with the network device as a const reference.
+    const IcCommunicationProtocol &icConst() { return *_ic; }
+    /// @brief The IC peripheral used to communicate with the network device as a mutable pointer
+    std::unique_ptr<IcCommunicationProtocol> &ic() { return _ic; }
 
     protected:
     /// @brief The current status of the network interface
     NetworkTypes::Status _status;
+
+    private:
+    /// @brief The IC peripheral used to communicate with the network device.
+    std::unique_ptr<IcCommunicationProtocol> _ic;
 };
 
 #endif // __NETWORK_ABSTRACTION_HPP__

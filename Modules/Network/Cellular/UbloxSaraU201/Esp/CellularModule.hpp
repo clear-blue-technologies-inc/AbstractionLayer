@@ -1,14 +1,13 @@
 /***************************************************************************//**
 * @author   Ben Haubrich
 * @file     CellularModule.hpp
-* @details  Cellular for Quectel EC21A and ESP
+* @details  Cellular for Ublox Sara U201
 * @ingroup  NoneModules
 *******************************************************************************/
 #ifndef __CELLULAR_MODULE_HPP__
 #define __CELLULAR_MODULE_HPP__
 
 #include "NetworkAbstraction.hpp"
-#include "IcCommunicationProtocol.hpp"
 
 class Cellular : public NetworkAbstraction {
     public:
@@ -30,9 +29,6 @@ class Cellular : public NetworkAbstraction {
     ErrorType getSignalStrength(DecibelMilliWatts &signalStrength) override;
 
     ErrorType mainLoop() override;
-
-    private:
-
 };
 
 #endif // __CELLULAR_MODULE_HPP__

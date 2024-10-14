@@ -30,9 +30,6 @@ class Cellular : public NetworkAbstraction {
     ErrorType getSignalStrength(DecibelMilliWatts &signalStrength) override;
 
     ErrorType mainLoop() override;
-
-    private:
-
 };
 
 #endif // __CELLULAR_MODULE_HPP__
