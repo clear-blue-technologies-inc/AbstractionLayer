@@ -1,6 +1,7 @@
 #include "CellularModule.hpp"
 
 ErrorType Cellular::init() {
+    return ErrorType::NotImplemented;
 }
 ErrorType Cellular::networkUp() {
     return ErrorType::NotImplemented;

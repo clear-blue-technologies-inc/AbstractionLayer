@@ -93,17 +93,25 @@ ErrorType Wifi::init() {
     int i = 0;
     ErrorType error;
     const Milliseconds oneHundred = 100;
-    bool interfaceIsNotUp = !status().isUp;
+    bool interfaceIsNotUp = _ipAddress.empty();
     bool weHaveNotRetried100Times = i < 100;
     CBT_LOGI(TAG, "Waiting for interface to come up");
     while (interfaceIsNotUp && weHaveNotRetried100Times) {
         OperatingSystem::Instance().delay(oneHundred);
         i++;
-        interfaceIsNotUp = !status().isUp;
+        interfaceIsNotUp = !_ipAddress.empty();
         weHaveNotRetried100Times = i < 100;
     }
 
-    interfaceIsNotUp ? error =  ErrorType::Timeout : error = ErrorType::Success;
+    if (interfaceIsNotUp) {
+        _status.isUp = false;
+        error =  ErrorType::Timeout;
+    }
+    else {
+        _status.isUp = true;
+        error = ErrorType::Success;
+    }
+
     return error;
     }
 }
@@ -131,7 +139,10 @@ ErrorType Wifi::networkUp() {
 }
 
 ErrorType Wifi::networkDown() {
-    return toPlatformError(esp_wifi_stop());
+    ErrorType error = toPlatformError(esp_wifi_stop());
+    _ipAddress.clear();
+    _status.isUp = false;
+    return error;
 }
 
 ErrorType Wifi::radioOn() {
@@ -328,7 +339,6 @@ static void WifiEventHandler(void *arg, esp_event_base_t eventBase, int32_t even
         ip_event_got_ip_t *event = (ip_event_got_ip_t *) eventData;
         CBT_LOGI(Wifi::TAG, "Got IP:" IPSTR, IP2STR(&event->ip_info.ip));
         s_retry_num = 0;
-        self->status().isUp = true;
     }
 
     s_retry_num++;

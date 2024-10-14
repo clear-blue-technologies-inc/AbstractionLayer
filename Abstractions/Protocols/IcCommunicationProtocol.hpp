@@ -10,6 +10,21 @@
 //Foundation
 #include "CommunicationProtocol.hpp"
 
+namespace IcCommunicationProtocolTypes {
+    /**
+     * @enum CellularIcDevice
+     * @brief Enumeration for different types of Cellular IC devices.
+    */
+    enum class IcDevice : uint8_t {
+        Unknown = 0, ///< Unknown peripheral
+        Uart,        ///< UART peripheral
+        Spi,         ///< SPI peripheral
+        I2c,         ///< I2C peripheral
+        Ethernet,    ///< Ethernet peripheral
+        Usb,         ///< USB peripheral
+    };
+}
+
 /**
  * @class IcCommunicationProtocol
  * @brief Interface for integrated circuit communication
