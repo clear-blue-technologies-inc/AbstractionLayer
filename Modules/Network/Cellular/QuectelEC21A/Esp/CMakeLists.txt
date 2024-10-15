@@ -11,6 +11,7 @@ STATIC
 target_include_directories(QuectelEC21AEspModule INTERFACE ${CMAKE_CURRENT_LIST_DIR})
 
 target_link_libraries(QuectelEC21AEspModule PUBLIC abstractionLayer)
+target_link_libraries(QuectelEC21AEspModule PUBLIC Gpio)
 target_link_libraries(${PROJECT_NAME}${EXECUTABLE_SUFFIX} PUBLIC QuectelEC21AEspModule)
 
 if (ESP_PLATFORM)

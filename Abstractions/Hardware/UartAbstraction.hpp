@@ -172,7 +172,7 @@ class UartAbstraction : public IcCommunicationProtocol{
     /// @brief Get the stop bits.
     uint32_t stopBits() const { return _stopBits; }
     /// @brief Get the parity.
-    uint32_t parity() const { return _parity; }
+    char parity() const { return _parity; }
     /// @brief Get the flow control.
     UartConfig::FlowControl flowControl() const { return _flowControl; }
     /// @brief Get the tx pin number.

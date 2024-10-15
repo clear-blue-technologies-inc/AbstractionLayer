@@ -7,12 +7,11 @@
 #ifndef __CELLULAR_MODULE_HPP__
 #define __CELLULAR_MODULE_HPP__
 
-#include "NetworkAbstraction.hpp"
-#include "IcCommunicationProtocol.hpp"
+#include "CellularAbstraction.hpp"
 
-class Cellular : public NetworkAbstraction {
+class Cellular : public CellularAbstraction {
     public:
-    Cellular() : NetworkAbstraction() {
+    Cellular() : CellularAbstraction() {
         _status.isUp = false;
         _status.technology = NetworkTypes::Technology::Cellular;
     }
@@ -30,6 +29,8 @@ class Cellular : public NetworkAbstraction {
     ErrorType getSignalStrength(DecibelMilliWatts &signalStrength) override;
 
     ErrorType mainLoop() override;
+
+    ErrorType reset() override;
 };
 
 #endif // __CELLULAR_MODULE_HPP__

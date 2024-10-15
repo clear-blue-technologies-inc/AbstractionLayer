@@ -59,9 +59,11 @@ ErrorType Uart::rxBlocking(std::string &buffer, const Milliseconds timeout) {
 
         result = uart_read_bytes(uartNumber, buffer.data(), buffer.size(), pdMS_TO_TICKS(timeout));
         if (result > 0) {
+            buffer.resize(result);
             return ErrorType::Success;
         }
 
+        buffer.resize(0);
         return ErrorType::Timeout;
     }
 
