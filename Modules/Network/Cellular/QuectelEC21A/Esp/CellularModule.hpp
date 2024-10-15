@@ -7,12 +7,12 @@
 #ifndef __CELLULAR_MODULE_HPP__
 #define __CELLULAR_MODULE_HPP__
 
-#include "NetworkAbstraction.hpp"
-#include "IcCommunicationProtocol.hpp"
+#include "CellularAbstraction.hpp"
+#include "GpioModule.hpp"
 
-class Cellular : public NetworkAbstraction {
+class Cellular : public CellularAbstraction {
     public:
-    Cellular() : NetworkAbstraction() {
+    Cellular() : CellularAbstraction() {
         _status.isUp = false;
         _status.technology = NetworkTypes::Technology::Cellular;
     }
@@ -31,8 +31,12 @@ class Cellular : public NetworkAbstraction {
 
     ErrorType mainLoop() override;
 
-    private:
+    ErrorType reset() override;
 
+    private:
+    std::unique_ptr<Gpio> _gpioReset;
+
+    ErrorType getManufacturerName(std::string &mfgName);
 };
 
 #endif // __CELLULAR_MODULE_HPP__

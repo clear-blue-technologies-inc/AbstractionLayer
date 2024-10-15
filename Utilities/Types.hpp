@@ -79,7 +79,7 @@ using Id = uint32_t;
 ///Partition number
 using PartitionNumber = uint16_t;
 ///@typedef PinNumber
-///Pin number
+///Pin number. Signed so that - can be used to represent unused or not connected pins.
 using PinNumber = int32_t;
 
 //-------------------------------Networks

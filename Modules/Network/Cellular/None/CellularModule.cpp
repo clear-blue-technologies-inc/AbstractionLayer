@@ -30,3 +30,6 @@ ErrorType Cellular::getSignalStrength(DecibelMilliWatts &signalStrength) {
 ErrorType Cellular::mainLoop() {
     return ErrorType::NotImplemented;
 }
+ErrorType Cellular::reset() {
+    return ErrorType::NotImplemented;
+}
