@@ -34,9 +34,74 @@ class Cellular : public CellularAbstraction {
     ErrorType reset() override;
 
     private:
+    /// @brief The GPIO pin for the reset pin.
     std::unique_ptr<Gpio> _gpioReset;
+    /// @brief The line termination character. Set to the default on Pg. 23 of the EC21A AT Command Manual.
+    char _commandLineTerminationCharacter = '\r';
+    /// @brief The response formatting character. Set to the default on Pg. 24 of the EC21A AT Command Manual.
+    char _responseFormattingCharacter = '\n';
 
+    /**
+     * @brief Send an AT command to the modem and wait for a response.
+     * @param[in] atCommand The AT command to send.
+     * @param[in] timeout The timeout for the command.
+     * @param[in] maxRetries The maximum number of retries to send the command.
+     * @param[out] responseBuffer The buffer to store the response in.
+     * @returns ErrorType::Success if the command was sent and a response was received.
+     * @returns ErrorType::Failure if the command was not sent or no response was received.
+    */
+    ErrorType sendCommand(const std::string &atCommand, const Milliseconds timeout, const Count maxRetries);
+    /**
+     * @brief Receive a response from the modem.
+     * @param[out] responseBuffer The buffer to store the response in.
+     * @param[in] timeout The timeout for the response.
+     * @param[in] maxRetries The maximum number of retries to receive the response.
+     * @returns ErrorType::Success if the response was received.
+     * @returns ErrorType::Failure if the response was not received.
+    */
+    ErrorType receiveCommand(std::string &responseBuffer, const Milliseconds timeout, const Count maxRetries);
+
+    /**
+     * @brief Get the manufacturer name of the modem.
+     * @param[out] mfgName The string to store the manufacturer name in.
+     * @returns ErrorType::Success if the manufacturer name was retrieved successfully.
+     * @returns ErrorType::Failure if the manufacturer name was not retrieved successfully.
+    */
     ErrorType getManufacturerName(std::string &mfgName);
+
+    /**
+     * @brief Check if the SIM card is inserted.
+     * @returns ErrorType::Success if the SIM card is inserted.
+     * @returns ErrorType::Failure if the SIM card is not inserted. 
+    */
+    ErrorType simCardIsInserted();
+    
+    /**
+     * @brief Set the echo mode of the modem.
+     * @details Controls whether the modem will echo back the characters it receives. See Pg. 22 of the EC21A AT Command Manual.
+     * @param[in] enable True to enable echo mode, false to disable.
+     * @returns ErrorType::Success if the echo mode was set successfully.
+     * @returns ErrorType::Failure if the echo mode was not set successfully.
+    */
+    ErrorType echoMode(const bool enable);
+
+    /**
+     * @brief terminatingCharacter
+     * @details Pg. 23 EC21A AT Command Manual
+     * @param[out] terminatingCharacter The character that the modem will use to terminate the response.
+     * @returns ErrorType::Success if the terminating character was retrieved successfully.
+     * @returns ErrorType::Failure if the terminating character was not retrieved successfully.
+    */
+    ErrorType terminatingCharacter(char &terminatingCharacter);
+
+    /**
+     * @brief responseFormattingCharacter
+     * @details Pg. 24 EC21A AT Command Manual
+     * @param[out] responseFormattingCharacter The character that the modem will use to format the response.
+     * @returns ErrorType::Success if the response formatting character was retrieved successfully.
+     * @returns ErrorType::Failure if the response formatting character was not retrieved successfully.
+    */
+    ErrorType responseFormattingCharacter(char &responseFormattingCharacter);
 };
 
 #endif // __CELLULAR_MODULE_HPP__
