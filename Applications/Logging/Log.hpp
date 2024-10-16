@@ -26,8 +26,8 @@
 #define LOG_COLOR_E       LOG_COLOR(LOG_COLOR_RED)
 #define LOG_COLOR_W       LOG_COLOR(LOG_COLOR_BROWN)
 #define LOG_COLOR_I       LOG_COLOR(LOG_COLOR_GREEN)
-#define LOG_COLOR_D
-#define LOG_COLOR_V
+#define LOG_COLOR_D       LOG_COLOR(LOG_COLOR_PURPLE)
+#define LOG_COLOR_V       LOG_COLOR(LOG_COLOR_CYAN)
 #else //CONFIG_LOG_COLORS
 /// @def LOG_COLOR_E
 /// @brief The color for error messages

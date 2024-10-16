@@ -57,14 +57,15 @@ class NetworkAbstraction : public CommunicationProtocol {
 
     /**
     * @brief Initialize the interface.
-    * @returns ErrorType::Success if the network interface was initialized
+    * @returns ErrorType::Success if the network interface was initialized and ready for clients to connect.
     * @returns ErrorType::NotImplemented if the network interface is not implemented.
     * @returns ErrorType::NotSupported if the network interface is not supported by the current hardware
     * @returns ErrorType::InvalidParameter if any of the required configuration variables have not been set before init was called.
     * @returns ErrorType::NotAvailable if the underlying implementation can't perform the operating (e.g. init wifi driver on Windows).
     * @attention Esp wifi You must set the WifiConfig::Mode before calling.
     * @sa setMode
-    * @post May block for up to a maximum of10 seconds to bring the interface up.
+    * @post May block for up to a maximum of 10 seconds to bring the interface up.
+    * @post Clients are able to connect to a host after this function returns ErrorType::Success.
     */
         virtual ErrorType init() = 0;
     /**

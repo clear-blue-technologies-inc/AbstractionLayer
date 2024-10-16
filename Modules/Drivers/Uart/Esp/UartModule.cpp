@@ -97,7 +97,7 @@ ErrorType Uart::rxBlocking(std::string &buffer, const Milliseconds timeout) {
         bufferHasRoom = readInThisFrame < buffer.capacity();
     }
 
-    return error;
+    return ErrorType::Failure;
 }
 
 //I'm not sure how to handle the interrupt based system.
