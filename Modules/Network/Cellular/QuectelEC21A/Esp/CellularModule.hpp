@@ -34,6 +34,21 @@ class Cellular : public CellularAbstraction {
     ErrorType reset() override;
 
     private:
+    /**
+     * @brief The context for the IP socket.
+     * @details Pg. 11 Quectel LTE Standard TCP/IP Application Note. There are a maximum of 3 contexts available.
+     *          Each context can open 11 connection IDs (or sockets)
+     */
+    static constexpr Id _IpContext = 1;
+    /**
+     * @brief The context for the HTTP socket.
+     * @sa ipContext
+     */
+    static constexpr Id _HttpContext = 2;
+    /// @brief The maximum number of contexts.
+    static constexpr Id _MaxContexts = 3;
+    /// @brief The maximum number of sockets per context.
+    static constexpr Id _MaxSocketsPerContext = 11;
     /// @brief The GPIO pin for the reset pin.
     std::unique_ptr<Gpio> _gpioReset;
     /// @brief The line termination character. Set to the default on Pg. 23 of the EC21A AT Command Manual.
@@ -51,15 +66,18 @@ class Cellular : public CellularAbstraction {
      * @returns ErrorType::Failure if the command was not sent or no response was received.
     */
     ErrorType sendCommand(const std::string &atCommand, const Milliseconds timeout, const Count maxRetries);
+
     /**
      * @brief Receive a response from the modem.
      * @param[out] responseBuffer The buffer to store the response in.
      * @param[in] timeout The timeout for the response.
      * @param[in] maxRetries The maximum number of retries to receive the response.
+     * @param[in] expectedResponse Optional. The expected response from the modem. If not provided, this function will ensure that the response ends with the response formatting character.
+     *            but will not check for response messages such as "OK" or "ERROR".
      * @returns ErrorType::Success if the response was received.
      * @returns ErrorType::Failure if the response was not received.
     */
-    ErrorType receiveCommand(std::string &responseBuffer, const Milliseconds timeout, const Count maxRetries);
+    ErrorType receiveCommand(std::string &responseBuffer, const Milliseconds timeout, const Count maxRetries, const std::string expectedResponse = std::string());
 
     /**
      * @brief Get the manufacturer name of the modem.
