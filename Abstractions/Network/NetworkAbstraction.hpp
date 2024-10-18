@@ -35,7 +35,7 @@ namespace NetworkTypes {
     struct Status {
         bool isUp;                           ///< True when the network is up and ready for use.
         Technology technology;               ///< The technology of the network interface.
-        std::string manufacturerName;      ///< The manufacturer name of the network interface.
+        std::string manufacturerName;        ///< The manufacturer name of the network interface.
     };
 }
 

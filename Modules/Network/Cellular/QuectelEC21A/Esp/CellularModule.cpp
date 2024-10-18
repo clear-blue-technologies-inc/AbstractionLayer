@@ -6,7 +6,7 @@
 //C++
 #include <cstring>
 
-#define CELLULAR_MODULE_DEBUGGING_ON 0
+#define CELLULAR_MODULE_DEBUGGING_ON 1
 
 ErrorType Cellular::init() {
     assert(nullptr != _ic);
@@ -67,12 +67,80 @@ ErrorType Cellular::init() {
 }
 
 ErrorType Cellular::networkUp() {
+    constexpr Milliseconds timeout = 1000;
+    constexpr Count maxRetries = 10;
+    ErrorType error = ErrorType::Failure;
+    std::string responseBuffer(64, 0);
 
-    if (ErrorType::Success != simCardIsInserted()) {
-        return ErrorType::Failure;
+    error = simCardIsInserted();
+    if (ErrorType::Success != error) {
+        CBT_LOGW(TAG, "SIM card not inserted.");
+        return error;
     }
 
-    return ErrorType::NotImplemented;
+    error = sendCommand("AT+COPS=0", timeout, maxRetries);
+    if (ErrorType::Success != error) {
+        return error;
+    }
+
+    error = receiveCommand(responseBuffer, timeout, maxRetries, "OK");
+    if (ErrorType::Success != error) {
+        CBT_LOGW(TAG, "AT command error: AT+COPS=0");
+        CBT_LOG_BUFFER_HEXDUMP(TAG, responseBuffer.data(), responseBuffer.size(), LogType::Warning);
+        return error;
+    }
+
+    //Quectel LTE Standard TCP/IP Application Note, Pg. 7.
+    //It can take up to 90 seconds for the module to register to the network.
+    {
+    int registerToNetworkRetries = 0;
+    do {
+        OperatingSystem::Instance().delay(1000);
+        error = sendCommand("AT+CREG?", timeout, 1);
+        if (ErrorType::Success != error) {
+            return error;
+        }
+
+        error = receiveCommand(responseBuffer, timeout, 1, "+CREG: 0,5");
+        if (ErrorType::Success != error) {
+            CBT_LOGW(TAG, "Module not registered to network.");
+            CBT_LOG_BUFFER_HEXDUMP(TAG, responseBuffer.data(), responseBuffer.size(), LogType::Warning);
+        }
+
+    } while (registerToNetworkRetries < 90 && ErrorType::Success != error);
+    }
+
+    if (ErrorType::Success != error) {
+        //If it does not register in 90s, then reboot the module.
+        reset();
+        return error;
+    }
+
+    assert(false == accessPointNameConst().empty());
+    assert(snprintf(responseBuffer.data(), responseBuffer.size(), "AT+CGDCONT=%d,\"IP\",\"%s\"", _IpContext, accessPointNameConst().c_str()));
+    error = sendCommand(responseBuffer, timeout, maxRetries);
+    if (ErrorType::Success != error) {
+        return error;
+    }
+    error = receiveCommand(responseBuffer, timeout, maxRetries, "OK");
+    if (ErrorType::Success != error) {
+        CBT_LOGW(TAG, "AT command error: AT+CGDCONT");
+        CBT_LOG_BUFFER_HEXDUMP(TAG, responseBuffer.data(), responseBuffer.size(), LogType::Warning);
+        return error;
+    }
+
+    error = sendCommand("AT+CGATT=1", timeout, maxRetries);
+    if (ErrorType::Success != error) {
+        return error;
+    }
+    error = receiveCommand(responseBuffer, timeout, maxRetries, "OK");
+    if (ErrorType::Success != error) {
+        CBT_LOGW(TAG, "AT command error: AT+CGATT");
+        CBT_LOG_BUFFER_HEXDUMP(TAG, responseBuffer.data(), responseBuffer.size(), LogType::Warning);
+        return error;
+    }
+
+    return error;
 }
 
 ErrorType Cellular::networkDown() {
@@ -151,7 +219,7 @@ ErrorType Cellular::sendCommand(const std::string &atCommand, const Milliseconds
     return error;
 }
 
-ErrorType Cellular::receiveCommand(std::string &responseBuffer, const Milliseconds timeout, const Count maxRetries) {
+ErrorType Cellular::receiveCommand(std::string &responseBuffer, const Milliseconds timeout, const Count maxRetries, const std::string expectedResponse) {
     ErrorType error = ErrorType::Failure;
     Count retries = 0;
 
@@ -200,6 +268,13 @@ ErrorType Cellular::receiveCommand(std::string &responseBuffer, const Millisecon
         error = ErrorType::Success;
     }
 
+    if (!expectedResponse.empty() && std::string::npos != responseBuffer.find(expectedResponse)) {
+        error = ErrorType::Success;
+    }
+    else {
+        error = ErrorType::Failure;
+    }
+
     return error;
 }
 
@@ -207,14 +282,7 @@ ErrorType Cellular::getManufacturerName(std::string &mfgName) {
     ErrorType error;
     error = sendCommand("ATI", 1000, 10);
     if (ErrorType::Success == error) {
-        error = receiveCommand(mfgName, 1000, 10);
-    }
-
-    if (std::string::npos != mfgName.find("OK")) {
-        error = ErrorType::Success;
-    }
-    else {
-        error = ErrorType::Failure;
+        error = receiveCommand(mfgName, 1000, 10, "OK");
     }
 
     return error;
@@ -232,18 +300,9 @@ ErrorType Cellular::simCardIsInserted() {
     }
 
     std::string &responseBuffer = commandBuffer;
-    error = receiveCommand(responseBuffer, timeout, numRetries);
+    error = receiveCommand(responseBuffer, timeout, numRetries, "OK");
     if (ErrorType::Success != error) {
         return error;
-    }
-
-    if (ErrorType::Success == error) {
-        if (std::string::npos != responseBuffer.find("OK")) {
-            error = ErrorType::Success;
-        }
-        else {
-            error = ErrorType::Failure;
-        }
     }
 
     responseBuffer.erase(std::remove(responseBuffer.begin(), responseBuffer.end(), '\r'), responseBuffer.end());
@@ -279,16 +338,7 @@ ErrorType Cellular::echoMode(const bool enable) {
     std::string &responseBuffer = commandBuffer;
 
     if (ErrorType::Success == error) {
-        error = receiveCommand(responseBuffer, 1000, 10);
-    }
-
-    if (ErrorType::Success == error) {
-        if (std::string::npos != responseBuffer.find("OK")) {
-            error = ErrorType::Success;
-        }
-        else {
-            error = ErrorType::Failure;
-        }
+        error = receiveCommand(responseBuffer, 1000, 10, "OK");
     }
 
     return error;
@@ -299,19 +349,10 @@ ErrorType Cellular::terminatingCharacter(char &terminatingCharacter) {
     ErrorType error;
     error = sendCommand("ATS3?", 1000, 10);
     if (ErrorType::Success == error) {
-        error = receiveCommand(responseBuffer, 1000, 10);
+        error = receiveCommand(responseBuffer, 1000, 10, "OK");
     }
     else {
         CBT_LOGW(TAG, "Error sending to <command:ATS3?>");
-    }
-
-    if (ErrorType::Success == error) {
-        if (std::string::npos != responseBuffer.find("OK")) {
-            error = ErrorType::Success;
-        }
-        else {
-            error = ErrorType::Failure;
-        }
     }
 
     responseBuffer.erase(std::remove(responseBuffer.begin(), responseBuffer.end(), '\r'), responseBuffer.end());
@@ -328,19 +369,10 @@ ErrorType Cellular::responseFormattingCharacter(char &responseFormattingCharacte
     ErrorType error;
     error = sendCommand("ATS4?", 500, 10);
     if (ErrorType::Success == error) {
-        error = receiveCommand(responseBuffer, 500, 10);
+        error = receiveCommand(responseBuffer, 500, 10, "OK");
     }
     else {
         CBT_LOGW(TAG, "Error sending to <command:ATS4?>");
-    }
-
-    if (ErrorType::Success == error) {
-        if (std::string::npos != responseBuffer.find("OK")) {
-            error = ErrorType::Success;
-        }
-        else {
-            error = ErrorType::Failure;
-        }
     }
 
     responseBuffer.erase(std::remove(responseBuffer.begin(), responseBuffer.end(), '\r'), responseBuffer.end());
