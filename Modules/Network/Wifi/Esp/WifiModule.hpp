@@ -62,19 +62,6 @@ class Wifi : public WifiAbstraction {
     ErrorType setAuthMode(WifiConfig::AuthMode authMode) override { _authMode = authMode; return ErrorType::Success; }
 
     private:
-    WifiConfig::Mode _mode = WifiConfig::Mode::Unknown;
-    std::string _ssid = std::string(32, '\0');
-    std::string _password;
-    std::string _ipAddress;
-    uint8_t _channel = 0;
-    uint8_t _maxConnections = 0;
-    WifiConfig::AuthMode _authMode = WifiConfig::AuthMode::Unknown;
-
-    ///@brief set the maximum number of wifi connections.
-    ErrorType setMaxConnections(uint8_t maxConnections) { _maxConnections = maxConnections; return ErrorType::Success; }
-    ///@brief set the wifi channel.
-    ErrorType setChannel(uint8_t channel) { _channel = channel; return ErrorType::Success; }
-
     wifi_auth_mode_t toEspAuthMode(WifiConfig::AuthMode authMode) {
         switch (authMode) {
             case WifiConfig::AuthMode::Open:
