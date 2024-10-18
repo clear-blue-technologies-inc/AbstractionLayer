@@ -8,45 +8,18 @@
 #define __WIFI_MODULE_HPP__
 
 //Foundation
-#include "NetworkAbstraction.hpp"
-#include "EventQueue.hpp"
+#include "WifiAbstraction.hpp"
 //ESP
 #include "esp_wifi.h"
-
-namespace WifiConfig {
-
-    /**
-     * @enum Mode
-     * @brief Wifi mode that effictively says whether you are connecting to wifi or being connected to by some other device.
-    */
-    enum class Mode : uint8_t {
-        Unknown = 0,
-        AccessPoint, ///< Access Point. You can connect to these from a station.
-        Station,     ///< Station. You can connect these to an access point.
-        AccessPointAndStation ///< Access Point and Station.
-    };
-
-    /**
-     * @enum AuthMode
-     * @brief Wifi authentication mode.
-    */
-    enum class AuthMode : uint8_t {
-        Unknown = 0, ///< Unknown
-        Open,        ///< Open
-        Wep,         ///< WEP
-        WpaPsk,      ///< WPA-PSK
-        Wpa2Psk      ///< WPA2-PSK
-    };
-}
 
 /**
  * @class Wifi
  * @brief Wifi for ESP32
 */
-class Wifi : public NetworkAbstraction {
+class Wifi : public WifiAbstraction {
 
     public:
-    Wifi() : NetworkAbstraction() {
+    Wifi() : WifiAbstraction() {
         _status.isUp = false;
         _status.technology = NetworkTypes::Technology::Wifi;
     }
@@ -64,45 +37,29 @@ class Wifi : public NetworkAbstraction {
 
     ErrorType mainLoop() override;
 
-    ErrorType radioOn();
-    ErrorType radioOff();
-
-    WifiConfig::Mode mode() const { return _mode; }
-    std::string ssid() const { return _ssid; }
-    std::string password() const { return _password; }
-    uint8_t channel() const { return _channel; }
-    uint8_t maxConnections() const { return _maxConnections; }
-    WifiConfig::AuthMode authMode() const { return _authMode; }
+    ErrorType radioOn() override;
+    ErrorType radioOff() override;
 
     /**
      * @brief Set the ssid for the selected mode.
      * @param[in] mode The wifi mode to set the SSID for
      * @param[in] ssid The ssid to set
      */
-    ErrorType setSsid(WifiConfig::Mode mode, std::string ssid);
+    ErrorType setSsid(WifiConfig::Mode mode, std::string ssid) override;
     /**
      * @brief Set the password for the selected mode.
      * @param[in] mode The wifi mode to set the password for
      * @param[in] password The password to set
     */
-    ErrorType setPassword(WifiConfig::Mode mode, std::string password);
-    ///@brief set the wifi channel.
-    ErrorType setChannel(uint8_t channel) { _channel = channel; return ErrorType::Success; }
-    ///@brief set the maximum number of wifi connections.
-    ErrorType setMaxConnections(uint8_t maxConnections) { _maxConnections = maxConnections; return ErrorType::Success; }
+    ErrorType setPassword(WifiConfig::Mode mode, std::string password) override;
     ///@brief set the wifi mode.
-    ErrorType setMode(WifiConfig::Mode mode) { _mode = mode; return ErrorType::Success; }
-    ///@brief get the wifi ip address as a mutable reference.
-    ErrorType ipAddress(std::string &ipAddress) { _ipAddress.assign(ipAddress); return ErrorType::Success; }
-    ///@brief get the wifi ip address as a const reference.
-    ErrorType ipAddress(const std::string &ipAddress) { _ipAddress.assign(ipAddress); return ErrorType::Success; }
-
+    ErrorType setMode(WifiConfig::Mode mode) override { _mode = mode; return ErrorType::Success; }
     /**
      * @brief set the wifi authentication mode.
      * @param[in] authMode The authentication mode to set.
      * @sa WifiConfig::AuthMode
      */
-    ErrorType setAuthMode(WifiConfig::AuthMode authMode) { _authMode = authMode; return ErrorType::Success; }
+    ErrorType setAuthMode(WifiConfig::AuthMode authMode) override { _authMode = authMode; return ErrorType::Success; }
 
     private:
     WifiConfig::Mode _mode = WifiConfig::Mode::Unknown;
@@ -112,6 +69,11 @@ class Wifi : public NetworkAbstraction {
     uint8_t _channel = 0;
     uint8_t _maxConnections = 0;
     WifiConfig::AuthMode _authMode = WifiConfig::AuthMode::Unknown;
+
+    ///@brief set the maximum number of wifi connections.
+    ErrorType setMaxConnections(uint8_t maxConnections) { _maxConnections = maxConnections; return ErrorType::Success; }
+    ///@brief set the wifi channel.
+    ErrorType setChannel(uint8_t channel) { _channel = channel; return ErrorType::Success; }
 
     wifi_auth_mode_t toEspAuthMode(WifiConfig::AuthMode authMode) {
         switch (authMode) {

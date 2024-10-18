@@ -52,6 +52,19 @@ class WifiAbstraction : public NetworkAbstraction {
     static constexpr char TAG[] = "Wifi";
 
     /**
+     * @brief Turn the wifi radio on.
+     * @return ErrorType::Success if the radio was turned on successfully
+     * @return ErrorType::Failure if the radio was not turned on successfully
+    */
+    virtual ErrorType radioOn() = 0;
+    /**
+     * @brief Turn the wifi radio off.
+     * @return ErrorType::Success if the radio was turned off successfully
+     * @return ErrorType::Failure if the radio was not turned off successfully
+    */
+    virtual ErrorType radioOff() = 0;
+
+    /**
      * @brief Set the ssid for the selected mode.
      * @param[in] mode The wifi mode to set the SSID for
      * @param[in] ssid The ssid to set
@@ -75,6 +88,23 @@ class WifiAbstraction : public NetworkAbstraction {
      * @sa WifiConfig::AuthMode
      */
     virtual ErrorType setAuthMode(WifiConfig::AuthMode authMode) = 0;
+
+    const WifiConfig::Mode &mode() const { return _mode; }
+    const std::string &ssid() const { return _ssid; }
+    const std::string &password() const { return _password; }
+    const uint8_t &channel() const { return _channel; }
+    const uint8_t &maxConnections() const { return _maxConnections; }
+    const WifiConfig::AuthMode &authMode() const { return _authMode; }
+    const std::string &ipAddress() const { return _ipAddress; }
+
+    protected:
+    WifiConfig::Mode _mode = WifiConfig::Mode::Unknown;
+    std::string _ssid = std::string(32, '\0');
+    std::string _password;
+    std::string _ipAddress;
+    uint8_t _channel = 0;
+    uint8_t _maxConnections = 0;
+    WifiConfig::AuthMode _authMode = WifiConfig::AuthMode::Unknown;
 };
 
 #endif
