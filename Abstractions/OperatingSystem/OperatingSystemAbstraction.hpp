@@ -256,7 +256,7 @@ class OperatingSystemAbstraction {
      * @brief Get the status of the operatings system as a const reference.
      * @returns The status of the operating system.
     */
-    const OperatingSystemConfig::Status &status() const { return _status; }
+    const OperatingSystemConfig::Status &statusConst() const { return _status; }
 
     protected:
     OperatingSystemConfig::Status _status; ///< The status of the operating system.

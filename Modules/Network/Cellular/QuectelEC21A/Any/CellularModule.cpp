@@ -6,7 +6,7 @@
 //C++
 #include <cstring>
 
-#define CELLULAR_MODULE_DEBUGGING_ON 1
+#define CELLULAR_MODULE_DEBUGGING_ON 0
 
 ErrorType Cellular::init() {
     assert(nullptr != _ic);
