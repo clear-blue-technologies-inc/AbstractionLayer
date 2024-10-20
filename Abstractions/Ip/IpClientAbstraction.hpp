@@ -83,6 +83,7 @@ class IpClientAbstraction {
      * @returns Fnd::ErrorType::Success on success
      * @returns Fnd::ErrorType::Failure on failure
      * @returns Fnd::ErrorType::NotImplemented if not implemented
+     * @returns Fnd::ErrorType::NotSupported if the network interface doesn't support the operation
     */
     virtual ErrorType connectTo(std::string hostname, Port port, IpClientSettings::Protocol protocol, IpClientSettings::Version version, Socket &socket, Milliseconds timeout) = 0;
     /**

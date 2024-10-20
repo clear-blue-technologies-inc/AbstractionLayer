@@ -1,15 +1,16 @@
 /***************************************************************************//**
 * @author   Ben Haubrich
 * @file     IpClientModule.hpp
-* @details  IP client for posix compliant systems.
-* @ingroup  PosixModules
+* @details  IP client for Quectel EC21A.
+* @ingroup  QuectelEC21A Modules
 *******************************************************************************/
 #ifndef __IP_CLIENT_MODULE_HPP__
 #define __IP_CLIENT_MODULE_HPP__
 
 //AbstractionLayer
 #include "IpClientAbstraction.hpp"
-#include "lwip/sockets.h"
+
+class Cellular;
 
 class IpClient : public IpClientAbstraction {
 
@@ -23,30 +24,10 @@ class IpClient : public IpClientAbstraction {
     ErrorType receiveNonBlocking(std::shared_ptr<std::string> buffer, const Milliseconds timeout, std::function<void(const ErrorType error, std::shared_ptr<std::string> buffer)> callback = nullptr) override;
 
     private:
-    ErrorType sendBlocking(const std::string &data, const Milliseconds timeout);
-    ErrorType receiveBlocking(std::string &buffer, const Milliseconds timeout);
+    ErrorType sendBlocking(const std::string &data, const Milliseconds timeout) override;
+    ErrorType receiveBlocking(std::string &buffer, const Milliseconds timeout) override;
 
-    int toPosixFamily(IpClientSettings::Version version) {
-        switch (version) {
-            case IpClientSettings::Version::IPv4:
-                return AF_INET;
-            case IpClientSettings::Version::IPv6:
-                return AF_INET6;
-            default:
-                return AF_UNSPEC;
-        }
-    }
-
-    int toPosixSocktype(IpClientSettings::Protocol protocol) {
-        switch (protocol) {
-            case IpClientSettings::Protocol::Tcp:
-                return SOCK_STREAM;
-            case IpClientSettings::Protocol::Udp:
-                return SOCK_DGRAM;
-            default:
-                return SOCK_RAW;
-        }
-    }
+    Cellular *_cellNetworkInterface = nullptr;
 };
 
 #endif // __IP_CLIENT_MODULE_HPP__
