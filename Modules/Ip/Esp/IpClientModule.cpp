@@ -15,7 +15,7 @@
 /*
  * I tried the example code for non-blocking sockets from ESP github, it didn't work.
  * getaddrinfo would return a new IP address every time you call it and none of them
- * worked for v2devshard. If you didn't call gethostbyname (which getaddrinfo is meant
+ * worked for DNS. If you didn't call gethostbyname (which getaddrinfo is meant
  * to replace) getaddrinfo would fail to find an IP every time you call it. Lastly, if you
  * call fcntl and set O_NONBLOCK on the socket it would fail to connect every time so there
  * was quite a symphony of bugs there.

@@ -1,7 +1,7 @@
 /***************************************************************************//**
 * @author   Ben Haubrich
 * @file     CellularModule.hpp
-* @details  Cellular for Quectel EC21A and ESP
+* @details  Cellular for Ublox Sara U201
 * @ingroup  NoneModules
 *******************************************************************************/
 #ifndef __CELLULAR_MODULE_HPP__
