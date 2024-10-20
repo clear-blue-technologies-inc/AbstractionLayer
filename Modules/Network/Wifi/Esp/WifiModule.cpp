@@ -186,6 +186,8 @@ ErrorType Wifi::getSignalStrength(DecibelMilliWatts &signalStrength) {
     esp_wifi_sta_get_rssi(&signalStrengthRssi);
     signalStrength = DecibelMilliWatts(signalStrengthRssi);
 
+    _status.signalStrength = signalStrength;
+
     return ErrorType::Success;
 }
 

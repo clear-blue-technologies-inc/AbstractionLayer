@@ -69,6 +69,8 @@ ErrorType Wifi::getSignalStrength(DecibelMilliWatts &signalStrength) {
 
     sscanf(signalNoiseRatioString.data(), "%d", &signalStrength);
 
+    _status.signalStrength = signalStrength;
+
     return error;
 }
 
