@@ -1,6 +1,7 @@
-//Modules
+//Abstractions
+#include "NetworkAbstraction.hpp"
+//AbstractionLayer Modules
 #include "IpClientModule.hpp"
-#include "WifiModule.hpp"
 #include "OperatingSystemModule.hpp"
 #include "Log.hpp"
 //Lwip

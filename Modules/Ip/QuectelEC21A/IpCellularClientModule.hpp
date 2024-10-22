@@ -1,14 +1,22 @@
-#ifndef __IP_CLIENT_MODULE_HPP__
-#define __IP_CLIENT_MODULE_HPP__
+/***************************************************************************//**
+* @author   Ben Haubrich
+* @file     IpCellularClientModule.hpp
+* @details  Cellular IP client for Quectel EC21A.
+* @ingroup  QuectelEC21A Modules
+*******************************************************************************/
+#ifndef __IP_CELLULAR_CLIENT_MODULE_HPP__
+#define __IP_CELLULAR_CLIENT_MODULE_HPP__
 
-//Foundation
+//AbstractionLayer
 #include "IpClientAbstraction.hpp"
 
-class IpClient : public IpClientAbstraction {
+class Cellular;
+
+class IpCellularClient : public IpClientAbstraction {
 
     public:
-    IpClient() : IpClientAbstraction() {};
-    ~IpClient() = default;
+    IpCellularClient() : IpClientAbstraction() {};
+    ~IpCellularClient() = default;
 
     ErrorType connectTo(std::string hostname, Port port, IpClientSettings::Protocol protocol, IpClientSettings::Version version, Socket &socket, Milliseconds timeout) override;
     ErrorType disconnect() override;
@@ -18,6 +26,8 @@ class IpClient : public IpClientAbstraction {
     private:
     ErrorType sendBlocking(const std::string &data, const Milliseconds timeout) override;
     ErrorType receiveBlocking(std::string &buffer, const Milliseconds timeout) override;
+
+    Cellular *_cellNetworkInterface = nullptr;
 };
 
-#endif // __IP_CLIENT_MODULE_HPP__
+#endif // __IP_CELLULAR_CLIENT_MODULE_HPP__

@@ -1,6 +1,6 @@
 //Modules
 #include "IpClientModule.hpp"
-#include "WifiModule.hpp"
+#include "NetworkAbstraction.hpp"
 #include "OperatingSystemModule.hpp"
 //Posix
 #include <netdb.h>
