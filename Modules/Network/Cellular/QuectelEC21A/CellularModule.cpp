@@ -63,6 +63,7 @@ ErrorType Cellular::init() {
         return error;
     }
 
+    _status.isUp = true;
     return ErrorType::Success;
 }
 
@@ -172,7 +173,16 @@ ErrorType Cellular::getSignalStrength(DecibelMilliWatts &signalStrength) {
 }
 
 ErrorType Cellular::mainLoop() {
-    return ErrorType::NotImplemented;
+    ErrorType error;
+
+    if (ErrorType::NoData == (error = runNextEvent())) {
+        return error;
+    }
+    else if (ErrorType::Success == error) {
+        return error;
+    }
+
+    return ErrorType::Failure;
 }
 
 //See Reset, Section 3.8, Quectel hardware design

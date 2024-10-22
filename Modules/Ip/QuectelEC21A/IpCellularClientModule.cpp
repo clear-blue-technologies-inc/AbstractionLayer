@@ -1,11 +1,11 @@
 //AbstractionLayer Modules
-#include "IpClientModule.hpp"
+#include "IpCellularClientModule.hpp"
 #include "CellularModule.hpp"
 #include "OperatingSystemModule.hpp"
 //AbstractionLayer Applications
 #include "Log.hpp"
 
-ErrorType IpClient::connectTo(std::string hostname, Port port, IpClientSettings::Protocol protocol, IpClientSettings::Version version, Socket &socket, Milliseconds timeout) {
+ErrorType IpCellularClient::connectTo(std::string hostname, Port port, IpClientSettings::Protocol protocol, IpClientSettings::Version version, Socket &socket, Milliseconds timeout) {
     auto connectCb = [&]() -> ErrorType {
         _cellNetworkInterface = dynamic_cast<Cellular *>(&network());
         if (nullptr == _cellNetworkInterface) {
@@ -26,7 +26,7 @@ ErrorType IpClient::connectTo(std::string hostname, Port port, IpClientSettings:
         return ErrorType::NotImplemented;
     };
 
-    std::unique_ptr<EventAbstraction> event = std::make_unique<EventQueue::Event<IpClient>>(std::bind(connectCb));
+    std::unique_ptr<EventAbstraction> event = std::make_unique<EventQueue::Event<IpCellularClient>>(std::bind(connectCb));
     if (ErrorType::Success != network().addEvent(event)) {
         return ErrorType::Failure;
     }
@@ -48,18 +48,18 @@ ErrorType IpClient::connectTo(std::string hostname, Port port, IpClientSettings:
     }
     }
 }
-ErrorType IpClient::disconnect() {
+ErrorType IpCellularClient::disconnect() {
     return ErrorType::NotImplemented;
 }
-ErrorType IpClient::sendBlocking(const std::string &data, const Milliseconds timeout) {
+ErrorType IpCellularClient::sendBlocking(const std::string &data, const Milliseconds timeout) {
     return ErrorType::NotImplemented;
 }
-ErrorType IpClient::receiveBlocking(std::string &buffer, const Milliseconds timeout) {
+ErrorType IpCellularClient::receiveBlocking(std::string &buffer, const Milliseconds timeout) {
     return ErrorType::NotImplemented;
 }
-ErrorType IpClient::sendNonBlocking(const std::shared_ptr<std::string> data, const Milliseconds timeout, std::function<void(const ErrorType error, const Bytes bytesWritten)> callback) {
+ErrorType IpCellularClient::sendNonBlocking(const std::shared_ptr<std::string> data, const Milliseconds timeout, std::function<void(const ErrorType error, const Bytes bytesWritten)> callback) {
     return ErrorType::NotImplemented;
 }
-ErrorType IpClient::receiveNonBlocking(std::shared_ptr<std::string> buffer, const Milliseconds timeout, std::function<void(const ErrorType error, std::shared_ptr<std::string> buffer)> callback) {
+ErrorType IpCellularClient::receiveNonBlocking(std::shared_ptr<std::string> buffer, const Milliseconds timeout, std::function<void(const ErrorType error, std::shared_ptr<std::string> buffer)> callback) {
     return ErrorType::NotImplemented;
 }

@@ -1,9 +1,9 @@
-#ifndef __IP_SERVER_MODULE_HPP__
-#define __IP_SERVER_MODULE_HPP__
+#ifndef __IP_CELLULAR_SERVER_MODULE_HPP__
+#define __IP_CELLULAR_SERVER_MODULE_HPP__
 
 #include "IpServerAbstraction.hpp"
 
-class IpServer : public IpServerAbstraction {
+class IpCellularServer : public IpServerAbstraction {
 
     public:
     ErrorType listenTo(IpServerSettings::Protocol protocol, IpServerSettings::Version version, Port port) override;
@@ -15,4 +15,4 @@ class IpServer : public IpServerAbstraction {
     ErrorType receiveNonBlocking(std::shared_ptr<std::string> buffer, const Milliseconds timeout, std::function<void(const ErrorType error, std::shared_ptr<std::string> buffer)> callback = nullptr) override;
 };
 
-#endif // __IP_SERVER_MODULE_HPP__
+#endif // __IP_CELLULAR_SERVER_MODULE_HPP__

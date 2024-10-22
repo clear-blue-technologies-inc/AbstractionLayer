@@ -1,4 +1,4 @@
-#include "IpClientModule.hpp"
+#include "IpCellularClientModule.hpp"
 
 ErrorType IpClient::connectTo(std::string hostname, Port port, IpClientSettings::Protocol protocol, IpClientSettings::Version version, Socket &socket, Milliseconds timeout) {
     return ErrorType::NotImplemented;
