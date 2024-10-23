@@ -5,6 +5,47 @@
 //AbstractionLayer Applications
 #include "Log.hpp"
 
+/**
+ * @brief Convert the IP client version to the Quectel context type
+ * 
+ * @param version The IP client version
+ * @return The Quectel context type
+ */
+static ContextType ToQuectelContextType(const IpClientSettings::Version version) {
+    switch (version) {
+        case IpClientSettings::Version::IPv4:
+            return ContextType::Ipv4;
+        case IpClientSettings::Version::IPv6:
+            return ContextType::Ipv6;
+        default:
+            return ContextType::Unknown;
+    }
+}
+
+static std::string ToQuectelProtocol(const IpClientSettings::Protocol protocol) {
+    switch (protocol) {
+        case IpClientSettings::Protocol::Tcp:
+            return "TCP";
+        case IpClientSettings::Protocol::Udp:
+            return "UDP";
+        default:
+            return "";
+    }
+}
+
+static int8_t ToQuectelAccessMode(const CellularConfig::AccessMode accessMode) {
+    switch (accessMode) {
+        case CellularConfig::AccessMode::Buffer:
+            return 0;
+        case CellularConfig::AccessMode::DirectPush:
+            return 1;
+        case CellularConfig::AccessMode::Transparent:
+            return 2;
+        default:
+            return -1;
+    }
+}
+
 ErrorType IpCellularClient::connectTo(std::string hostname, Port port, IpClientSettings::Protocol protocol, IpClientSettings::Version version, Socket &socket, Milliseconds timeout) {
     auto connectCb = [&]() -> ErrorType {
         _cellNetworkInterface = dynamic_cast<Cellular *>(&network());
@@ -20,10 +61,53 @@ ErrorType IpCellularClient::connectTo(std::string hostname, Port port, IpClientS
             return ErrorType::NotImplemented;
         }
 
-        CBT_LOGI(TAG, "Connected to %s", hostname.c_str());
-        _status.connected = false;
+        if (ErrorType::LimitReached == _cellNetworkInterface->nextAvailableConnectionId(socket)) {
+            CBT_LOGW(TAG, "No more sockets available");
+            socket = -1;
+            return ErrorType::LimitReached;
+        }
 
-        return ErrorType::NotImplemented;
+        ErrorType error = _cellNetworkInterface->pdpContextIsActive(Cellular::_IpContext);
+        if (ErrorType::Success != error) {
+            error = _cellNetworkInterface->activatePdpContext(Cellular::_IpContext, socket, ToQuectelContextType(version), _cellNetworkInterface->accessPointName());
+            if (ErrorType::Success != error) {
+                socket = -1;
+                return error;
+            }
+        }
+
+        std::string quectelProtocol = ToQuectelProtocol(protocol);
+        if (quectelProtocol.empty()) {
+            CBT_LOGE(TAG, "Invalid protocol");
+            socket = -1;
+            return ErrorType::InvalidParameter;
+        }
+
+        std::string openSocketCommand("AT+QIOPEN=");
+        openSocketCommand.append(std::to_string(Cellular::_IpContext));
+        openSocketCommand.append(",").append(std::to_string(socket));
+        openSocketCommand.append(",").append("\"").append(quectelProtocol).append("\"");
+        openSocketCommand.append(",").append("\"").append(hostname).append("\"");
+        openSocketCommand.append(",").append(std::to_string(port));
+        openSocketCommand.append(",").append(std::to_string(0));
+        openSocketCommand.append(",").append(std::to_string(ToQuectelAccessMode(_cellNetworkInterface->accessModeConst())));
+
+        error = _cellNetworkInterface->sendCommand(openSocketCommand, 1000, 10);
+        if (ErrorType::Success != error) {
+            socket = -1;
+            return error;
+        }
+
+        error = _cellNetworkInterface->receiveCommand(openSocketCommand, 1000, 10, "OK");
+        if (ErrorType::Success != error) {
+            socket = -1;
+            return error;
+        }
+
+        CBT_LOGI(TAG, "Connected to %s", hostname.c_str());
+        _status.connected = true;
+
+        return ErrorType::Success;
     };
 
     std::unique_ptr<EventAbstraction> event = std::make_unique<EventQueue::Event<IpCellularClient>>(std::bind(connectCb));

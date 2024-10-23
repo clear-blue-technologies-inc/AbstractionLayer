@@ -104,7 +104,7 @@ ErrorType Cellular::networkUp() {
 
         error = receiveCommand(responseBuffer, timeout, 1, "+CREG: 0,5");
         if (ErrorType::Success != error) {
-            CBT_LOGW(TAG, "Module not registered to network.");
+            CBT_LOGW(TAG, "Not registered to network.");
             CBT_LOG_BUFFER_HEXDUMP(TAG, responseBuffer.data(), responseBuffer.size(), LogType::Warning);
         }
 
@@ -333,6 +333,99 @@ ErrorType Cellular::simCardIsInserted() {
     }
     else {
         error = ErrorType::Failure;
+    }
+
+    return error;
+}
+
+ErrorType Cellular::pdpContextIsActive(const PdpContext context) {
+    std::string commandBuffer(128, 0);
+    const std::string expectedResponse = std::string("+QIACT: ").append(std::to_string(context));
+    constexpr int numRetries = 10;
+    constexpr Milliseconds timeout = 1000;
+    ErrorType error = ErrorType::Failure;
+
+    error = sendCommand("AT+QIACT?", timeout, numRetries);
+    if (ErrorType::Success != error) {
+        return error;
+    }
+
+    std::string &responseBuffer = commandBuffer;
+    error = receiveCommand(responseBuffer, timeout, numRetries, expectedResponse);
+    if (ErrorType::Success != error) {
+        return error;
+    }
+
+    return ErrorType::Success;
+}
+
+ErrorType Cellular::activatePdpContext(const PdpContext context, const Socket socket, const ContextType contextType, const std::string &accessPointName) {
+    constexpr Milliseconds timeout = 1000;
+    constexpr Count numRetries = 10;
+    std::string responseBuffer(128, 0);
+
+    std::string configurePdpContextCommand("AT+QICSGP=");
+    configurePdpContextCommand.append(std::to_string(context));
+    configurePdpContextCommand.append(",").append(std::to_string(static_cast<uint8_t>(contextType)));
+    configurePdpContextCommand.append(",").append("\"").append(accessPointName).append("\"");
+
+    std::string activatePdpContextCommand("AT+QIACT=");
+    activatePdpContextCommand.append(std::to_string(context));
+
+    ErrorType error = sendCommand(configurePdpContextCommand, timeout, numRetries);
+    if (ErrorType::Success != error) {
+        CBT_LOGW(TAG, "Error sending command: %s", configurePdpContextCommand.c_str());
+        return error;
+    }
+    error = receiveCommand(responseBuffer, timeout, numRetries, "OK");
+    if (ErrorType::Success != error) {
+        CBT_LOGW(TAG, "Error receiving command %s", configurePdpContextCommand.c_str());
+        CBT_LOG_BUFFER_HEXDUMP(TAG, responseBuffer.data(), responseBuffer.size(), LogType::Warning);
+        return error;
+    }
+
+    error = sendCommand(activatePdpContextCommand, timeout, numRetries);
+    if (ErrorType::Success != error) {
+        CBT_LOGW(TAG, "Error sending command: %s", activatePdpContextCommand.c_str());
+        return error;
+    }
+    error = receiveCommand(responseBuffer, timeout, numRetries, "OK");
+    if (ErrorType::Success != error) {
+        CBT_LOGW(TAG, "Error receiving command %s", activatePdpContextCommand.c_str());
+        CBT_LOG_BUFFER_HEXDUMP(TAG, responseBuffer.data(), responseBuffer.size(), LogType::Warning);
+        return error;
+    }
+
+    if (ErrorType::Success != error) {
+        sendCommand("AT+QIGETERROR", 1000, 10);
+        receiveCommand(responseBuffer, 1000, 10, "OK");
+        CBT_LOGW(TAG, "Error activating PDP context");
+        CBT_LOG_BUFFER_HEXDUMP(TAG, responseBuffer.data(), responseBuffer.size(), LogType::Warning);
+        return error;
+    }
+
+    return ErrorType::Success;
+}
+
+ErrorType Cellular::deactivatePdpContext(const PdpContext context) {
+    constexpr Milliseconds timeout = 1000;
+    constexpr Count numRetries = 10;
+    ErrorType error = ErrorType::Failure;
+
+    std::string deavtivatePdpContextCommand("AT+QIDEACT=");
+    deavtivatePdpContextCommand.append(std::to_string(context));
+    error = sendCommand(deavtivatePdpContextCommand, timeout, numRetries);
+    if (ErrorType::Success != error) {
+        CBT_LOGW(TAG, "Error sending command: %s", deavtivatePdpContextCommand.c_str());
+        return error;
+    }
+
+    std::string &responseBuffer = deavtivatePdpContextCommand;
+    error = receiveCommand(responseBuffer, timeout, numRetries, "OK");
+    if (ErrorType::Success != error) {
+        CBT_LOGW(TAG, "Error receiving command");
+        CBT_LOG_BUFFER_HEXDUMP(TAG, responseBuffer.data(), responseBuffer.size(), LogType::Warning);
+        return error;
     }
 
     return error;

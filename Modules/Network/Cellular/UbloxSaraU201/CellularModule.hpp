@@ -2,7 +2,7 @@
 * @author   Ben Haubrich
 * @file     CellularModule.hpp
 * @details  Cellular for Ublox Sara U201
-* @ingroup  NoneModules
+* @ingroup  NetworkModules
 *******************************************************************************/
 #ifndef __CELLULAR_MODULE_HPP__
 #define __CELLULAR_MODULE_HPP__

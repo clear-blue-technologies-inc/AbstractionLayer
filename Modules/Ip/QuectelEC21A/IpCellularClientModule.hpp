@@ -15,7 +15,7 @@ class Cellular;
 class IpCellularClient : public IpClientAbstraction {
 
     public:
-    IpCellularClient() : IpClientAbstraction() {};
+    IpCellularClient() : IpClientAbstraction() {}
     ~IpCellularClient() = default;
 
     ErrorType connectTo(std::string hostname, Port port, IpClientSettings::Protocol protocol, IpClientSettings::Version version, Socket &socket, Milliseconds timeout) override;
@@ -24,10 +24,10 @@ class IpCellularClient : public IpClientAbstraction {
     ErrorType receiveNonBlocking(std::shared_ptr<std::string> buffer, const Milliseconds timeout, std::function<void(const ErrorType error, std::shared_ptr<std::string> buffer)> callback = nullptr) override;
 
     private:
+    Cellular *_cellNetworkInterface = nullptr;
+
     ErrorType sendBlocking(const std::string &data, const Milliseconds timeout) override;
     ErrorType receiveBlocking(std::string &buffer, const Milliseconds timeout) override;
-
-    Cellular *_cellNetworkInterface = nullptr;
 };
 
 #endif // __IP_CELLULAR_CLIENT_MODULE_HPP__
