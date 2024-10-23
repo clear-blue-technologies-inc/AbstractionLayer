@@ -2,7 +2,7 @@
 * @author   Ben Haubrich
 * @file     CellularModule.hpp
 * @details  Cellular for Quectel EC21A
-* @ingroup  NoneModules
+* @ingroup  NetworkModules
 *******************************************************************************/
 #ifndef __CELLULAR_MODULE_HPP__
 #define __CELLULAR_MODULE_HPP__
@@ -10,11 +10,23 @@
 #include "CellularAbstraction.hpp"
 #include "GpioModule.hpp"
 
+class IpCellularClient;
+
+using PdpContext = int8_t;
+
+enum class ContextType : uint8_t {
+    Unknown = 0,
+    Ipv4,
+    Ipv6,
+    Ipv4v6
+};
+
 class Cellular : public CellularAbstraction {
     public:
     Cellular() : CellularAbstraction() {
         _status.isUp = false;
         _status.technology = NetworkTypes::Technology::Cellular;
+        _connectionIds.fill(-1);
     }
     ~Cellular() = default;
 
@@ -33,28 +45,36 @@ class Cellular : public CellularAbstraction {
 
     ErrorType reset() override;
 
+    /**
+     * @brief Allow the IpCellularClient to access the private members of Cellular
+     * @details In order for the client to connect, it will need to be able to send AT commands to the modem.
+    */
+    friend IpCellularClient;
+
     private:
     /**
      * @brief The context for the IP socket.
      * @details Pg. 11 Quectel LTE Standard TCP/IP Application Note. There are a maximum of 3 contexts available.
      *          Each context can open 11 connection IDs (or sockets)
      */
-    static constexpr Id _IpContext = 1;
+    static constexpr PdpContext _IpContext = 1;
     /**
      * @brief The context for the HTTP socket.
      * @sa ipContext
      */
-    static constexpr Id _HttpContext = 2;
+    static constexpr PdpContext _HttpContext = 2;
     /// @brief The maximum number of contexts.
-    static constexpr Id _MaxContexts = 3;
+    static constexpr PdpContext _MaxContexts = 3;
     /// @brief The maximum number of sockets per context.
-    static constexpr Id _MaxSocketsPerContext = 11;
+    static constexpr Socket _MaxSocketsPerContext = 11;
     /// @brief The GPIO pin for the reset pin.
     std::unique_ptr<Gpio> _gpioReset;
     /// @brief The line termination character. Set to the default on Pg. 23 of the EC21A AT Command Manual.
     char _commandLineTerminationCharacter = '\r';
     /// @brief The response formatting character. Set to the default on Pg. 24 of the EC21A AT Command Manual.
     char _responseFormattingCharacter = '\n';
+    /// @brief The connection ids.
+    std::array<Socket, 11> _connectionIds;
 
     /**
      * @brief Send an AT command to the modem and wait for a response.
@@ -93,6 +113,32 @@ class Cellular : public CellularAbstraction {
      * @returns ErrorType::Failure if the SIM card is not inserted. 
     */
     ErrorType simCardIsInserted();
+
+    /**
+     * @brief Check if the pdp context is active.
+     * @details A pdp context is like a network interface within the modem. There are 3 of them and each can support up to 11 simultaneous connections.
+     * @returns ErrorType::Success if the pdp context is active.
+     * @returns ErrorType::Failure if the pdp context is not active.
+     * @returns ErrorType's listed in sendCommand
+     * @returns ErrorType's listed in receiveCommand
+    */
+    ErrorType pdpContextIsActive(const PdpContext context);
+
+    /**
+     * @brief Activate a pdp context.
+     * @param[in] context The pdp context to activate.
+     * @returns ErrorType::Success if the pdp context was activated successfully.
+     * @returns ErrorType::Failure if the pdp context was not activated successfully.
+     */
+    ErrorType activatePdpContext(const PdpContext context, const Socket socket, const ContextType contextType, const std::string &accessPointName);
+
+    /**
+     * @brief Deactivate a pdp context.
+     * @param[in] context The pdp context to deactivate.
+     * @returns ErrorType::Success if the pdp context was deactivated successfully.
+     * @returns ErrorType::Failure if the pdp context was not deactivated successfully.
+    */
+    ErrorType deactivatePdpContext(const PdpContext context);
     
     /**
      * @brief Set the echo mode of the modem.
@@ -120,6 +166,32 @@ class Cellular : public CellularAbstraction {
      * @returns ErrorType::Failure if the response formatting character was not retrieved successfully.
     */
     ErrorType responseFormattingCharacter(char &responseFormattingCharacter);
+
+    /**
+     * @brief Find the next available connection id (aka socket)
+     * @param id [out] The next available connection id
+     * @return ErrorType::Success if an id was found
+     * @return ErrorType::LimitReached if no ids are available
+     */
+    ErrorType nextAvailableConnectionId(Socket &id) {
+
+        for (Socket i = 0; i < _connectionIds.size(); i++) {
+            if (-1 == _connectionIds[i]) {
+                id = i;
+                return ErrorType::Success;
+            }
+        }
+
+        return ErrorType::LimitReached;
+    }
+
+    /**
+     * @brief Release a connection id (aka socket)
+     * @param id The connection id to release
+     */
+    void releaseConnectionId(const Socket id) {
+        _connectionIds[id] = -1;
+    }
 };
 
 #endif // __CELLULAR_MODULE_HPP__
