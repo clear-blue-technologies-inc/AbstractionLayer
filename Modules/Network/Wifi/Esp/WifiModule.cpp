@@ -165,6 +165,7 @@ ErrorType Wifi::rxBlocking(std::string &frameBuffer, const Milliseconds timeout)
 ErrorType Wifi::rxNonBlocking(std::shared_ptr<std::string> frameBuffer, std::function<void(const ErrorType error, std::shared_ptr<std::string> frameBuffer)> callback) {
     return ErrorType::NotImplemented;
 }
+
 ErrorType Wifi::getMacAddress(std::string &macAddress) {
     uint8_t macAddressByteArray[6];
     constexpr Count macAddressStringSize = 17;
@@ -181,6 +182,7 @@ ErrorType Wifi::getMacAddress(std::string &macAddress) {
 
     return ErrorType::Success;
 }
+
 ErrorType Wifi::getSignalStrength(DecibelMilliWatts &signalStrength) {
     int signalStrengthRssi;
     esp_wifi_sta_get_rssi(&signalStrengthRssi);
