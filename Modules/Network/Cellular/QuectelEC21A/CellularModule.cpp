@@ -164,8 +164,11 @@ ErrorType Cellular::rxNonBlocking(std::shared_ptr<std::string> frameBuffer, std:
     return ErrorType::NotImplemented;
 }
 
+//https://iot.stackexchange.com/questions/5705/getting-ip-and-mac-address-of-lte-modem-using-at-commands
+//https://networkengineering.stackexchange.com/questions/77606/mobile-cellular-networks-gsm-lte-5g-and-mac-addresses#:~:text=Mobile%20devices%20don't%20use,service%2C%20they%20use%20IMEI%20addresses./
+//Cell networks don't use a MAC address.
 ErrorType Cellular::getMacAddress(std::string &macAddress) {
-    return ErrorType::NotImplemented;
+    return ErrorType::NotAvailable;
 }
 
 ErrorType Cellular::getSignalStrength(DecibelMilliWatts &signalStrength) {
