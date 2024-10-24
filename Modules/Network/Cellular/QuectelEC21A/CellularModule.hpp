@@ -67,11 +67,20 @@ class Cellular : public CellularAbstraction {
     static constexpr PdpContext _MaxContexts = 3;
     /// @brief The maximum number of sockets per context.
     static constexpr Socket _MaxSocketsPerContext = 11;
+    /// @brief Pg.20, Sect. 2.1.8 Quectel LTE TCP/IP Standard. Maximum number of bytes that can be read at a time.
+    static constexpr Bytes _MaxBytesToRead = 1500;
     /// @brief The GPIO pin for the reset pin.
     std::unique_ptr<Gpio> _gpioReset;
-    /// @brief The line termination character. Set to the default on Pg. 23 of the EC21A AT Command Manual.
+    /**
+     * @brief The line termination character. Set to the default on Pg. 23 of the EC21A AT Command Manual.
+     * @details This is the character used to terminate an AT command.
+     */
     char _commandLineTerminationCharacter = '\r';
-    /// @brief The response formatting character. Set to the default on Pg. 24 of the EC21A AT Command Manual.
+    /**
+     * @brief The response formatting character. Set to the default on Pg. 24 of the EC21A AT Command Manual.
+     * @details This is the character used along with the _commandLineTerminationCharacter to terminate the response from the modem.
+     *          Responses are terminated with the _commandLineTerminationCharacter followed by the _responseFormattingCharacter.
+     */
     char _responseFormattingCharacter = '\n';
     /// @brief The connection ids.
     std::array<Socket, 11> _connectionIds;
@@ -89,13 +98,15 @@ class Cellular : public CellularAbstraction {
 
     /**
      * @brief Receive a response from the modem.
+     * @details If ErrorType::Failure is returned, then you may want to try calling this function again until the response is received.
      * @param[out] responseBuffer The buffer to store the response in.
      * @param[in] timeout The timeout for the response.
      * @param[in] maxRetries The maximum number of retries to receive the response.
      * @param[in] expectedResponse Optional. The expected response from the modem. If not provided, this function will ensure that the response ends with the response formatting character.
      *            but will not check for response messages such as "OK" or "ERROR".
      * @returns ErrorType::Success if the response was received.
-     * @returns ErrorType::Failure if the response was not received.
+     * @returns ErrorType::Timeout if receiving from the IC failed more times than maxRetries.
+     * @returns ErrorType::Failure if the expected response was not found.
     */
     ErrorType receiveCommand(std::string &responseBuffer, const Milliseconds timeout, const Count maxRetries, const std::string expectedResponse = std::string());
 
@@ -123,6 +134,15 @@ class Cellular : public CellularAbstraction {
      * @returns ErrorType's listed in receiveCommand
     */
     ErrorType pdpContextIsActive(const PdpContext context);
+
+    /**
+     * @brief Check if there is data available to read from the provided socket.
+     * @param[in] socket The socket to check for available data.
+     * @returns ErrorType::Success if there is data available.
+     * @returns ErrorType::NoData if there is no data.
+     * @returns Any error returned by sendCommand or receiveCommand if there was an AT command failure.
+     */
+    ErrorType dataIsAvailable(const Socket socket);
 
     /**
      * @brief Activate a pdp context.
@@ -175,7 +195,7 @@ class Cellular : public CellularAbstraction {
      */
     ErrorType nextAvailableConnectionId(Socket &id) {
 
-        for (Socket i = 0; i < _connectionIds.size(); i++) {
+        for (unsigned int i = 0; i < _connectionIds.size(); i++) {
             if (-1 == _connectionIds[i]) {
                 id = i;
                 return ErrorType::Success;

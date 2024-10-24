@@ -63,7 +63,6 @@ ErrorType Cellular::init() {
         return error;
     }
 
-    _status.isUp = true;
     return ErrorType::Success;
 }
 
@@ -141,6 +140,7 @@ ErrorType Cellular::networkUp() {
         return error;
     }
 
+    _status.isUp = true;
     return error;
 }
 
@@ -171,8 +171,45 @@ ErrorType Cellular::getMacAddress(std::string &macAddress) {
     return ErrorType::NotAvailable;
 }
 
+//Pg. 78, sect. 6.3,Quectel AT command manual.
 ErrorType Cellular::getSignalStrength(DecibelMilliWatts &signalStrength) {
-    return ErrorType::NotImplemented;
+    constexpr Milliseconds timeout = 1000;
+    constexpr Count maxRetries = 10;
+    std::string responseBuffer(64, 0);
+
+    ErrorType error = sendCommand("AT+CSQ", timeout, maxRetries);
+    if (ErrorType::Success != error) {
+        return error;
+    }
+
+    error = receiveCommand(responseBuffer, timeout, maxRetries, "OK");
+    if (ErrorType::Success != error) {
+        CBT_LOGW(TAG, "AT command error: AT+CSQ");
+        CBT_LOG_BUFFER_HEXDUMP(TAG, responseBuffer.data(), responseBuffer.size(), LogType::Warning);
+        return error;
+    }
+
+    for (size_t i = 0; i < responseBuffer.size(); i++) {
+        if (',' == responseBuffer.at(i)) {
+            responseBuffer.at(i) = '\0';
+            const size_t sizeOfSignalQualityResponsePreamble = sizeof(_commandLineTerminationCharacter)-1 + sizeof(_responseFormattingCharacter)-1 + sizeof("+CSQ: ")-1;
+            signalStrength = strtod(responseBuffer.c_str() + sizeOfSignalQualityResponsePreamble, nullptr);
+            break;
+        }
+    }
+
+    if (signalStrength != 199 && signalStrength != 99) {
+        if (signalStrength <= 31) {
+            signalStrength = (signalStrength * 2) - 113;
+        }
+        else if (signalStrength >= 100) {
+            signalStrength -= 216;
+        }
+    }
+
+    _status.signalStrength = signalStrength;
+
+    return ErrorType::Success;
 }
 
 ErrorType Cellular::mainLoop() {
@@ -240,6 +277,7 @@ ErrorType Cellular::receiveCommand(std::string &responseBuffer, const Millisecon
     responseBuffer.resize(0);
     std::string bytesRead(16, 0);
     bool endOfResponse = false;
+    const bool specialCaseQiSend = 0 == expectedResponse.compare(">");
 
     do {
         bytesRead.clear();
@@ -260,7 +298,13 @@ ErrorType Cellular::receiveCommand(std::string &responseBuffer, const Millisecon
             responseBuffer.append(bytesRead);
         }
 
-        endOfResponse = (responseBuffer.back() == _responseFormattingCharacter);
+        //Special case - There is no response formatting character for AT+QISEND
+        if (specialCaseQiSend) {
+            endOfResponse = std::string::npos != responseBuffer.find(">");
+        }
+        else {
+            endOfResponse = responseBuffer.back() == _responseFormattingCharacter || specialCaseQiSend;
+        }
 
     } while (retries < maxRetries && !endOfResponse);
 
@@ -272,7 +316,7 @@ ErrorType Cellular::receiveCommand(std::string &responseBuffer, const Millisecon
     if (retries >= maxRetries) {
         error = ErrorType::Timeout;
     }
-    else if (responseBuffer.back() != _responseFormattingCharacter) {
+    else if (!specialCaseQiSend && responseBuffer.back() != _responseFormattingCharacter) {
         //You can try increasing the buffer size in case it wasn't big enough to read all the data until the response formatting character was found.
         CBT_LOGE(TAG, "Response formatting character not found.");
         error = ErrorType::Failure;
@@ -362,6 +406,49 @@ ErrorType Cellular::pdpContextIsActive(const PdpContext context) {
     return ErrorType::Success;
 }
 
+ErrorType Cellular::dataIsAvailable(const Socket socket) {
+    constexpr Count maxRetries = 10;
+    constexpr Milliseconds timeout = 1000;
+
+    std::string commandQueryAvailableBytes("AT+QIRD=");
+    commandQueryAvailableBytes.append(std::to_string(socket));
+    commandQueryAvailableBytes.append(",");
+    commandQueryAvailableBytes.append(std::to_string(0));
+
+    std::string receiveBuffer(64, 0);
+
+    ErrorType error = sendCommand(commandQueryAvailableBytes, timeout, maxRetries);
+    if (ErrorType::Success != error) {
+        CBT_LOGW(TAG, "AT command error:");
+        CBT_LOG_BUFFER_HEXDUMP(TAG, commandQueryAvailableBytes.data(), commandQueryAvailableBytes.size(), LogType::Warning);
+        return error;
+    }
+
+    error = receiveCommand(receiveBuffer, timeout, maxRetries, "OK");
+    if (ErrorType::Success != error) {
+        CBT_LOGW(TAG, "Receive error:");
+        CBT_LOG_BUFFER_HEXDUMP(TAG, receiveBuffer.data(), receiveBuffer.size(), LogType::Warning);
+        return error;
+    }
+
+    const char *delim = ",";
+    char *save_ptr = receiveBuffer.data();
+    char *token = strtok_r(save_ptr, delim, &save_ptr);
+    token = strtok_r(save_ptr, delim, &save_ptr);
+    token = strtok_r(save_ptr, delim, &save_ptr);
+
+    assert(nullptr != token);
+
+    const Bytes unread = strtoul(token, nullptr, 10);
+
+    if (unread > 0) {
+        return ErrorType::Success;
+    }
+    else {
+        return ErrorType::NoData;
+    }
+}
+
 ErrorType Cellular::activatePdpContext(const PdpContext context, const Socket socket, const ContextType contextType, const std::string &accessPointName) {
     constexpr Milliseconds timeout = 1000;
     constexpr Count numRetries = 10;
@@ -377,24 +464,26 @@ ErrorType Cellular::activatePdpContext(const PdpContext context, const Socket so
 
     ErrorType error = sendCommand(configurePdpContextCommand, timeout, numRetries);
     if (ErrorType::Success != error) {
-        CBT_LOGW(TAG, "Error sending command: %s", configurePdpContextCommand.c_str());
+        CBT_LOGW(TAG, "Error sending command:");
+        CBT_LOG_BUFFER_HEXDUMP(TAG, configurePdpContextCommand.data(), configurePdpContextCommand.size(), LogType::Warning);
         return error;
     }
     error = receiveCommand(responseBuffer, timeout, numRetries, "OK");
     if (ErrorType::Success != error) {
-        CBT_LOGW(TAG, "Error receiving command %s", configurePdpContextCommand.c_str());
+        CBT_LOGW(TAG, "Error receiving command");
         CBT_LOG_BUFFER_HEXDUMP(TAG, responseBuffer.data(), responseBuffer.size(), LogType::Warning);
         return error;
     }
 
     error = sendCommand(activatePdpContextCommand, timeout, numRetries);
     if (ErrorType::Success != error) {
-        CBT_LOGW(TAG, "Error sending command: %s", activatePdpContextCommand.c_str());
+        CBT_LOGW(TAG, "Error sending command:");
+        CBT_LOG_BUFFER_HEXDUMP(TAG, activatePdpContextCommand.data(), activatePdpContextCommand.size(), LogType::Warning);
         return error;
     }
     error = receiveCommand(responseBuffer, timeout, numRetries, "OK");
     if (ErrorType::Success != error) {
-        CBT_LOGW(TAG, "Error receiving command %s", activatePdpContextCommand.c_str());
+        CBT_LOGW(TAG, "Error receiving command");
         CBT_LOG_BUFFER_HEXDUMP(TAG, responseBuffer.data(), responseBuffer.size(), LogType::Warning);
         return error;
     }
@@ -419,7 +508,8 @@ ErrorType Cellular::deactivatePdpContext(const PdpContext context) {
     deavtivatePdpContextCommand.append(std::to_string(context));
     error = sendCommand(deavtivatePdpContextCommand, timeout, numRetries);
     if (ErrorType::Success != error) {
-        CBT_LOGW(TAG, "Error sending command: %s", deavtivatePdpContextCommand.c_str());
+        CBT_LOGW(TAG, "Error sending command:");
+        CBT_LOG_BUFFER_HEXDUMP(TAG, deavtivatePdpContextCommand.data(), deavtivatePdpContextCommand.size(), LogType::Warning);
         return error;
     }
 
@@ -461,9 +551,9 @@ ErrorType Cellular::terminatingCharacter(char &terminatingCharacter) {
         CBT_LOGW(TAG, "Error sending to <command:ATS3?>");
     }
 
-    responseBuffer.erase(std::remove(responseBuffer.begin(), responseBuffer.end(), '\r'), responseBuffer.end());
-    responseBuffer.erase(std::remove(responseBuffer.begin(), responseBuffer.end(), '\n'), responseBuffer.end());
-    responseBuffer.replace(responseBuffer.find("OK"), 2, "");
+    responseBuffer.erase(std::remove(responseBuffer.begin(), responseBuffer.end(), _commandLineTerminationCharacter), responseBuffer.end());
+    responseBuffer.erase(std::remove(responseBuffer.begin(), responseBuffer.end(), _responseFormattingCharacter), responseBuffer.end());
+    responseBuffer.replace(responseBuffer.find("OK"), sizeof("OK") - 1, "");
 
     terminatingCharacter = strtoul(responseBuffer.c_str(), nullptr, 10);
 
@@ -481,9 +571,9 @@ ErrorType Cellular::responseFormattingCharacter(char &responseFormattingCharacte
         CBT_LOGW(TAG, "Error sending to <command:ATS4?>");
     }
 
-    responseBuffer.erase(std::remove(responseBuffer.begin(), responseBuffer.end(), '\r'), responseBuffer.end());
-    responseBuffer.erase(std::remove(responseBuffer.begin(), responseBuffer.end(), '\n'), responseBuffer.end());
-    responseBuffer.replace(responseBuffer.find("OK"), 2, "");
+    responseBuffer.erase(std::remove(responseBuffer.begin(), responseBuffer.end(), _commandLineTerminationCharacter), responseBuffer.end());
+    responseBuffer.erase(std::remove(responseBuffer.begin(), responseBuffer.end(), _responseFormattingCharacter), responseBuffer.end());
+    responseBuffer.replace(responseBuffer.find("OK"), sizeof("OK") - 1, "");
 
     responseFormattingCharacter = strtoul(responseBuffer.c_str(), nullptr, 10);
 
