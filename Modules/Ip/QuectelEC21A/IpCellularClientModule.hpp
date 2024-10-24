@@ -28,15 +28,6 @@ class IpCellularClient : public IpClientAbstraction {
 
     ErrorType sendBlocking(const std::string &data, const Milliseconds timeout) override;
     ErrorType receiveBlocking(std::string &buffer, const Milliseconds timeout) override;
-
-    /**
-     * @brief block and poll for data.
-     * @pre The access mode must be buffer access mode to poll for data.
-     * @returns ErrorType::Success if there is data avilable.
-     * @returns ErrorType::Timeout if the time ran out before any data was avilable
-     * @returns ErrorType::PrerequisitesNotMet if the current access mode is not buffer access mode.
-     */
-    ErrorType pollForData(const Socket socket, const Milliseconds timeout);
 };
 
 #endif // __IP_CELLULAR_CLIENT_MODULE_HPP__
