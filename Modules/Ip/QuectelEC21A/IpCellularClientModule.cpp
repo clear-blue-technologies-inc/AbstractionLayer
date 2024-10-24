@@ -295,7 +295,7 @@ ErrorType IpCellularClient::receiveBlocking(std::string &buffer, const Milliseco
 
                     const Bytes toRead = std::strtoul(buffer.c_str(), nullptr, 10);
                     if (toRead > buffer.size()) {
-                        CBT_LOGW(TAG, "Bytes to read is larger than the buffer size");
+                        CBT_LOGW(TAG, "Bytes to read is larger than the buffer size <toRead:%u, bufferSize:%u>", toRead, buffer.size());
                         return ErrorType::PrerequisitesNotMet;
                     }
                     if (0 == toRead) {
